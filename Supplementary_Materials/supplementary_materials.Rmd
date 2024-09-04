@@ -1,8 +1,11 @@
 ---
-title: Supplementary materials to TITLE
-author: Martin Papenberg
-output: pdf_document
-bibliography: "lit.bib"
+title: "Supplementary materials to TITLE"
+author: "Martin Papenberg"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+bibliography: lit.bib
 ---
 
 ```{r include = FALSE}
@@ -124,14 +127,11 @@ The exchange algorithm that maximizes the diversity consists of two steps: an in
 
 ## Including must-link constraints with anticlustering
 
-To include must-link constraints with anticlustering, we adjusted both the initialization phase as well as the optimization phase of the exchange algorithm. For initialization, we recognize that we now may have to assign multiple samples simultaneously ("must-link groups") to a batch---not all samples can be considered independently of all other samples. Therefore, we first collect all samples that are have at least one other sample ("must-link partner") that has to be assigned to the same group.
+To include must-link constraints with anticlustering, we adjusted both the initialization phase as well as the optimization phase of the exchange algorithm. For initialization, we recognize that we now may have to assign multiple samples simultaneously ("must-link groups") to a batch---not all samples can be considered independently of all other samples. In our application, samples belonging to the same patient were required to be assigned to the same batch. In the synthetic data set that resembles our actual application, we have `r nrow(tt)` samples from `r length(unique(tt$patientID))` unique patients. Most patients (n = `r table(table(tt$patientID))[1]`) were included with 1 sample, and the maximum number of samples per patient was `r max(table(tt$patientID))`. 
 
-- We obtain a list of all must-link groups together and store them with their cardinality. 
-- We must assign these must-link groups to the $K$ batches.
-- This corresponds to a bin packing problem!
-  * We have $n$ elements -- $n$ = numer of must-link groups -- where each element has a size, corresponding to the number of elements in that must-link group.
-  * Each bin corresponds to a batch and has target capacity of $\frac{N}{K}$
-  * We use "randomized fit" heuristic to fill the batches: Select first bacthes that fits, and try out batches in random order (leads to rather even distribution in all batches). A "worst fit" heuristic might also be used, but some random element is good if we restart our optimization heuristic multiple times for better results.
+Our algorithm first we collect all samples of patients with more than one sample. It treats each group of samples that belong to the same patient as a unit. Each unit has a weight corresponding to the number of samples for this patient. The initialization step must assign these must-link groups to the $K$ batches; in our application, we required 16 batches. This assignment needs to ensure that the weight per batch does not exceed the maximum capacity of  $\frac{N}{K}$. This problem corresponds to the well-known bin packing problem, for which optimal and heuristic algorithms are available.
+
+- We use "randomized fit" heuristic to fill the batches: Select first bacthes that fits, and try out batches in random order (leads to rather even distribution in all batches). A "worst fit" heuristic might also be used, but some random element is good if we restart our optimization heuristic multiple times for better results.
 - The remaining elements (that are not part of must-link groups) can be assigned randomly to batches (while respecting the cardinality constraints / equal-sized batches) -- they are not part of the bin packing problem. 
 
 **Optimization algorithm**:
