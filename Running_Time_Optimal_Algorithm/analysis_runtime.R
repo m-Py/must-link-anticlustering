@@ -2,8 +2,11 @@
 library(dplyr)
 library(tidyr)
 library(ggplot2)
+library(here)
 
-ti <- read.csv("results_runningtime.csv", sep = ";")
+## Currently the data are not complete!! (need to rerun using gurobi solver on my computer at university)
+
+ti <- read.csv(here("Running_Time_Optimal_Algorithm", "results_runningtime.csv"), sep = ";")
 mean(ti$diversity_heuristic == ti$diversity_optimal, na.rm = TRUE)
 ti$ID <- 1:nrow(ti)
 
@@ -40,3 +43,4 @@ df |>
                         name = "Run time (s)", 
                         breaks = exp(c(-6, -3, 0, 3, 6)))
   ) 
+

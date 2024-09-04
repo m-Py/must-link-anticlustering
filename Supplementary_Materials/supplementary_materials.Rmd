@@ -9,9 +9,10 @@ bibliography: "lit.bib"
 # Set some knitr options
 library(knitr)
 library(anticlust)
+library(here)
 opts_chunk$set(message = FALSE, warning = FALSE, fig.align = "center", echo = FALSE)
 
-tt <- read.csv("../Application/sample_data.csv")
+tt <- read.csv(here("Application", "sample_data.csv"))
 N <- nrow(tt)
 
 numeric_features <- tt[, c("age", "BMI")]

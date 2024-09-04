@@ -1,5 +1,7 @@
 
-tt <- read.csv("./Simulation_vs_OSAT/results_N=4543_save.csv", sep = ";")
+library(here)
+
+tt <- read.csv(here("Simulation_vs_OSAT", "results_N=4543_save.csv"), sep = ";")
 nrow(tt)
 p_values <- tt[, grepl("p_", colnames(tt))]
 
