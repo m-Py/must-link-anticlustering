@@ -11,7 +11,7 @@ library(knitr)
 library(anticlust)
 opts_chunk$set(message = FALSE, warning = FALSE, fig.align = "center", echo = FALSE)
 
-tt <- read.csv("../sample_data.csv")
+tt <- read.csv("../Application/sample_data.csv")
 N <- nrow(tt)
 
 numeric_features <- tt[, c("age", "BMI")]
@@ -138,5 +138,17 @@ To include must-link constraints with anticlustering, we adjusted both the initi
 - "Merge" samples: A must-link group is treated as a single unit during optimization.
 - New distance matrix has to be computed: New distances are given by summing up all distances between all elements that are part of must-link groups (this works for the diversity objective because it is a mere sum)
 - Exchange heuristic is conducted on the merged elements. We only exchange must-link groups of the same size to ensure that the cardinality constraints are still respected in the end (equal-sized groups).
+
+## Anticlustering vs. OSAT
+
+- Some more details on the simulation study
+- Given the parameters of the simulation, anticlustering strongly outperforms the OSAT method
+
+## Optimal algorithm for anticlustering under cannot-link constraints
+
+- Solving anticlustering optimally (i.e., finding a batch assignment with globally optimal value in diversity) under must-link constraints is possible using the ILP by @papenberg2020
+- We have to adjust the input matrix: Samples that must be linked receive sufficiently large pairwise distance; in this case, a globally optimal solution must pair these samples in the same batch (if the constraints can be fulfilled at all)
+- We investigate the feasibiliy of the optimal approach, which solves a computationally difficult (NP hard) problem (it seems to scale to about 40-50 samples; for larger data sets, a heuristic is required)
+- We can use the optimal algorithm to validate the quality of our heuristic (how often does it find the globally optimal solution)
 
 ## References
