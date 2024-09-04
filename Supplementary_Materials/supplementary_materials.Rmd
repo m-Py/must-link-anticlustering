@@ -1,0 +1,142 @@
+---
+title: Supplementary materials to TITLE
+author: Martin Papenberg
+output: pdf_document
+bibliography: "lit.bib"
+---
+
+```{r include = FALSE}
+# Set some knitr options
+library(knitr)
+library(anticlust)
+opts_chunk$set(message = FALSE, warning = FALSE, fig.align = "center", echo = FALSE)
+
+tt <- read.csv("../sample_data.csv")
+N <- nrow(tt)
+
+numeric_features <- tt[, c("age", "BMI")]
+categorical_features <- tt[, c("race", "ethnicity", "clinical_site", 
+       "anatomical_site", "disease_stage", "cycle_phase", "sample_type", "lesion_type")]
+
+```
+
+## Standard algorithm for anticlustering
+
+To assign samples to batches, we use anticlustering. Anticlustering is an optimization method that is characterized by (a) an objective function that quantifies the balance among batches, and (b) an algorithm that conducts the batch assignment in such a way that balance among batches is maximized via the objective function. Anticlustering owes its name to the fact that the objective functions it uses are the reversal of criteria used in cluster analysis. For example, @spath1986 already recognized that by maximizing instead of minimizing the k-means criterion (the "variance"), he was able to create groups that are similar to each other, and presented it as an improvement over the more intuitive random assignment. 
+
+In our application, we optimize the (a) diversity objective using (b) the exchange algorithm by @papenberg2020. This constellation of objective and algorithm is also the default method implemented in the R package `anticlust` [@R-anticlust]. The diversity is defined as the total sum the within-cluster sums of dissimilarities [@brusco2019]. When assigning samples in such a way that the diversity is maximized, we simultaneously maximize similarity between batches. In @papenberg2020, we referred to the maximization of the diversity as "anticluster editing" because the minimization of the diversity is also well-known from the area of cluster analysis---under the term "cluster editing" [@shamir2004vf; @bocker2011]. 
+
+The anticlustering exchange algorithm takes as input (1) a distance matrix, quantifying the pairwise dissimilarity among samples, and (2) the number of batches $K$. As measure of dissimilarity, we use the common Euclidean distance, which transfers the features of our samples to pairwise distances. It is defined as 
+
+$$
+d(x, y) =  \sqrt{\sum\limits_{i = 1}^{M}(x_i - y_i)^2}
+$$
+
+where $M$ is the number of numeric features describing two samples $x$ = ($x_1, \ldots, x_M$) and $y$ = ($y_1, \ldots, y_M$). When samples are described by two features, the Euclidean distance corresponds to the geometric, "straightline" distance between two points in a two-dimensional space; more similar data points are closer to each other. Figure&nbsp;1 illustrates the computation of the Euclidean distance and the diversity for the numeric features BMI and age that were used in our motivating application. For categorical variables, we use binary coding before including them in the computation of the Euclidean distance. Table 1 illustrates binary coding for the feature race in our data set, which had five unique values: `r paste0("(", letters[1:5], ") ", unique(tt$race))`. Such a categorical variable can be recoded into four binary variables to maintain the information included in the original variable. 
+
+```{r, fig.width = 6, fig.height = 6, fig.cap = "Illustrates the conversion from numeric features to Euclidean distance, and (anti)clustering assignments based on minimum and maximum diversity using the Euclidean distance. Panel A illustrates the BMI and age of twelve women in our synthetic data in a scatter plot. Panel B represents the Euclidean distances between features as a straight line in the two-dimensional space. The Euclidean distance is proportional to the length of the connecting lines in panel B. Panel C illustrates a clustering assignment of the 12 data points to $K = 3$ equal-sized groups via \\textit{minimum} diversity. Panel D illustrates an anticlustering assignment of the 12 data points to $K = 3$ equal-sized groups via \\textit{maximum} diversity. The diversity is computed as the sum of within-(anti)cluster distances, which are highlighted in Panel C and Panel D through connecting lines."}
+
+# Select 12 points ("arbitrarily")       
+not_duplicated <- !duplicated(numeric_features)
+six_randos <- c(28L, 144L, 108L, 102L, 7L, 138L, 54L, 147L, 1L, 87L, 110L, 31L)
+points <- numeric_features[not_duplicated, ][six_randos, ]
+
+
+## GENERATE FIGURE 1
+standard <- c(5, 4, 4, 2) + 0.1
+par(mfrow = c(2, 2))
+size_letter <- 1.5
+
+### A
+par(mar = c(0, standard[2], standard[3], 0))
+plot(points, las = 1, xaxt = "n", xlab = "")
+legend("topleft", title = "A", bty = "n", legend = "", title.cex = size_letter)
+
+### B
+par(mar = c(0, 0, standard[3], standard[4]))
+plot(points, las = 1, xaxt = "n", yaxt = "n")
+anticlust:::draw_clique(
+  points[,1], points[,2], col = "black",
+  lwd = .7, lty = 2)
+legend("topleft", title = "B", bty = "n", legend = "", title.cex = size_letter)
+
+### C
+par(mar = c(standard[1], standard[2], 0, 0))
+clusters <- balanced_clustering(points, K = 3, method = "ilp")
+colors <- c("#a9a9a9", "#df536b", "#61d04f")
+cex <-  c(0.7, 1.2, 1.5)
+pch <- c(19, 15, 17)
+
+# Plot the data while visualizing the different clusters
+plot(
+  points,
+  col = colors[clusters],
+  pch = pch[clusters],
+  cex = cex[clusters],
+  las = 1, xlab = "Age"
+)
+legend("topleft", title = "C", bty = "n", legend = "", title.cex = size_letter)
+anticlust:::draw_all_cliques(
+  points[,1], points[,2], 
+  assignment = clusters, 
+  cols = colors[clusters], 
+  lty = 2, lwd = .5
+)
+
+
+### D
+par(mar = c(standard[1], 0, 0, standard[4]))
+
+anticlusters <- anticlustering(points, K = 3, method = "ilp")
+plot(
+  points,
+  col = colors[anticlusters],
+  pch = pch[anticlusters],
+  yaxt = "n", xlab = "Age"
+)
+legend("topleft", title = "D", bty = "n", legend = "", title.cex = size_letter)
+anticlust:::draw_all_cliques(
+  points[,1], points[,2], 
+  assignment = anticlusters, 
+  cols = colors[anticlusters], 
+  lty = 2, 
+  lwd = .7
+)
+
+
+```
+
+```{r}
+Race <- categorical_features[not_duplicated, c("race")][six_randos]
+Race[grepl("Pacific Islander", Race)] <- "Pacific Islander"
+
+mat <-  cbind(Race, categories_to_binary(Race))
+rownames(mat) <- mat[,1]
+knitr::kable(
+  mat[,-1], 
+  col.names = gsub("categories", "", colnames(mat)), 
+  caption = "Illustrate the recoding of the variable Race using four binary variables."
+)
+```
+
+The exchange algorithm that maximizes the diversity consists of two steps: an initialization step and an optimization step. As initialization, it randomly assigns samples to $K$ equal-sized batches. In principle, unequal-sized batches would also be possible with our algorithm, but equal-sized batches were required in the current application. After initialization, the algorithm selects the first sample and checks how the diversity would change if the sample were swapped with each sample that is currently assigned to a different batch. After simulating each exchange---that is $N - \frac{N}{K}$ exchanges---it realizes the one exchange that increases the diversity the most. It does not conduct an exchange if no improvement in diversity is possible. This procedure is repeated for each sample, leading to the evaluation of $N \cdot \frac{N}{K}$ exchanges in total; it terminates after the last sample was processed. The procedure might also restart at the first element and reiterate through all samples until no exchange leads to an improvement any more, i.e., until a local maximum is found. In `anticlust`, we also implemented this local maximum search, which corresponds to the algorithm LCW by @weitz1998. For better results, it is also possible to restart the search algorithm multiple times using different (random) initializations. 
+
+## Including must-link constraints with anticlustering
+
+To include must-link constraints with anticlustering, we adjusted both the initialization phase as well as the optimization phase of the exchange algorithm. For initialization, we recognize that we now may have to assign multiple samples simultaneously ("must-link groups") to a batch---not all samples can be considered independently of all other samples. Therefore, we first collect all samples that are have at least one other sample ("must-link partner") that has to be assigned to the same group.
+
+- We obtain a list of all must-link groups together and store them with their cardinality. 
+- We must assign these must-link groups to the $K$ batches.
+- This corresponds to a bin packing problem!
+  * We have $n$ elements -- $n$ = numer of must-link groups -- where each element has a size, corresponding to the number of elements in that must-link group.
+  * Each bin corresponds to a batch and has target capacity of $\frac{N}{K}$
+  * We use "randomized fit" heuristic to fill the batches: Select first bacthes that fits, and try out batches in random order (leads to rather even distribution in all batches). A "worst fit" heuristic might also be used, but some random element is good if we restart our optimization heuristic multiple times for better results.
+- The remaining elements (that are not part of must-link groups) can be assigned randomly to batches (while respecting the cardinality constraints / equal-sized batches) -- they are not part of the bin packing problem. 
+
+**Optimization algorithm**:
+
+- "Merge" samples: A must-link group is treated as a single unit during optimization.
+- New distance matrix has to be computed: New distances are given by summing up all distances between all elements that are part of must-link groups (this works for the diversity objective because it is a mere sum)
+- Exchange heuristic is conducted on the merged elements. We only exchange must-link groups of the same size to ensure that the cardinality constraints are still respected in the end (equal-sized groups).
+
+## References
