@@ -47,3 +47,6 @@ po/*~
 
 # RStudio Connect folder
 rsconnect/
+
+# rkward preview files for rmarkdown documents
+*tmp_rkward_preview*
