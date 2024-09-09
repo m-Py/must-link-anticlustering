@@ -138,7 +138,7 @@ The optimization phase of the exchange algorithm is based on a merged data set w
 has to be computed: New distances are given by summing up all distances between all elements that are part of must-link groups (this works for the diversity objective because it is a mere sum)
 - Exchange heuristic is conducted on the merged elements. We only exchange must-link groups of the same size to ensure that the cardinality constraints are still respected in the end (equal-sized groups).
 
-[^optimal]: The randomized fit method is a heuristic that may not yield a valid assignment of the must-link clusters even if one is theoretically available. If the heuristic indicates that the batches do cannot hold the must-link clusters, we verify this result using an optimal algorithm based on integer linear programming (and use the optimal assignment if a solution is possible).
+[^optimal]: The randomized fit method is a heuristic that may not yield a valid assignment of the must-link clusters even if one is theoretically available. If the heuristic indicates that the batches do cannot hold the must-link clusters, we verify this result using an optimal algorithm based on integer linear programming and use the optimal assignment if a solution is returned [@brusco2013].
 
 **Optimization algorithm**:
 
