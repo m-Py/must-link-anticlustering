@@ -1,7 +1,10 @@
 
 library(here)
+library(tidyverse)
+library(santoku)
 
 tt <- read.csv(here("Simulation_vs_OSAT", "results_N=4543_save.csv"), sep = ";")
+tt$ID <- 1:nrow(tt)
 nrow(tt)
 p_values <- tt[, grepl("p_", colnames(tt))]
 
@@ -40,9 +43,53 @@ mean(tt$ANTICLUST_t_c)
 
 
 
-## Expected number of must-link partners:
+## Some more sophisticated analyes:
 
-Ns <- tt$N
+dfl <- tt |> 
+  select(ID, N, M, K, P, starts_with("p")) |> 
+  pivot_longer(
+    cols = starts_with("p_")
+  ) |> 
+  na.omit()
+
+dfl$Method <- "Anticlustering"
+dfl$Method[grepl("osat", dfl$name)] <- "OSAT"
+dfl$Method[grepl("p_anticlust_c", dfl$name)] <- "Must-Link Anticlustering"
+
+
+## Analyze data by variables
+
+# N - OSAT gets better with increasing N (but always worse than anticlustering)
+dfl |> 
+  group_by(Method, N_category = santoku::chop(N, breaks = c(100, 300))) |> 
+  summarise(mean(value))
+# M - interesting, OSAT gets worse with increasing M
+dfl |> 
+  group_by(Method, M) |> 
+  summarise(mean(value))
+
+# K (no interaction here, just anticlust always better)
+dfl |> 
+  group_by(Method, K) |> 
+  summarise(mean(value))
+
+# P (OSAT gets worse with increasing P)
+dfl |> 
+  group_by(Method, P) |> 
+  summarise(mean(value))
+
+dfl |> 
+  group_by(Method, M) |> 
+  summarise(`p value` = mean(value)) |> 
+  ggplot(aes(y = `p value`, x = M, color = Method)) +
+  geom_point(aes(color = Method, shape = Method)) + 
+  geom_line(aes(color = Method, linetype = Method)) +
+  theme_bw(base_size = 14) +
+  xlab("Number of variables") +
+  ylab("Average p value")
+
+
+## Expected number of must-link partners:
 
 tables <- lapply(lapply(Ns, function(x) sample(x, replace = TRUE)), function(x) table(table(x)))
 # make each member the same length:

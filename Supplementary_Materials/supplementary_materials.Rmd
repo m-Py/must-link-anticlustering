@@ -5,6 +5,7 @@ output:
   pdf_document: default
   html_document:
     df_print: paged
+  word_document: default
 bibliography: lit.bib
 ---
 
@@ -13,6 +14,8 @@ bibliography: lit.bib
 library(knitr)
 library(anticlust)
 library(here)
+library(tidyverse)
+library(patchwork)
 opts_chunk$set(message = FALSE, warning = FALSE, fig.align = "center", echo = FALSE)
 
 tt <- read.csv(here("Application", "sample_data.csv"))
@@ -117,7 +120,7 @@ Race[grepl("Pacific Islander", Race)] <- "Pacific Islander"
 mat <-  cbind(Race, categories_to_binary(Race))
 rownames(mat) <- mat[,1]
 knitr::kable(
-  mat[,-1], 
+  mat[!duplicated(mat), -1], 
   col.names = gsub("categories", "", colnames(mat)), 
   caption = "Illustrate the recoding of the variable Race using four binary variables."
 )
@@ -131,23 +134,100 @@ The exchange algorithm that maximizes the diversity consists of two steps: an in
 must_link_frequencies <- table(table(tt$patientID))
 ```
 
-To include must-link constraints with anticlustering, we adjusted both the initialization phase as well as the optimization phase of the exchange algorithm. A critical adjustment for both phases is that it treats a group of samples that must be assigned to the same batch as a single unit, because we recognize that not all samples can be considered independently of the other samples. In our application, samples belonging to the same patient were required to be assigned to the same batch; we refer to a group of samples that must be assigned to same batch as a *must-link cluster*. In our application synthetic data set, we simulated `r nrow(tt)` samples from `r length(unique(tt$patientID))` unique patients, which corresponds to the effective sample size for the anticlustering algorithm that includes must-link constraints. Most patients (*n* = `r must_link_frequencies[1]`) were included with 1 sample. The remaining `r nrow(tt) - must_link_frequencies[1]` were part of a must-link cluster with varying size between 2 (frequency = `r must_link_frequencies[2]`) and 8 (frequency = `r must_link_frequencies[7]`). 
+In our application, samples belonging to the same patient were required to be assigned to the same batch; we refer to a set of samples that must be assigned to same batch as a *must-link group*. For the data set that resembled our actual application, we simulated `r nrow(tt)` samples from `r length(unique(tt$patientID))` unique patients. Most patients (*n* = `r must_link_frequencies[1]`) were included with 1 sample. The remaining `r nrow(tt) - must_link_frequencies[1]` patients were part of a must-link group, with group sizes varying between 2 (`r must_link_frequencies[2]` must-link groups of size 2) and 8 (`r must_link_frequencies[7]` must-link group of size 8). 
 
-### Initialization
+To include must-link constraints with anticlustering, we use a downscaled data set where each patient constitutes a single unit in the anticlustering process. Some adjustments are of the exchange method are required to ensure that despite using a reduced data set (a) we still obtain a valid partitioning regarding the size constraints (equal-sized batches) and (b) that the diversity is computed correctly during optimization. We therefore adjusted both the initialization phase as well as the optimization phase of the exchange algorithm. During initialization, we assign all patients that are part of a must-link cluster in a first step. Each of these patients must has to be assigned to one of the $K$ batches without exceeding the maximum capacity of each batch. Using this conceptualization, the initialization step corresponds to a bin packing problem: We assign a weight to each patient, corresponding to the number of samples she provided. There are $K$ batches ("bins") with a capacity $\frac{N}{K}$, which have to be filled with patients while the sum of weights is not allowed to exceed the capacity. Bin packing is one the classical NP complete problem in computer science [@garey1979] and many optimal and heuristic algorithms have been developed to address it. We use a randomized fit heuristic to fill the batches: For each must-link cluster, we iterate through the $K$ batches in random order and assign it to the first batch where it fits. The process is expected to evenly distribute the must-link clusters among batches, and the random component is particularly useful if we use multiple restarts for the exchange algorithm. After assigning the must-link clusters to batches, the remaining samples can be assigned randomly to fill the remaining space. Note that our randomized fit algorithm is a heuristic that may not find an assignment of must-link groups to batches, even if one is theoretically available. If the heuristic indicates that the batches do cannot hold the must-link clusters, we therefore use an optimal algorithm based on integer linear programming as fallback option to verify if the constraints really cannot be fulfilled [citation].
 
-During initialization, we assigns a weight to each patient, corresponding to the number of samples she provided. Using this conceptualization, the initialization step corresponds to a bin packing problem (citation needed): Each patient must has to be assigned to one of the $K$ batches without exceeding the maximum capacity of each batch (which is $\frac{N}{K}$ for each batch). We use a randomized fit heuristic to fill the batches: For each must-link cluster, we iterate through the $K$ batches in random order and assign it to the first batch where it fits.[^optimal] The process is expected to evenly distribute the must-link clusters among batches, and the random component is particularly useful if we use multiple restarts for the exchange algorithm. After assigning the must-link clusters to batches, the remaining samples can be assigned randomly to fill the remaining space.
+The optimization phase of the exchange algorithm also uses the downscaled data set where each must-link group corresponds to a single unit of analysis. For example, in our application, the original data set consisted of `r nrow(tt)` samples, but the optimization algorithm works on a data set of `r length(unique(tt$PatientID))` unique patients. To obtain the reduced distance matrix that preserves all information of the original distance matrix, we can sum all pairwise distances between elements in different must-link clusters [@bocker2011]. This transformation preserves the computation of the diversity as compared to using the full data set. The exchange heuristic is then conducted on the merged elements. During the exchange process, we only exchange must-link clusters of the same size to ensure that the cardinality constraints are still respected in the end (i.e., equal-sized groups).
 
-[^optimal]: The randomized fit algorithm is a heuristic that may not yield a valid assignment of the must-link clusters even if one is theoretically available. If the heuristic indicates that the batches do cannot hold the must-link clusters, we verify this result using an optimal algorithm based on integer linear programming and use the optimal assignment if a solution is returned [@brusco2013]. Even though bin packing is a computationally difficult problem in theory (it is NP complete), we can use integer linear programming to process rather large data sets in reasonable time.
-
-### Optimization
-
-The optimization phase of the exchange algorithm is also based on a downscaled data set where each must-link cluster corresponds to a single unit. So, in our application, the original data set consists of `r nrow(tt)` samples, but the optimization algorithm works on a data set of unique patients. To obtain the reduced distance matrix that however preserves all information of the original distance matrix, we sum all pairwise distances between elements in different must-link clusters [@bocker2011]. This transformation preserves the computation of the diversity as compared to using the full data set. The exchange heuristic is then conducted on the merged elements. During the exchange process, we only exchange must-link clusters of the same size to ensure that the cardinality constraints are still respected in the end (i.e., equal-sized groups).
+## Simulation Study
 
 
-## Anticlustering vs. OSAT
+```{r}
+tt <- read.csv(here("Simulation_vs_OSAT", "results.csv"), sep = ";")
+tt$ID <- 1:nrow(tt)
+p_values <- tt[, grepl("p_", colnames(tt))]
 
-- Some more details on the simulation study
-- Given the parameters of the simulation, anticlustering strongly outperforms the OSAT method
+# global results OSAT vs. anticlust. How often is p value of anticlust better (i.e. larger)?
+anticlust_better <- apply(p_values, 1, function(x) x[1:5] < x[6:10])
+osat_better <- apply(p_values, 1, function(x) x[1:5] > x[6:10])
+same <- apply(p_values, 1, function(x) x[1:5] == x[6:10])
+
+anticlust_better_percent <- round(mean(anticlust_better, na.rm = TRUE) * 100)
+osat_better_percent <- round(mean(osat_better, na.rm = TRUE) * 100)
+same_percent <- round(mean(same, na.rm = TRUE) * 100)
+
+avg_constrained_obj <- round(mean(tt$diversity_constrained / tt$diversity_unconstrained) * 100, 1)
+constrained_not_worse <- round(mean(apply(p_values, 1, function(x) x[6:10] <= x[11:15]), na.rm = TRUE)*100)
+
+```
+
+
+We conducted a simulation study to illustrate the usefulness of anticlustering for batch assignment. The simulation followed two goals. First, it compared anticlustering with the OSAT package, which is currently the gold standard for automated batch assignment (citation). Second, it investigated whether the quality of batch assignment is reduced with must-link constraints as compared to an unconstrained assignment. We generated `r nrow(tt)` data sets, which were all processed via (a) the default OSAT algorithm (optimal shuffle with 5000 repetitions), (b) unconstrained anticlustering and (c) anticlustering subject to must-link constraints. In each data set, we randomly determined the number of categorical variables (2-5), the number of classes per variable (2-5), the total sample size (between 50 and 500) and the number of batches (2, 5, or 10 equal-sized batches). Must-link constraints were randomly generated in such a way that the distribution of constraints resembled our motivating application: 58% of all elements had no must-link partner; 29% had 1 must-link partner; 10% had 2 must-link partners, and 3% had 3 or more must-link partners. The code and data to reproduce the simulation and analysis is openly available via XXX (**TODO**). 
+
+For each simulation run, we computed $\chi^2$-tests to assess the imbalance among batches for each of the 2-5 variables, for each of the three competing methods. We stored the *p* value associated with each test. A higher *p* value indicates that there is less imbalance among batches, i.e., that the batches are more similar. The simulation revealed that in `r anticlust_better_percent`% of all comparisons, the balance between batches was improved when using anticlustering as compared to OSAT. Balance was equal in `r same_percent`% of all comparisons, and only in `r osat_better_percent`% OSAT outperformed anticlust. These results clearly underline the power of anticlustering for batch assignment. Moreover, the anticlustering assignment that was subjected to must-link constraints on average achieved `r avg_constrained_obj`% of the objective value of the unconstrained assignment. Hence, must-link constraints are not only desirable from a user's point of view, but they also do not decrease batch balance considerably; in `r constrained_not_worse`% of all cases, balance was not at all reduced by the constraints. Figure 2 illustrates the average balance among batches in dependence of the factors that varied between data sets. Must-link constraints primarily reduced balance in smaller data sets, but did not strongly affect the balance in larger data sets. Remarkably, the constrained anticlustering assignment led to better balance than the OSAT assignment that did not employ any constraints. Figure 2 also shows that for anticlustering, balance was not reduced when the number of variables increased, which however posed a more severe challenge for OSAT.
+
+```{r, fig.cap= "Average p values in dependence of the factors that varied in the simulation study. Higher p values indicate better balance. Anticlustering maintained a comparable level of balance in all conditions. OSAT's performance decreased with increasing number of variables and number of categories per variable."}
+
+## Some more sophisticated analyes:
+dfl <- tt |> 
+  select(ID, N, M, K, P, starts_with("p")) |> 
+  pivot_longer(
+    cols = starts_with("p_")
+  ) |> 
+  na.omit()
+
+dfl$Method <- "Anticlustering"
+dfl$Method[grepl("osat", dfl$name)] <- "OSAT"
+dfl$Method[grepl("p_anticlust_c", dfl$name)] <- "Must-Link Anticlustering"
+
+dfl$N_category <- santoku::chop(dfl$N, breaks = c(100, 300))
+dfl$K <- ordered(dfl$K)
+dfl$M <- ordered(dfl$M)
+dfl$P <- ordered(dfl$P)
+
+p0 <- dfl |> 
+  group_by(Method, N_category) |> 
+  summarise(`p value` = mean(value)) |> 
+  ggplot(aes(y = `p value`, x = N_category, color = Method)) +
+  geom_point(aes(color = Method, shape = Method)) + 
+  geom_line(aes(color = Method, linetype = Method)) +
+  theme_bw(base_size = 8) +
+  xlab("Sample size (categorized)") +
+  ylab("Average p value")
+
+p1 <- dfl |> 
+  group_by(Method, M) |> 
+  summarise(`p value` = mean(value)) |> 
+  ggplot(aes(y = `p value`, x = M, color = Method)) +
+  geom_point(aes(color = Method, shape = Method)) + 
+  geom_line(aes(color = Method, linetype = Method)) +
+  theme_bw(base_size = 8) +
+  xlab("Number of variables") +
+  ylab("")
+
+p2 <- dfl |> 
+  group_by(Method, K) |> 
+  summarise(`p value` = mean(value)) |> 
+  ggplot(aes(y = `p value`, x = K, color = Method)) +
+  geom_point(aes(color = Method, shape = Method)) + 
+  geom_line(aes(color = Method, linetype = Method)) +
+  theme_bw(base_size = 8) +
+  xlab("Number of batches") +
+  ylab("Average p value")
+
+p3 <- dfl |> 
+  group_by(Method, P) |> 
+  summarise(`p value` = mean(value)) |> 
+  ggplot(aes(y = `p value`, x = P, color = Method)) +
+  geom_point(aes(color = Method, shape = Method)) + 
+  geom_line(aes(color = Method, linetype = Method)) +
+  theme_bw(base_size = 8) +
+  xlab("Number of categories per variable") +
+  ylab("")
+
+p0 + p1 + p2 + p3+ plot_layout(guides = "collect", widths = c(2, 1)) 
+```
 
 ## Optimal algorithm for anticlustering under cannot-link constraints
 
