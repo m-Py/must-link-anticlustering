@@ -16,6 +16,7 @@ library(anticlust)
 library(here)
 library(tidyverse)
 library(patchwork)
+library(kableExtra)
 opts_chunk$set(message = FALSE, warning = FALSE, fig.align = "center", echo = FALSE)
 
 df <- read.csv(here("Application", "sample_data.csv"))
@@ -27,19 +28,106 @@ categorical_features <- df[, c("race", "ethnicity", "clinical_site",
 
 ```
 
-## Standard algorithm for anticlustering
+## Design
+
+### Motivating example
+
+```{r}
+must_link_frequencies <- table(table(df$patientID))
+N_unique <- length(unique(df$patientID))
+```
+
+- Explain data set, and why the application is needed
+- Apply anticlustering to assign batches
+
+The synthetic data set that we generated to resemble our actual application consisted of `r N` samples from `r N_unique` unique patients. In our application, samples belonging to the same patient were required to be assigned to the same batch. Most patients (*n* = `r must_link_frequencies[1]`) were included with 1 sample. The remaining `r N - must_link_frequencies[1]` patients provided more than one sample: 
+`r must_link_frequencies[2]` patients provided 2 samples, 
+`r must_link_frequencies[3]` patients provided 3 samples, 
+`r must_link_frequencies[4]` patients provided 4 samples, 
+`r must_link_frequencies[5]` patients provided 5 samples, 
+`r must_link_frequencies[6]` patients provided 6 samples, 
+and `r must_link_frequencies[7]` patient provided 8 samples.
+We required the samples to be assigned to 16 equal-sized batches. As a perfect split was not possible using this constellation, we created 2 batches containing 24 samples and 14 batches containing 23 samples. We strived for balance among the batches with regard to two numeric variables (age, BMI) and several categorical variables (such as ethniciy, desease stage, and cycle phase). Table 1 illustrates the results of three batch assignments using three of the variables (age, BMI, ethnicity) for illustrative purposes. The first assignment is based on "standard" anticlustering, which ignores the must-link constraints and assumes that all samples can be assigned independently with the objective of maximum balance. This unrestricted anticlustering leads to the most pronounced balance among batches. The second assignment implements the must-link restrictions that samples belonging to the same patient have to be assigned to the same batch, while still optimizing balance via anticlsutering. The constrained assignment necessarily reduces the overall similarity among batches, but arguably the numeric variables in particular are still well balanced. The third assignment is based on a is a completely random allocation of samples to batches, which was included for comparative purporses. It by far leads to the worst balancing. 
+
+In the next section, we will explain the methodology of anticlustering that led to the batch assignment illustrated in Table 1. We will reiterate the general anticlustering methodology first, before outlining how we included must-link constraints with anticlustering. The inclusion of must-link constraints with anticlustering is first done in this paper. 
+
+```{r}
+
+kmeans_input <- cbind(numeric_features, categories_to_binary(categorical_features)) 
+
+nrep <- 100
+
+df$Batch <- anticlustering(
+  dist(kmeans_input)^2, 
+  K = 16,
+  method = "local-maximum",
+  repetitions = nrep
+)
+
+df$Batch2 <- anticlustering(
+  dist(kmeans_input)^2, 
+  K = 16,
+  method = "local-maximum",
+  repetitions = nrep,
+  must_link = df$patientID
+)
+
+df$Random_Batch <- sample(df$Batch)
+
+tab1 <- df |> 
+  group_by(Batch) |> 
+  summarise(
+    "Mean Age" = mean(age), 
+    "Mean BMI" = mean(BMI), 
+    "% Hispanic" =  paste0(mean(ethnicity == "Hispanic or Latino") |> round(2) * 100, "%")
+  )
+tab1$`Mean Age` <- prmisc::force_decimals(tab1$`Mean Age`)
+tab1$`Mean BMI` <- prmisc::force_decimals(tab1$`Mean BMI`)
+
+tab2 <- df |> 
+  group_by(Batch2) |> 
+  summarise(
+    "Mean Age" = mean(age), 
+    "Mean BMI" = mean(BMI), 
+    "% Hispanic" = paste0(mean(ethnicity == "Hispanic or Latino") |> round(2) * 100, "%")
+  )
+tab2$`Mean Age` <- prmisc::force_decimals(tab2$`Mean Age`)
+tab2$`Mean BMI` <- prmisc::force_decimals(tab2$`Mean BMI`)
+tab3 <- df |> 
+  group_by(Random_Batch) |> 
+  summarise(
+    "Mean Age" = mean(age), 
+    "Mean BMI" = mean(BMI), 
+    "% Hispanic" = paste0(mean(ethnicity == "Hispanic or Latino") |> round(2) * 100, "%")
+  )
+tab3$`Mean Age` <- prmisc::force_decimals(tab3$`Mean Age`)
+tab3$`Mean BMI` <- prmisc::force_decimals(tab3$`Mean BMI`)
+
+tab <- cbind(Batch = 1:16, cbind(tab1[, -1], tab2[, -1], tab3[, -1]))
+tab |>
+  kbl(booktabs = TRUE, align = "r", caption = "Example application") |>
+  kable_styling(latex_options = c("striped", "scale_down")) |>
+  add_header_above(
+    c(" " = 1, "Anticlustering" = 3, "Constrained Anticlustering" = 3, "Random" = 3)
+  )
+```
+
+
+### Standard algorithm for anticlustering
 
 To assign samples to batches, we use anticlustering. Anticlustering is an optimization method that is characterized by (a) an objective function that quantifies the balance among batches, and (b) an algorithm that conducts the batch assignment in such a way that balance among batches is maximized via the objective function. Anticlustering owes its name to the fact that the objective functions it uses are the reversal of criteria used in cluster analysis. For example, @spath1986 already recognized that by maximizing instead of minimizing the k-means criterion (the "variance"), he was able to create groups that are similar to each other, and presented it as an improvement over the more intuitive random assignment.
 
-In our application, we optimize the (a) diversity objective using (b) the exchange algorithm by @papenberg2020. This constellation of objective and algorithm is also the default method implemented in the R package `anticlust` [@R-anticlust]. The diversity is defined as the total sum the within-cluster sums of dissimilarities [@brusco2019]. When assigning samples in such a way that the diversity is maximized, we simultaneously maximize similarity between batches. @papenberg2020 referred to the maximization of the diversity as "anticluster editing" because the minimization of the diversity is also well-known from the area of cluster analysis---under the term "cluster editing" [@shamir2004vf; @bocker2011]. 
-
-The anticlustering exchange algorithm takes as input (1) a distance matrix, quantifying the pairwise dissimilarity among samples, and (2) the number of batches $K$. In most anticlustering applications, samples are split into equal-sized groups $\frac{N}{K}$, which was also the requirement in our motivating application. As measure of dissimilarity, we use the common Euclidean distance, which transfers the features of our samples to pairwise distances. It is defined as 
+In our application, we optimize the (a) diversity objective using (b) the exchange algorithm as described by @papenberg2020. This constellation of objective and algorithm is also the default method implemented in the R package `anticlust` [@R-anticlust]. The diversity is computed on the basis of a measure of pairwise dissimilarities among samples. In particular, it is defined as the overall sum of all dissimilarities among samples that are assigned to the same batch [@brusco2019]. As measure of dissimilarity, we use the common Euclidean distance, which transfers the features of our samples to pairwise distances. It is defined as 
 
 $$
 d(x, y) =  \sqrt{\sum\limits_{i = 1}^{M}(x_i - y_i)^2}
 $$
 
-where $M$ is the number of numeric features describing two samples $x$ = ($x_1, \ldots, x_M$) and $y$ = ($y_1, \ldots, y_M$). When samples are described by two features, the Euclidean distance corresponds to the geometric, "straightline" distance between two points in a two-dimensional space; more similar data points are closer to each other. Figure&nbsp;1 illustrates the computation of the Euclidean distance and the diversity for the numeric features BMI and age that were used in our motivating application. For categorical variables, we use binary coding before including them in the computation of the Euclidean distance. Table 1 illustrates binary coding for the feature race in our data set, which had five unique values: `r paste0("(", letters[1:5], ") ", unique(df$race))`. Such a categorical variable can be recoded into four binary variables to maintain the information included in the original variable. 
+where $M$ is the number of numeric features describing two samples $x$ = ($x_1, \ldots, x_M$) and $y$ = ($y_1, \ldots, y_M$). When samples are described by two features, the Euclidean distance corresponds to the geometric, "straightline" distance between two points in a two-dimensional space; more similar data points are closer to each other. Figure&nbsp;1 illustrates the computation of the Euclidean distance and the computation diversity for the numeric features BMI and age that were used in our motivating application. For categorical variables, we use binary coding before including them in the computation of the Euclidean distance (see Table 2 for an example). 
+
+An anticlustering algorithm assigns samples to batches in such a way that the diversity is maximized. Importantly, maximizing the diversity within batches simultaneously maximize similarity among batches, leading to a balanced distribution of the input variables among batches. @papenberg2020 referred to the maximization of the diversity as "anticluster editing" because the minimization of the diversity is also well-known from the area of cluster analysis---under the term "cluster editing" [@shamir2004vf; @bocker2011]. 
+
+The anticlustering exchange algorithm takes as input (1) a distance matrix, quantifying the pairwise dissimilarity among samples, and (2) the number of batches $K$. In most anticlustering applications, samples are split into equal-sized groups $\frac{N}{K}$, which was also the requirement in our motivating application. 
 
 ```{r, fig.width = 6, fig.height = 6, fig.cap = "Illustrates the conversion from numeric features to Euclidean distance, and (anti)clustering assignments based on minimum and maximum diversity using the Euclidean distance. Panel A illustrates the BMI and age of twelve women in our synthetic data in a scatter plot. Panel B represents the Euclidean distances between features as a straight line in the two-dimensional space. The Euclidean distance is proportional to the length of the connecting lines in panel B. Panel C illustrates a clustering assignment of the 12 data points to $K = 3$ equal-sized groups via \\textit{minimum} diversity. Panel D illustrates an anticlustering assignment of the 12 data points to $K = 3$ equal-sized groups via \\textit{maximum} diversity. The diversity is computed as the sum of within-(anti)cluster distances, which are highlighted in Panel C and Panel D through connecting lines."}
 
@@ -122,7 +210,7 @@ rownames(mat) <- mat[,1]
 knitr::kable(
   mat[!duplicated(mat), -1], 
   col.names = gsub("categories", "", colnames(mat)), 
-  caption = "Illustrate the recoding of the variable Race using four binary variables."
+  caption = "Illustrates the recoding of the categorical variable Race using four binary variables."
 )
 ```
 
@@ -130,17 +218,12 @@ The exchange algorithm that maximizes the diversity consists of two steps: an in
 
 ## Including must-link constraints with anticlustering
 
-```{r}
-must_link_frequencies <- table(table(df$patientID))
-N_unique <- length(unique(df$patientID))
-```
-
 In our application, samples belonging to the same patient were required to be assigned to the same batch. We refer to a set of samples that must be assigned to same batch as a must-link *clique*. In our application, not all samples were part of a clique. For the data set that resembled our actual application, we simulated `r N` samples from `r N_unique` unique patients. Most patients (*n* = `r must_link_frequencies[1]`) were included with 1 sample; these samples were not part of a clique. The remaining `r N - must_link_frequencies[1]` patients were part of a clique, with clique sizes varying between 2 and 8: `r must_link_frequencies[2]` cliques of size 2, `r must_link_frequencies[3]` cliques of size 3, `r must_link_frequencies[4]` cliques of size 4, `r must_link_frequencies[5]` cliques of size 5, `r must_link_frequencies[6]` cliques of size 6, and `r must_link_frequencies[7]` clique of size 8. 
 
 To include must-link constraints with anticlustering, we use a downscaled data set where each unique patient---but not each single sample---constitutes a unit in the anticlustering process. Hence, in our application, the effective sample size was `r N_unique` instead of `r N`. Some adjustments of the exchange method are required to ensure (a) we still obtain a valid partitioning regarding the size constraints (equal-sized batches) and (b) the diversity is computed correctly during optimization. We therefore had to adjust both the initialization phase as well as the optimization phase of the exchange algorithm. 
 
 During initialization, we first assign all samples to a batch that are part of a clique (`r N - must_link_frequencies[1]` samples). Each clique must be assigned completely to one of the $K$ batches and samples within the clique must not be split apart. At the same time, the maximum capacity of each batch must not be exceeded. Using this conceptualization, the initialization step corresponds to a bin packing problem, which is one the classical NP complete problem in computer science [@garey1979]. We assign a weight to each clique, corresponding to the number of samples it contains. This leads there are $K$ batches each with capacity $\frac{N}{K}$, which have to be filled with cliques. The sum of the weights of the cliques in each batch must not exceed its capacity. Many optimal and heuristic algorithms have been developed to address the bin packing problem. as default method, we use a randomized fit heuristic to fill the batches. For each must-link cluster, we iterate through the $K$ batches in random order and assign it to the first batch where it fits. The process is expected to evenly distribute the must-link clusters among batches, and the random component is particularly useful if we use multiple restarts for the exchange algorithm. After assigning the must-link clusters to batches, the remaining samples can be assigned randomly to fill the remaining space. Note that our randomized fit algorithm is a heuristic that may not find an assignment of must-link groups to batches even if one is theoretically available. If the heuristic indicates that the batches cannot hold the must-link groups, we therefore use an optimal algorithm based on integer linear programming as fallback option, which allows us to verify if the constraints really cannot be fulfilled [@martello1990].
-
+ 
 The optimization phase of the exchange algorithm also uses the downscaled data set where each patient rather than each sample corresponds corresponds to a unit of analysis. To obtain the reduced distance matrix that preserves all information of the original distance matrix, we sum up all pairwise distances between samples in different cliques [@bocker2011]. This transformation preserves the computation of the diversity as compared to using the full data set, because the diversity itself is defined as a sum of distances within-cliques. The exchange heuristic is then conducted on the level of patients. During the exchange process, we only exchange cliques of the same size to ensure that the cardinality constraints are respected throughout (i.e., equal-sized groups).
 
 ## Simulation Study
