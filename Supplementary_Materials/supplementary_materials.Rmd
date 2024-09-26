@@ -249,17 +249,23 @@ The optimization phase of the exchange algorithm also uses a downscaled data set
 
 ## Evaluation
 
-We provide a twofold evaluation of the usage of anticlustering for batch assignment. The code and data for all evaluations is openly retrievable from XXX (**TODO**). As first evaluation, we seize up on the example applications that were provided by @yan2012 and @carry2023 to illustrate the usage of OSAT and the propensity score method, respectively. In each case, we illustrate how anticlustering performs on the example data sets provided by the authors of the alternative methods. It should be noted that neither package implements the must-link restrictions that we provide, so this evaluation is limited to the case of unrestricted assignment. As a second evaluation, we conducted a large scale simulation study that compares anticlustering with the OSAT package using synthetic data sets. We did not include the propensity score based method by @carry2023 in the simulation, because their current implementation is limited with regard to factors that we deemed important to vary in a large scale assessment. For example, the number of batches their method can process is currently limited to 4, while we also compared the methods' performance using a larger number of batches. Another limitation of the propensity score method is that their method was introduced as an optimal method that compares all possible batch assignments and selects the assignment that minimizes the differences in propensity scores between batches. This approach of complete enumeration is however only feasible for quite small data sets. 
+We evaluated the usefulness of anticlustering by comparing it to two alternative approaches for batch assignment: (1) the OSAT method by @yan2012, which already has been used frequently for the purpose of batch assignment, and (2) propensity score batch assignment (PSBA) by @carry2023, which is a more recent method that has not yet been applied frequently. The code and data for all evaluations is openly retrievable from XXX (**TODO**). As first evaluation, we seize up on the example applications that were provided by @yan2012 and @carry2023 to illustrate the usage of OSAT and PSBA, respectively. In each case, we illustrate how anticlustering performs on the example data sets provided by the authors of the alternative methods. It should be noted that neither package implements the must-link restrictions that we provide, so this evaluation is limited to the case of unrestricted assignment. As a second evaluation, we conducted a large scale simulation study that compared anticlustering with OSAT and PSBA using 10,000 synthetic data sets. As a secondary contribution of the simulation study, we investigated whether the quality of batch assignment is reduced when must-link constraints are included with anticlustering, as compared to an unconstrained anticlustering assignment.
 
-### Comparison with existing approaches
+### Implementation of methods
 
-OSAT is freely available as an R package from Bioconductor (citation). Alongside their package, the authors include a vignette that illustrates the basic usage of the OSAT method on an example data set. Their data set includes features of 576 persons who provided gene expression samples. In their application, the samples had to be assigned to 6 equal-sized batches, while they attempted to balance age, race and sample type (case vs. control). As the OSAT method does not deal with numeric variables, age was treated as a categorical variable with the levels (0,30], (30,40], (40,50], (50,60], and (60,100]. For their evaluation, the authors conducted the OSAT assignment and then computed a $\chi^2$-test that quantifies imbalance among batches for each of the 3 variables. A larger *p*-value associated with the $\chi^2$-test indicates that the distribution of the variables is more similar among batches. The authors reported *p*-values of .99058 for sample type,  .99963 for race, and 1.00000 for age group. Anticlustering led to *p*-values of .99999 for sample type, .99998 for race, and 1.00000 for age group. Hence, in this example provided by the OSAT authors, anticlustering led to improved balance among the six batches compared to OSAT.
+To obtain the most fair comparison to the alternative approaches, anticlustering was implemented using the default settings of the `anticlust` package [package version, @papenberg2020]: We optimized the diversity objective using the (non-local maximum) exchange method without additional repetitions, using the Euclidean distance as measure of dissimilarity. We used the OSAT implementation that is freely available as an R package from Bioconductor [version; citation]. We used the default OSAT algorithm optimal shuffle. **TODO say something about the algorithm**. We increased the number of random initializations to 5000, which is recommended in the vignette that accompanies the OSAT package. @carry2023 provided an R implementation of PSBA that is available from an accompanying online repository.[^github] In the original publication, the authors presented a version of PSBA that investigates all possible batch assignments and selects the one that minimizes discrepancy in propensity scores among batches. However, investigating all possible assignment is only feasible for small data sets and therefore not generally applicable. In the online repository, the authors therefore included an implementation that randomly generates a user defined number of batch assignments, and selects the best one among them. For comparability with OSAT, we set the number of random assignments to 5000. When generating the assignments, PSBA allows to treat one variable a stratification variable; if requested by the user, PSBA only generates assignments that have a perfect split according to the stratification variable. In the simulation, we did not declare a variable as stratification variable, because there is no obvious prioritization for any one variable in synthetic data sets. Moreover, the PSBA implementation provided by the authors only allows stratification variables that contain two levels, which was too limiting for the settings of our simulation. 
 
-@carry2023 provided an R implementation of their propensity score method that is available from an accompanying online repository.[^github] Their implementation is also accompanied with a vignette that illustrates the usage of their function on the data set GSE122288 from the GEO data base[^GEO]. The data set includes 61 cases who provided blood samples to measure DNA methylation levels. In their hypothetical application, these samples had to be assigned to three batches, two batches containing 20 samples and one batch containing 21 samples. They used their propensity score method to balance the covariates neonate sex, birth weight, and gestational age. They used the R package `table1` (citation) to illustrate the balancing. Table 3 reproduces the results and also includes the balance that was obtained via the application of anticlustering. As shown, both approaches led to a similar level of balance. 
+[^github]: https://github.com/carryp/PS-Batch-Effect
+
+
+### Example applications
+
+Alongside the OSAT package, the authors included a vignette that illustrates the basic usage of the OSAT method on an example data set. The data set includes features of 576 persons who provided gene expression samples. In their application, the samples had to be assigned to 6 equal-sized batches, while they attempted to balance age, race and sample type (case vs. control). As the OSAT method does not deal with numeric variables, age was treated as a categorical variable with the levels (0,30], (30,40], (40,50], (50,60], and (60,100]. For their evaluation, the authors conducted the OSAT assignment and then computed a $\chi^2$-test that quantifies imbalance among batches for each of the 3 variables. A larger *p*-value associated with the $\chi^2$-test indicates that the distribution of the variables is more similar among batches. The authors reported *p*-values of .99058 for sample type,  .99963 for race, and 1.00000 for age group. Anticlustering led to *p*-values of .99999 for sample type, .99998 for race, and 1.00000 for age group. Hence, in this example provided by the OSAT authors, anticlustering led to improved balance among the six batches compared to OSAT.
+
+The developers of PSBA also provided an example application in a vignette. The application uses the data set GSE122288 from the GEO data base[^GEO]. The data set includes 61 cases who provided blood samples to measure DNA methylation levels. In the hypothetical application, these samples had to be assigned to three batches, two batches containing 20 samples and one batch containing 21 samples. They used PSBA to balance the covariates neonate sex, birth weight, and gestational age, and employed the R package `table1` (citation) to illustrate the balancing. Table 3 reproduces the results and also includes the balance that was obtained via the application of anticlustering. As shown, both approaches led to a similar level of balance in this example. 
 
 [^GEO]: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE122288
 
-[^github]: https://github.com/carryp/PS-Batch-Effect
 
 ```{r}
 
@@ -284,26 +290,35 @@ tt$ID <- 1:nrow(tt)
 p_values <- tt[, grepl("p_", colnames(tt))]
 
 # global results OSAT vs. anticlust. How often is p value of anticlust better (i.e. larger)?
-anticlust_better <- apply(p_values, 1, function(x) x[1:5] < x[6:10])
+anticlust_better1 <- apply(p_values, 1, function(x) x[1:5] < x[6:10])
 osat_better <- apply(p_values, 1, function(x) x[1:5] > x[6:10])
-same <- apply(p_values, 1, function(x) x[1:5] == x[6:10])
+same1 <- apply(p_values, 1, function(x) x[1:5] == x[6:10])
 
-anticlust_better_percent <- round(mean(anticlust_better, na.rm = TRUE) * 100)
+anticlust_better_percent1 <- round(mean(anticlust_better1, na.rm = TRUE) * 100)
 osat_better_percent <- round(mean(osat_better, na.rm = TRUE) * 100)
-same_percent <- round(mean(same, na.rm = TRUE) * 100)
+same_percent1 <- round(mean(same1, na.rm = TRUE) * 100)
+
+# global results PS vs. anticlust. How often is p value of anticlust better (i.e. larger)?
+anticlust_better2 <- apply(p_values, 1, function(x) x[1:5] < x[16:20])
+ps_better <- apply(p_values, 1, function(x) x[1:5] > x[16:20])
+same2 <- apply(p_values, 1, function(x) x[1:5] == x[16:20])
+
+anticlust_better_percent2 <- round(mean(anticlust_better2, na.rm = TRUE) * 100)
+ps_better_percent <- round(mean(ps_better, na.rm = TRUE)  * 100)
+same_percent2 <- round(mean(same2, na.rm = TRUE) * 100)
 
 avg_constrained_obj <- round(mean(tt$diversity_constrained / tt$diversity_unconstrained) * 100, 1)
 constrained_not_worse <- round(mean(apply(p_values, 1, function(x) x[6:10] <= x[11:15]), na.rm = TRUE)*100)
 
 ```
 
-To more thoroughly evaluate the the usefulness of anticlustering for batch assignment, we conducted a large scale simulation study. The simulation followed two goals. First, it compared anticlustering with the OSAT package, which has been used frequently for the purpose of batch assignment. Second, the simulation study investigated whether the quality of batch assignment is reduced with must-link constraints as compared to an unconstrained assignment. We generated `r nrow(tt)` data sets, which were all processed via (a) the default OSAT algorithm (optimal shuffle with 5000 repetitions), (b) unconstrained anticlustering and (c) anticlustering subject to must-link constraints. To obtain a fair comparison to OSAT, we used the default (non-local maximum) exchange method implemented in `anticlust`, optimizing the diversity on the basis of the Euclidean distance. No additional restarts of the algorithm were conducted and no additional data processing was applied. 
+For the simulation, we generated `r nrow(tt)` data sets. Data sets were processed via (a) OSAT, (b) PSBA, (c) unconstrained anticlustering and (d) anticlustering subject to must-link constraints. Because the OSAT method is only applicable to categorical variables, we used categorical variables in our simulation. For anticlustering and for PSBA, the categorical variables were binary coded before the methods were applied (see Table 2). For each data set, we randomly determined the number of categorical variables (2-5), the number of classes per variable (2-5; the distribution of classes was uniform), the total sample size $N$ (between 50 and 500) and the number of batches $K$ (2, 4, or 10 equal-sized batches). PSBA was only applied for $K = 2$ and $K = 4$ ($n = `r sum(tt[["K"]] < 10)`$ data sets) because the authors' implementation only allows the assignment to a maximum of four batches. Must-link constraints were generating a random integer between 1 and $N$ (with equal probability), and using the resulting numbers as must-link grouping variables. This rule resulted in a distribution of constraints that resembled our motivating application: 58% of all elements had no must-link partner; 29% had 1 must-link partner; 10% had 2 must-link partners, and 3% had 3 or more must-link partners.
 
-In each data set, we randomly determined the number of categorical variables (2-5), the number of classes per variable (2-5), the total sample size (between 50 and 500) and the number of batches (2, 5, or 10 equal-sized batches). Must-link constraints were randomly generated in such a way that the distribution of constraints resembled our motivating application: 58% of all elements had no must-link partner; 29% had 1 must-link partner; 10% had 2 must-link partners, and 3% had 3 or more must-link partners.
+For each simulation run, we computed $\chi^2$-tests to assess the imbalance among batches for each of the 2-5 variables, for each of the three competing methods. We stored the *p*-value associated with each test. A higher *p*-value indicates that there is less imbalance among batches, i.e., that the batches are more similar. The simulation revealed that in `r anticlust_better_percent1`% of all variable comparisons, balance among batches was better when using anticlustering as compared to OSAT. Balance was equal in `r same_percent1`% of all comparisons, and only in `r osat_better_percent`% OSAT outperformed `anticlust`. In `r anticlust_better_percent2`% of all variable comparisons, balance was better when using anticlustering as compared to PSBA. Balance was equal in `r same_percent2`% of all comparisons, and in `r ps_better_percent`% PSBA outperformed anticlustering. Figure 2 illustrates the average *p*-values in dependence of the number of variables ($M$) and the number of batches ($K$). The online supplement also includes additional Figures illustrating average *p*-values in dependence of the other factors that varied in the simulation (the sample size $N$ and the number of classes per categorical variables; **TODO**). Figure 2 shows that increasing the number of variables posed severe challenges for OSAT, but hardly affected anticlustering. PSBA also showed decreased performance with an increasing number of variables, but less so than OSAT.
 
-For each simulation run, we computed $\chi^2$-tests to assess the imbalance among batches for each of the 2-5 variables, for each of the three competing methods. We stored the *p* value associated with each test. A higher *p* value indicates that there is less imbalance among batches, i.e., that the batches are more similar. The simulation revealed that in `r anticlust_better_percent`% of all variable comparisons, balance among batches was better when using anticlustering as compared to OSAT. Balance was equal in `r same_percent`% of all comparisons, and only in `r osat_better_percent`% OSAT outperformed `anticlust`. These results clearly underline the power of anticlustering for batch assignment. Moreover, the anticlustering assignment that was subjected to must-link constraints on average achieved `r avg_constrained_obj`% of the objective value of the unconstrained assignment. Hence, must-link constraints are not only desirable from a user's point of view, but they also do not decrease batch balance considerably; in `r constrained_not_worse`% of all cases, balance was not at all reduced by the constraints. Figure 2 illustrates the average balance among batches in dependence of the factors that varied between data sets. Must-link constraints primarily reduced balance in smaller data sets, but did not strongly affect the balance in larger data sets. Remarkably, the constrained anticlustering assignment led to better balance than the OSAT assignment that did not employ any constraints. Figure 2 also shows increasing the number of variables as well as increasing the number of categories per variables posed severe challenges for OSAT, but hardly affected anticlustering.
+The anticlustering assignment that was subjected to must-link constraints on average achieved `r avg_constrained_obj`% of the objective value of the unconstrained assignment. Hence, must-link constraints are not only desirable from a user's point of view, but they also do not decrease batch balance considerably; in `r constrained_not_worse`% of all cases, balance was not at all reduced by the constraints. Remarkably, the constrained anticlustering assignment led to better balance than the OSAT and PSBA assignments that did not employ any constraints (see Figure 2).
 
-```{r, fig.cap= "Average \\textit{p} values in dependence of the factors that varied in the simulation study. Higher \\textit{p} values indicate better balance. Anticlustering maintained a comparable level of balance in all conditions. OSAT's performance decreased with increasing number of variables and number of categories per variable."}
+```{r, fig.cap= "Average \\textit{p} values in dependence of the number of batches and the number of variables. Higher \\textit{p} values indicate better balance. Anticlustering maintained a comparable level of balance in all conditions. OSAT's performance decreased with increasing number of variables most strongly."}
 
 ## Some more sophisticated analyes:
 dfl <- tt |> 
@@ -311,64 +326,33 @@ dfl <- tt |>
   pivot_longer(
     cols = starts_with("p_")
   ) |> 
-  na.omit()
+  filter(!is.na(value))
 
 dfl$Method <- "Anticlustering"
 dfl$Method[grepl("osat", dfl$name)] <- "OSAT"
 dfl$Method[grepl("p_anticlust_c", dfl$name)] <- "Must-Link Anticlustering"
+dfl$Method[grepl("p_ps", dfl$name)] <- "PSBA"
 
-dfl$N_category <- santoku::chop(dfl$N, breaks = c(100, 200, 300, 400))
-dfl$K <- ordered(dfl$K)
-dfl$M <- ordered(dfl$M)
-dfl$P <- ordered(dfl$P)
+facets <- c(
+  `2` = "K = 2",
+  `4` = "K = 4",
+  `10` = "K = 10"
+)
 
-p0 <- dfl |> 
-  group_by(Method, N_category) |> 
-  summarise(`p value` = mean(value)) |> 
-  ggplot(aes(y = `p value`, x = N_category, color = Method)) +
-  geom_point(aes(color = Method, shape = Method)) + 
-  theme_bw(base_size = 8) +
-  xlab("Sample size (categorized)") +
-  ylab("Average p value")
-
-p1 <- dfl |> 
-  group_by(Method, M) |> 
+dfl |> 
+  group_by(Method, M, K) |> 
   summarise(`p value` = mean(value)) |> 
   ggplot(aes(y = `p value`, x = M, color = Method)) +
   geom_point(aes(color = Method, shape = Method)) + 
-  theme_bw(base_size = 8) +
+  geom_line(aes(color = Method, linetype = Method)) +
+  facet_grid(cols = vars(`K`), labeller = as_labeller(facets))+
+  theme_bw(base_size = 12) +
   xlab("Number of variables") +
-  ylab("")
+  ylab("Average p value") + 
+  theme(legend.position = "top", legend.title = element_blank())
 
-p2 <- dfl |> 
-  group_by(Method, K) |> 
-  summarise(`p value` = mean(value)) |> 
-  ggplot(aes(y = `p value`, x = K, color = Method)) +
-  geom_point(aes(color = Method, shape = Method)) +
-  theme_bw(base_size = 8) +
-  xlab("Number of batches") +
-  ylab("Average p value")
 
-p3 <- dfl |> 
-  group_by(Method, P) |> 
-  summarise(`p value` = mean(value)) |> 
-  ggplot(aes(y = `p value`, x = P, color = Method)) +
-  geom_point(aes(color = Method, shape = Method)) +
-  theme_bw(base_size = 8) +
-  xlab("Number of categories per variable") +
-  ylab("")
-
-p0 + p1 + p2 + p3+ plot_layout(guides = "collect", widths = c(2, 1)) 
 ```
-
-## Evaluation
-
-## Optimal algorithm for anticlustering under cannot-link constraints
-
-- Solving anticlustering optimally (i.e., finding a batch assignment with globally optimal value in diversity) under must-link constraints is possible using the ILP by @papenberg2020
-- We have to adjust the input matrix: Samples that must be linked receive sufficiently large pairwise distance; in this case, a globally optimal solution must pair these samples in the same batch (if the constraints can be fulfilled at all)
-- We investigate the feasibiliy of the optimal approach, which solves a computationally difficult (NP hard) problem (it seems to scale to about 40-50 samples; for larger data sets, a heuristic is required)
-- We can use the optimal algorithm to validate the quality of our heuristic (how often does it find the globally optimal solution)
 
 \clearpage
 
