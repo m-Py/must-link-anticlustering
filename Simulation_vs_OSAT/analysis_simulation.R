@@ -3,10 +3,11 @@ library(here)
 library(tidyverse)
 library(santoku)
 
-tt <- read.csv(here("Simulation_vs_OSAT", "results_N=4543_save.csv"), sep = ";")
+tt <- read.csv(here("Simulation_vs_OSAT", "results.csv"), sep = ";")
 tt$ID <- 1:nrow(tt)
 nrow(tt)
 p_values <- tt[, grepl("p_", colnames(tt))]
+
 
 # global results OSAT vs. anticlust. How often is p value of anticlust better (i.e. larger)?
 anticlust_better <- apply(p_values, 1, function(x) x[1:5] < x[6:10])
@@ -17,14 +18,16 @@ mean(anticlust_better, na.rm = TRUE) |> round(2)
 mean(osat_better, na.rm = TRUE) |> round(2)
 mean(same, na.rm = TRUE) |> round(2)
 
-# osat vs. constrained anticlust 
-anticlust_better <- apply(p_values, 1, function(x) x[1:5] < x[11:15])
-osat_better <- apply(p_values, 1, function(x) x[1:5] > x[11:15])
-same <- apply(p_values, 1, function(x) x[1:5] == x[11:15])
+# global results PS vs. anticlust. How often is p value of anticlust better (i.e. larger)?
+anticlust_better <- apply(p_values, 1, function(x) x[1:5] < x[16:20])
+ps_better <- apply(p_values, 1, function(x) x[1:5] > x[16:20])
+same <- apply(p_values, 1, function(x) x[1:5] == x[16:20])
 
 mean(anticlust_better, na.rm = TRUE) |> round(2)
-mean(osat_better, na.rm = TRUE) |> round(2)
+mean(ps_better, na.rm = TRUE) |> round(2)
 mean(same, na.rm = TRUE) |> round(2)
+
+# PS method seems to be better than OSAT, but still outperformed by anticlust
 
 # Average relative objective of constrained assignment:
 mean(tt$diversity_constrained / tt$diversity_unconstrained) |> round(3)
@@ -33,15 +36,8 @@ mean(tt$diversity_constrained / tt$diversity_unconstrained) |> round(3)
 # How often is balance not reduced by constraints:
 mean(apply(p_values, 1, function(x) x[6:10] <= x[11:15]), na.rm = TRUE) |> round(2)
 
-# Run times. We do not report those in the paper but the difference is actually
-# quite substantial (anticlust is implemented in C and OSAT in R. I think this 
-# explains the difference. I even think that anticlustering should actually be 
-# the computationally more expensive algorithm - but I'm not entirely sure)
-mean(tt$OSAT_t)
-mean(tt$ANTICLUST_t)
-mean(tt$ANTICLUST_t_c)
-
-
+# Run times. We also should report those in the paper
+colMeans(tt[, grepl("_t", colnames(tt))], na.rm = TRUE) |> round(2)
 
 ## Some more sophisticated analyes:
 
@@ -50,12 +46,12 @@ dfl <- tt |>
   pivot_longer(
     cols = starts_with("p_")
   ) |> 
-  na.omit()
+  filter(!is.na(value))
 
 dfl$Method <- "Anticlustering"
 dfl$Method[grepl("osat", dfl$name)] <- "OSAT"
 dfl$Method[grepl("p_anticlust_c", dfl$name)] <- "Must-Link Anticlustering"
-
+dfl$Method[grepl("p_ps", dfl$name)] <- "Propensity Score Batch Effect"
 
 ## Analyze data by variables
 
@@ -78,12 +74,19 @@ dfl |>
   group_by(Method, P) |> 
   summarise(mean(value))
 
+facets <- c(
+  `2` = "K = 2",
+  `4` = "K = 4",
+  `10` = "K = 10"
+)
+
 dfl |> 
-  group_by(Method, M) |> 
+  group_by(Method, M, K) |> 
   summarise(`p value` = mean(value)) |> 
   ggplot(aes(y = `p value`, x = M, color = Method)) +
   geom_point(aes(color = Method, shape = Method)) + 
   geom_line(aes(color = Method, linetype = Method)) +
+  facet_grid(cols = vars(`K`), labeller = as_labeller(facets))+
   theme_bw(base_size = 14) +
   xlab("Number of variables") +
   ylab("Average p value")
