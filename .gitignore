@@ -50,3 +50,5 @@ rsconnect/
 
 # rkward preview files for rmarkdown documents
 *tmp_rkward_preview*
+
+Simulation_vs_OSAT/PS-Batch-Effect/*
