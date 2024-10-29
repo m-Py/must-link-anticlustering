@@ -1,6 +1,6 @@
 # oast_vs_anticlust.R
 
-library(anticlust) # I used 0.8.6.9999, development version, which has must_link argument for `anticlustering()`
+library(anticlust) # I used version 0.8.7, which has must_link argument for `anticlustering()`
 library(OSAT) # I got version OSAT_1.52.0 from Bioconductor
 library(here) # for managing relative paths in the project
 
