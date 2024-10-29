@@ -257,30 +257,6 @@ To obtain the most fair comparison to the alternative approaches, anticlustering
 [^github]: https://github.com/carryp/PS-Batch-Effect
 
 
-### Example applications
-
-Alongside the OSAT package, the authors included a vignette that illustrates the basic usage of the OSAT method on an example data set. The data set includes features of 576 persons who provided gene expression samples. In their application, the samples had to be assigned to 6 equal-sized batches, while they attempted to balance age, race and sample type (case vs. control). As the OSAT method does not deal with numeric variables, age was treated as a categorical variable with the levels (0,30], (30,40], (40,50], (50,60], and (60,100]. For their evaluation, the authors conducted the OSAT assignment and then computed a $\chi^2$-test that quantifies imbalance among batches for each of the 3 variables. A larger *p*-value associated with the $\chi^2$-test indicates that the distribution of the variables is more similar among batches. The authors reported *p*-values of .99058 for sample type,  .99963 for race, and 1.00000 for age group. Anticlustering led to *p*-values of .99999 for sample type, .99998 for race, and 1.00000 for age group. Hence, in this example provided by the OSAT authors, anticlustering led to improved balance among the six batches compared to OSAT.
-
-The developers of PSBA also provided an example application in a vignette. The application uses the data set GSE122288 from the GEO data base[^GEO]. The data set includes 61 cases who provided blood samples to measure DNA methylation levels. In the hypothetical application, these samples had to be assigned to three batches, two batches containing 20 samples and one batch containing 21 samples. They used PSBA to balance the covariates neonate sex, birth weight, and gestational age, and employed the R package `table1` (citation) to illustrate the balancing. Table 3 reproduces the results and also includes the balance that was obtained via the application of anticlustering. As shown, both approaches led to a similar level of balance in this example. 
-
-[^GEO]: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE122288
-
-
-```{r}
-
-t1 <- read.csv("Results_GSE122288_Propensity_Score.csv", sep = ";")[, -5] 
-t2 <- read.csv("Results_GSE122288_Anticlust.csv", sep = ";")[-1, -5]
-t3 <- rbind(t1, t2)
-colnames(t3) <- c("", "B1", "B2", "B3")
-
-kbl(t3, caption = "Comparison of the Propensity score approach and anticlustering.", booktabs = T, row.names=FALSE, align = c("l", "c", "c", "c")) |>
-  kable_styling() |>
-  pack_rows("Propensity Score", 2, 10) |>
-  pack_rows("Anticlustering", 11, 19) |>
-  add_indent(c(3:4, 6:7, 9:10, 12:13, 15:16, 18:19))
-
-```
-
 ### Simulation Study
 
 ```{r}
