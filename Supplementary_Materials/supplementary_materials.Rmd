@@ -25,20 +25,12 @@ categorical_features <- df[, c("race", "ethnicity", "clinical_site",
 
 ```
 
-## Design
-
-### Motivating Example
+# Motivating Example
 
 ```{r}
 must_link_frequencies <- table(table(df$patientID))
 N_unique <- length(unique(df$patientID))
 ```
-
-- Explain the application and why the application / batch assignment is needed
-- Explain "real" data set and synthetic data set 
-  * which variables are included (why is it relevant to balance them?)
-  * (Why we do not share the original data)
-
 
 ```{r}
 
@@ -137,7 +129,7 @@ and the percentage of samples belonging to hispanic patients ranged between
 
 In the next section, we will explain the methodology of anticlustering that led to the batch assignments illustrated in Table 1. We will reiterate the general anticlustering methodology first, before outlining how we included must-link constraints with anticlustering. The implementation of must-link constraints with anticlustering is a novel contribution of the current paper. 
 
-### Anticlustering
+# Methods
 
 Anticlustering is an optimization method that is characterized by (a) an objective function that quantifies the balance among batches, and (b) an algorithm that conducts the batch assignment in such a way that balance among batches is maximized. Anticlustering owes its name to the fact that the objective functions it uses are the reversal of criteria used in cluster analysis. For example, @spath1986 already recognized that by maximizing instead of minimizing the k-means criterion (the "variance"), he was able to create groups that are similar to each other, and presented it as an improvement over the more intuitive random assignment. @brusco2019 recognized that other objective functions known from cluster analysis can also be implemented in the context of anticlustering. Anticlustering has uses in many research fields including psychology [@brusco2019; @schaper2023], education [@krauss2013; @baker2002], artificial intelligence [@steghofer2013], machine learning [@mauri2023; @rahu2024], network systems [@mohebi2022], and operations research [@gallego2013; @gliesch2021]. However, to the best of our knowledge, anticlustering has not previously been applied for batch assignment in high throughput sequencing.
 
@@ -236,7 +228,7 @@ knitr::kable(
 )
 ```
 
-We use an exchange algorithm to maximize the diversity [@spath1986; @papenberg2020; @weitz1998.]. It consists of two steps: an initialization step and an optimization step. As initialization, it randomly assigns samples to $K$ equal-sized batches. In principle, unequal-sized batches would also be possible, but equal-sized batches were required in the current application. After initialization, the algorithm selects the first sample and checks how the diversity would change if the sample were swapped with each sample that is currently assigned to a different batch. After simulating each exchange---that is $N - \frac{N}{K}$ exchanges---it realizes the one exchange that increases the diversity the most. It does not conduct an exchange if no improvement in diversity is possible. This procedure is repeated for each sample, leading to the evaluation of $N \cdot \frac{N}{K}$ exchanges in total; it terminates after the last sample was processed. The procedure might also restart at the first element and reiterate through all samples until no exchange leads to an improvement any more, i.e., until a local maximum is found. In `anticlust`, we also implemented this local maximum search, which corresponds to the algorithm LCW by @weitz1998. For better results, it is also possible to restart the search algorithm multiple times using different (random) initializations [@spath1986]. For the anticlustering assignment illustrated in Table 1, we used `r nrep` repetitions of the local maximum search LCW, with the squared Euclidean distance as measure of pairwise dissimilarity. To ensure comparable weight of the three features, we also applied a standardization of the input variables before the distance was computed. Using a standardization is recommended if the variables differ strongly in their ranges [@papenberg2024].
+We use an exchange algorithm to maximize the diversity [@spath1986; @papenberg2020; @weitz1998]. It consists of two steps: an initialization step and an optimization step. As initialization, it randomly assigns samples to $K$ equal-sized batches. In principle, unequal-sized batches would also be possible, but equal-sized batches were required in the current application. After initialization, the algorithm selects the first sample and checks how the diversity would change if the sample were swapped with each sample that is currently assigned to a different batch. After simulating each exchange---that is $N - \frac{N}{K}$ exchanges---it realizes the one exchange that increases the diversity the most. It does not conduct an exchange if no improvement in diversity is possible. This procedure is repeated for each sample, leading to the evaluation of $N \cdot \frac{N}{K}$ exchanges in total; it terminates after the last sample was processed. The procedure might also restart at the first element and reiterate through all samples until no exchange leads to an improvement any more, i.e., until a local maximum is found. In `anticlust`, we also implemented this local maximum search, which corresponds to the algorithm LCW by @weitz1998. For better results, it is also possible to restart the search algorithm multiple times using different (random) initializations [@spath1986]. For the anticlustering assignment illustrated in Table 1, we used `r nrep` repetitions of the local maximum search LCW, with the squared Euclidean distance as measure of pairwise dissimilarity. To ensure comparable weight of the three features, we also applied a standardization of the input variables before the distance was computed. Using a standardization is recommended if the variables differ strongly in their ranges [@papenberg2024].
 
 ## Including Must-Link Constraints with Anticlustering
 
@@ -246,18 +238,7 @@ During initialization, we first assign all samples to a batch that are part of a
  
 The optimization phase of the exchange algorithm also uses a downscaled data set where each patient rather than each sample corresponds corresponds to a unit of analysis. To obtain a reduced distance matrix that preserves all information of the original distance matrix, we sum up all pairwise distances between samples in different cliques [@bocker2011]. In the context of maximizing the diversity, this transformation sufficiently preserves the relevant information in the original distance matrix. Using the initial assignment and the reduced distance matrix, we apply the same exchange algorithm as we described for the unrestricted anticlustering application. However, during the exchange process, we only exchange cliques of the same size (e.g., patients providing the same number of samples) to ensure that the cardinality constraints are respected throughout (i.e., equal-sized groups).
 
-## Evaluation
-
-We evaluated the usefulness of anticlustering by comparing it to two alternative approaches for batch assignment: (1) the OSAT method by @yan2012, which already has been used frequently for the purpose of batch assignment, and (2) propensity score batch assignment (PSBA) by @carry2023, which is a more recent method that has not yet been applied frequently. The code and data for all evaluations is openly retrievable from XXX (**TODO**). As first evaluation, we seize up on the example applications that were provided by @yan2012 and @carry2023 to illustrate the usage of OSAT and PSBA, respectively. In each case, we illustrate how anticlustering performs on the example data sets provided by the authors of the alternative methods. It should be noted that neither package implements the must-link restrictions that we provide, so this evaluation is limited to the case of unrestricted assignment. As a second evaluation, we conducted a large scale simulation study that compared anticlustering with OSAT and PSBA using 10,000 synthetic data sets. As a secondary contribution of the simulation study, we investigated whether the quality of batch assignment is reduced when must-link constraints are included with anticlustering, as compared to an unconstrained anticlustering assignment.
-
-### Implementation of methods
-
-To obtain the most fair comparison to the alternative approaches, anticlustering was implemented using the default settings of the `anticlust` package [package version, @papenberg2020]: We optimized the diversity objective using the (non-local maximum) exchange method without additional repetitions, using the Euclidean distance as measure of dissimilarity. We used the OSAT implementation that is freely available as an R package from Bioconductor [version; citation]. We used the default OSAT algorithm optimal shuffle. **TODO say something about the algorithm**. We increased the number of random initializations to 5000, which is recommended in the vignette that accompanies the OSAT package. @carry2023 provided an R implementation of PSBA that is available from an accompanying online repository.[^github] In the original publication, the authors presented a version of PSBA that investigates all possible batch assignments and selects the one that minimizes discrepancy in propensity scores among batches. However, investigating all possible assignment is only feasible for small data sets and therefore not generally applicable. In the online repository, the authors therefore included an implementation that randomly generates a user defined number of batch assignments, and selects the best one among them. For comparability with OSAT, we set the number of random assignments to 5000. When generating the assignments, PSBA allows to treat one variable a stratification variable; if requested by the user, PSBA only generates assignments that have a perfect split according to the stratification variable. In the simulation, we did not declare a variable as stratification variable, because there is no obvious prioritization for any one variable in synthetic data sets. Moreover, the PSBA implementation provided by the authors only allows stratification variables that contain two levels, which was too limiting for the settings of our simulation. 
-
-[^github]: https://github.com/carryp/PS-Batch-Effect
-
-
-### Simulation Study
+## Simulation Study
 
 ```{r}
 tt <- read.csv(here("Simulation_vs_OSAT", "results.csv"), sep = ";")
