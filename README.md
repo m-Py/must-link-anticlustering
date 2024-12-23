@@ -1,9 +1,9 @@
 # must-link-anticlustering
 
-- Directory `Application` contains code for the example application (synthetic data provided by Tomiko)
+- Directory `Application` contains code for the example application (synthetic data provided by Tomiko Oskotsky)
+- Directory `Simulation_vs_OSAT` implements a simulation that compares the quality of the OSAT method, the propensity score method, and anticlustering
+- Directory `Supplementary_Materials` has a document that has supplementary information and analysis on the project. 
 - Directory `Running_Time_Optimal_Algorithm` has code that investigates the feasibility of an optimal algorithm for must-link anticlustering
-- Directory `Simulation_vs_OSAT` implements a simulation that compares the quality of the OSAT method and anticlustering
-- Directory `Supplementary_Materials` has a document that might be used as supplementary information to a short report (describing the anticlustering method and the must-link addition in more detail than is possible in the main paper). It is an ongoing writing process.
 
 ## Dependencies
 
@@ -12,9 +12,7 @@ The following R packages are needed to reproduce the analyses / documents:
 **R packages**
 
 - `anticlust`
-  * Currently I use a development version 0.8.6.9999, which implements the cannot-link method; it will be part of the release in the near future. For now, it has to be installed from a development branch from Github.
-  * `if (!require("remotes", quietly = TRUE)) install.packages("remotes")`
-  * `remotes::install_github("m-Py/anticlust", ref = "additional_solvers")`
+  * I used version 0.8.7, which is available from CRAN.
 - `OSAT` (For Simulation Study)
   * [Available from Bioconductor](https://bioconductor.org/packages/release/bioc/html/OSAT.html)
   * `if (!require("BiocManager", quietly = TRUE)) install.packages("BiocManager")`
@@ -33,6 +31,6 @@ In the directory `Running_Time_Optimal_Algorithm`, we evaluate an optimal algori
 ```
 if (!require("remotes", quietly = TRUE)) 
   install.packages("remotes")
-remotes::install_github("m-Py/anticlust", ref = "additional_solvers")
+remotes::install_github("m-Py/anticlust", ref = "gurobi")
 ```
 
