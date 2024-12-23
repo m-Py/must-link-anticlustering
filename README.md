@@ -17,6 +17,9 @@ The following R packages are needed to reproduce the analyses / documents:
   * [Available from Bioconductor](https://bioconductor.org/packages/release/bioc/html/OSAT.html)
   * `if (!require("BiocManager", quietly = TRUE)) install.packages("BiocManager")`
   * `BiocManager::install("OSAT")`
+- Propensity Score Batch Assignment
+  * Available from https://github.com/carryp/PS-Batch-Effect
+  * Last commit from when I accessed the files: d9ba5cd0d9a240e761d045a99557b715355ddfb8
 - `here` (for handling relative paths in this project; the working directory is always assumed to be the top-level directory)
   * `install.packages("here")`
 - tidyverse packages (for data analysis)
