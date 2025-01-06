@@ -8,6 +8,7 @@ tt$ID <- 1:nrow(tt)
 nrow(tt)
 p_values <- tt[, grepl("p_", colnames(tt))]
 
+colMeans(p_values)
 
 # global results OSAT vs. anticlust. How often is p value of anticlust better (i.e. larger)?
 anticlust_better <- apply(p_values, 1, function(x) x[1:5] < x[6:10])
@@ -52,6 +53,12 @@ dfl$Method <- "Anticlustering"
 dfl$Method[grepl("osat", dfl$name)] <- "OSAT"
 dfl$Method[grepl("p_anticlust_c", dfl$name)] <- "Must-Link Anticlustering"
 dfl$Method[grepl("p_ps", dfl$name)] <- "Propensity Score Batch Effect"
+dfl$Method[grepl("p_exper", dfl$name)] <- "experDesign"
+
+
+dfl |> 
+  group_by(Method) |> 
+  summarise(mean(value))
 
 ## Analyze data by variables
 

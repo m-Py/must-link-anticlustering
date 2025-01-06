@@ -2,6 +2,7 @@
 
 library(anticlust) # I used version 0.8.7, which has must_link argument for `anticlustering()`
 library(OSAT) # I got version OSAT_1.52.0 from Bioconductor
+library(experDesign) # I got version 0.4.0 from CRAN
 library(here) # for managing relative paths in the project
 
 sessionInfo()
@@ -88,13 +89,38 @@ named_1row_matrix <- function(x, prefix) {
 }
 
 
+### EXPERDESIGN
+# experDesign can handle categorical variables (i.e., factors in R), but does not
+# optimize similarity for them. So we will insert binary coded categories into 
+# this method as well (because otherwise it will perform the same as random assignment)
+my_experDesign <- function(data, K, nSim = 5000) {
+  data <- data.frame(data)
+  data[, 1] <- factor(data[, 1]) # wow, experDesign seems to need at least one categorical variable...
+  index <- design(data, size_subset = nrow(data)/K, iterations = nSim)
+  groups <- experDesign_index_to_cluster_vector(index)
+  tab <- table(groups)
+  stopifnot(all(tab[1] == tab)) # ensure that experDesign returns equal sized groups
+  stopifnot(length(tab) == K) # ensure that the correct number of clusters is returned
+  groups
+}
+
+# basic function to convert output of experDesign to clustering vector as used in anticlust (or `kmeans()`)
+experDesign_index_to_cluster_vector <- function(index) {
+  N <- sum(lengths(index))
+  cl <- rep(NA, N) 
+  for (i in seq_along(index)) {
+    cl[index[[i]]] <- i
+  }
+  cl
+}
+
 generate_categorical_data <- function(N, M, P) {
   data <- data.frame(matrix(sample(P, replace = TRUE, size = N*M), ncol = M))
   as.data.frame(lapply(data, as.factor))
 }
 
 # set.seed(123) # set seed for final simulation 
-nsim <- 500
+nsim <- 10
 
 # Unfortunately, the PS implementation needs a seed. It also sets seeds 
 # repeatedly, which can easily mess with the logic of the remaining 
@@ -114,11 +140,13 @@ for (i in 1:nsim) {
   
   data <- generate_categorical_data(N, M, P)
   
+  repetitions <- 100
+  
   start <- Sys.time()
   OSAT <- my_osat(
     data,
     K = K, 
-    nSim = 5000
+    nSim = repetitions
   )
   OSAT_t <- as.numeric(difftime(Sys.time(), start, units = "s"))
   
@@ -154,23 +182,29 @@ for (i in 1:nsim) {
   USE_PS <- K <= 4
   if (USE_PS) {
     start <- Sys.time()
-    PS <- my_ps_batch_effect(binary_categories, K = K, SEED = seeds_ps[i])
+    PS <- my_ps_batch_effect(binary_categories, K = K, SEED = seeds_ps[i], nSim = repetitions)
     PS_time <- as.numeric(difftime(Sys.time(), start, units = "s"))
   }
-
   
-  # OSAT vignette uses p values to quantify discrepancy in each category between batches
-  # (I would also use p values in the simulation in our paper I guess)
+  ## Perform experDesign method
+  start <- Sys.time()
+  EXPER <- my_experDesign(binary_categories, K, nSim = repetitions)
+  EXPER_t <- as.numeric(difftime(Sys.time(), start, units = "s"))
+  
+  # OSAT paper uses p values to quantify discrepancy in each category between batches.
+  # We do that as well.
   pvalues_osat <- rep(NA, 5)
   pvalues_anticlust <- rep(NA, 5)
   pvalues_anticlust2 <- rep(NA, 5)
   pvalues_ps <- rep(NA, 5)
+  pvalues_exper <- rep(NA, 5)
   pvalues_osat[1:M] <- sapply(1:M, function(x) chisq.test(table(data[, x], OSAT))$p.value)
   pvalues_anticlust[1:M] <- sapply(1:M, function(x) chisq.test(table(data[, x], ANTICLUST))$p.value)
   pvalues_anticlust2[1:M] <- sapply(1:M, function(x) chisq.test(table(data[, x], ANTICLUST2))$p.value)
   if (USE_PS) {
     pvalues_ps[1:M] <- sapply(1:M, function(x) chisq.test(table(data[, x], PS))$p.value)
   }
+  pvalues_exper[1:M] <- sapply(1:M, function(x) chisq.test(table(data[, x], EXPER))$p.value)
   
   results_file <- here("Simulation", "results.csv")
   results_file_exists <- file.exists(results_file)
@@ -184,10 +218,12 @@ for (i in 1:nsim) {
     named_1row_matrix(pvalues_anticlust, "p_anticlust"),
     named_1row_matrix(pvalues_anticlust2, "p_anticlust_c"),
     named_1row_matrix(pvalues_ps, "p_ps"),
+    named_1row_matrix(pvalues_exper, "p_exper"),
     OSAT_t = OSAT_t,
     ANTICLUST_t = ANTICLUST_t,
     ANTICLUST_t_c = ANTICLUST2_t,
     PS_t = ifelse(USE_PS, PS_time, NA),
+    EXPER_t = EXPER_t,
     diversity_unconstrained = diversity_objective(dists, ANTICLUST),
     diversity_constrained = diversity_objective(dists, ANTICLUST2)
   )
@@ -208,5 +244,3 @@ for (i in 1:nsim) {
     )
   )
 }
-
-
