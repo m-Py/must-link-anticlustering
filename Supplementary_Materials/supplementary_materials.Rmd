@@ -254,7 +254,7 @@ As mentioned above due the computational complexity of anticlustering, batch ass
 ## Simulation Study
 
 ```{r}
-tt <- read.csv(here("Simulation_vs_OSAT", "results.csv"), sep = ";")
+tt <- read.csv(here("Simulation", "results.csv"), sep = ";")
 tt$ID <- 1:nrow(tt)
 p_values <- tt[, grepl("p_", colnames(tt))]
 

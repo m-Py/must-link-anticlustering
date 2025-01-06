@@ -1,7 +1,7 @@
 # must-link-anticlustering
 
 - Directory `Application` contains code for the example application (synthetic data provided by Tomiko Oskotsky)
-- Directory `Simulation_vs_OSAT` implements a simulation that compares the quality of the OSAT method, the propensity score method, and anticlustering
+- Directory `Simulation` implements a simulation that compares the quality of the anticlustering method and alternative approaches
 - Directory `Supplementary_Materials` has a document that has supplementary information and analysis on the project. 
 - Directory `Running_Time_Optimal_Algorithm` has code that investigates the feasibility of an optimal algorithm for must-link anticlustering
 

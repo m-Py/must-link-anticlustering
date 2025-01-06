@@ -3,7 +3,7 @@ library(here)
 library(tidyverse)
 library(santoku)
 
-tt <- read.csv(here("Simulation_vs_OSAT", "results.csv"), sep = ";")
+tt <- read.csv(here("Simulation", "results.csv"), sep = ";")
 tt$ID <- 1:nrow(tt)
 nrow(tt)
 p_values <- tt[, grepl("p_", colnames(tt))]

@@ -41,11 +41,11 @@ my_osat <- function(data, K, nSim = 5000) {
 # because they lack a license. On my local computer, I just downloaded the files and
 # put them in a subdirectory "/PS-Batch-Effect/". 
 # Here, I check if the files if such a directory exists, and the files are downloaded from Github if not.
-files_locally_available <- dir.exists(here::here("Simulation_vs_OSAT", "PS-Batch-Effect"))
+files_locally_available <- dir.exists(here::here("Simulation", "PS-Batch-Effect"))
 if (files_locally_available) {
-  source(here::here("Simulation_vs_OSAT", "./PS-Batch-Effect/Almost.Optimal.R"))
-  source(here::here("Simulation_vs_OSAT", "./PS-Batch-Effect/R.Allocation.R"))
-  source(here::here("Simulation_vs_OSAT", "./PS-Batch-Effect/SR.Allocation.R"))
+  source(here::here("Simulation", "./PS-Batch-Effect/Almost.Optimal.R"))
+  source(here::here("Simulation", "./PS-Batch-Effect/R.Allocation.R"))
+  source(here::here("Simulation", "./PS-Batch-Effect/SR.Allocation.R"))
 } else {
   source("https://raw.githubusercontent.com/carryp/PS-Batch-Effect/refs/heads/main/R/Almost.Optimal.R")
   source("https://raw.githubusercontent.com/carryp/PS-Batch-Effect/refs/heads/main/R/R.Allocation.R")
@@ -172,7 +172,7 @@ for (i in 1:nsim) {
     pvalues_ps[1:M] <- sapply(1:M, function(x) chisq.test(table(data[, x], PS))$p.value)
   }
   
-  results_file <- here("Simulation_vs_OSAT", "results.csv")
+  results_file <- here("Simulation", "results.csv")
   results_file_exists <- file.exists(results_file)
   
   df <- data.frame(
