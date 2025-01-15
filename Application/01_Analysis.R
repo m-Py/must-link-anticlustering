@@ -10,6 +10,7 @@ library(here)
 # Read data set that includes the assignments, as well as information on duplication of an individual within samples
 dataset <- read.csv(here("Application", "assignments_synthetic_dataset.csv"), sep = ";")
 
+
 # Balance for the entire data set including duplicate samples
 save_t1 <- function(t1, file) {
   write.csv(
@@ -54,3 +55,8 @@ save_t1(
   tableone::CreateCatTable(data = dataset[!dataset$DUPLICATED_ANTICLUST_ML, ], vars = vars, strata = "BatchAnticlustML"),
   file = here("Application", paste0(format(Sys.time(), "%Y %m %d"), " Tableone Must-Link Assignment - Individuals.csv"))
 )
+
+sum(!dataset$DUPLICATED_ANTICLUST_ML) # this is actually the number of individuals; each individual is assigned to only one batch using ML anticlustering
+# not true for the other methods:
+sum(!dataset$DUPLICATED_ANTICLUST)
+sum(!dataset$DUPLICATED_OSAT)
