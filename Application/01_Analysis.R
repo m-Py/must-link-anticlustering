@@ -1,0 +1,56 @@
+
+# Author: Martin Papenberg
+# Year: 2025
+
+# This script analyses the batch assignments generated via script 00_Assignments.R
+# Uses tableone package to assess balance on the levels of (a) samples, (b) individuals
+library(tableone)
+library(here)
+
+# Read data set that includes the assignments, as well as information on duplication of an individual within samples
+dataset <- read.csv(here("Application", "assignments_synthetic_dataset.csv"), sep = ";")
+
+# Balance for the entire data set including duplicate samples
+save_t1 <- function(t1, file) {
+  write.csv(
+    print(
+      t1, 
+      quote = TRUE,
+      noSpaces = TRUE,
+      printToggle = FALSE
+    ), file = file
+  )
+}
+
+## Generate Tableones to view balance among batches
+vars <- c("endo", "site", "phase", "stage")
+
+# Level of samples 
+save_t1(
+  tableone::CreateCatTable(data = dataset, vars = vars, strata = "BatchAnticlust"),
+  file = here("Application", paste0(format(Sys.time(), "%Y %m %d"), " Tableone Unrestricted Anticlustering Assignment - All Samples.csv"))
+)
+save_t1(
+  tableone::CreateCatTable(data = dataset, vars = vars, strata = "BatchOSAT"),
+  file = here("Application", paste0(format(Sys.time(), "%Y %m %d"), " Tableone OSAT Assignment - All Samples.csv"))
+)
+save_t1(
+  tableone::CreateCatTable(data = dataset, vars = vars, strata = "BatchAnticlustML"),
+  file = here("Application/", paste0(format(Sys.time(), "%Y %m %d"), " Tableone Must-Link Assignment - All Samples.csv"))
+)
+
+# Level of individuals
+save_t1(
+  tableone::CreateCatTable(data = dataset[!dataset$DUPLICATED_ANTICLUST, ], vars = vars, strata = "BatchAnticlust"),
+  file = here("Application", paste0(format(Sys.time(), "%Y %m %d"), " Tableone Unrestricted Anticlustering Assignment - Individuals.csv"))
+)
+
+save_t1(
+  tableone::CreateCatTable(data = dataset[!dataset$DUPLICATED_OSAT, ], vars = vars, strata = "BatchOSAT"),
+  file = here("Application", paste0(format(Sys.time(), "%Y %m %d"), " Tableone OSAT Assignment - Individuals.csv"))
+)
+
+save_t1(
+  tableone::CreateCatTable(data = dataset[!dataset$DUPLICATED_ANTICLUST_ML, ], vars = vars, strata = "BatchAnticlustML"),
+  file = here("Application", paste0(format(Sys.time(), "%Y %m %d"), " Tableone Must-Link Assignment - Individuals.csv"))
+)
