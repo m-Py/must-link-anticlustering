@@ -23,8 +23,7 @@ save_t1 <- function(t1, file) {
   )
 }
 
-# Encode per batch if individuals in it are unique to the Batch
-## do this for all batches. 
+## Encode per batch if individuals in it are unique to the Batch
 # (a) OSAT
 sapply(1:20, function(i) !any(dataset$patient_id[dataset$BatchOSAT == i] %in% dataset$patient_id[dataset$BatchOSAT != i]))
 # (b) unrestricted anticlustering
