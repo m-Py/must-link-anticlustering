@@ -24,9 +24,18 @@ save_t1 <- function(t1, file) {
 }
 
 # Encode per batch if individuals in it are unique to the Batch
+## do this for all batches. 
+# (a) OSAT
+sapply(1:20, function(i) !any(dataset$patient_id[dataset$BatchOSAT == i] %in% dataset$patient_id[dataset$BatchOSAT != i]))
+# (b) unrestricted anticlustering
+sapply(1:20, function(i) !any(dataset$patient_id[dataset$BatchAnticlust == i] %in% dataset$patient_id[dataset$BatchAnticlust != i]))
+# (c) must-link constrained anticlustering
+sapply(1:20, function(i) !any(dataset$patient_id[dataset$BatchAnticlustML == i] %in% dataset$patient_id[dataset$BatchAnticlustML != i]))
 
 
-## Generate Tableones to view balance among batches
+## <- We insert this info manually into the table because aggregating it programatically with the tableone output is quite hard
+
+## Now Generate Tableones to view balance among batches
 vars <- c("endo", "site", "phase", "stage")
 
 # Level of samples 
