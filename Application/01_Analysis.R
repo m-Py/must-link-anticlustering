@@ -23,6 +23,9 @@ save_t1 <- function(t1, file) {
   )
 }
 
+# Encode per batch if individuals in it are unique to the Batch
+
+
 ## Generate Tableones to view balance among batches
 vars <- c("endo", "site", "phase", "stage")
 

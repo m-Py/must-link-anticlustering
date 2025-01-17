@@ -60,8 +60,8 @@ Sys.time() - start
 
 # check balance / diversity (diversity is being optimized via the algorithms)
 diversity_objective(input, dataset$BatchAnticlust) # 8244
-diversity_objective(input, dataset$BatchOSAT) # 8200
-diversity_objective(input, dataset$BatchAnticlustML) # 8180 with 2PML method (250x Phase 1, 250x Phase 2)
+diversity_objective(input, dataset$BatchOSAT) # 8204
+diversity_objective(input, dataset$BatchAnticlustML) # 8182 with 2PML method (250x Phase 1, 250x Phase 2)
 
 ## NOW: Encode if a sample is a duplicated within a batch (this information is used to assess balance on individuals' rather than samples' level)
 
