@@ -1,6 +1,6 @@
 # oast_vs_anticlust.R
 
-library(anticlust) # I used 0.8.6, but 0.8.5 (currently on CRAN) has the same implementation of fast_anticlustering() which is used below
+library(anticlust) # I used 0.8.9-1
 library(OSAT) # I got version OSAT_1.52.0 from Bioconductor
 
 sessionInfo()

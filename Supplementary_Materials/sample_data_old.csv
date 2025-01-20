@@ -1,0 +1,371 @@
+﻿patientID,casecontrol,age,race,ethnicity,BMI,clinical_site,anatomical_site,disease_stage,cycle_phase,sample_type,lesion_type
+1,control,44,Asian,Not hispanic or latino,32,Stanford,none,none,secretory,eutopic,none
+2,control,29,White,Not hispanic or latino,31,Stanford,none,none,proliferative,eutopic,none
+3,control,24,Native Hawaiian or Other Pacific Islander,Hispanic or Latino,34,Stanford,none,none,secretory,eutopic,none
+4,control,26,White,Hispanic or Latino,32,Stanford,none,none,proliferative,eutopic,none
+5,control,31,Native Hawaiian or Other Pacific Islander,Hispanic or Latino,21,Stanford,none,none,secretory,eutopic,none
+6,control,46,Asian,Hispanic or Latino,26,Stanford,none,none,proliferative,eutopic,none
+7,control,38,White,Hispanic or Latino,24,Stanford,none,none,secretory,eutopic,none
+8,control,27,White,Hispanic or Latino,30,Stanford,none,none,proliferative,eutopic,none
+9,control,37,Native Hawaiian or Other Pacific Islander,Not hispanic or latino,33,Stanford,none,none,secretory,eutopic,none
+10,control,17,White,Not hispanic or latino,25,Stanford,none,none,proliferative,eutopic,none
+11,control,31,White,Not hispanic or latino,34,Stanford,none,none,secretory,eutopic,none
+12,control,34,Black,Hispanic or Latino,27,Stanford,none,none,proliferative,eutopic,none
+13,control,36,Native American,Hispanic or Latino,29,Stanford,none,none,secretory,eutopic,none
+14,control,21,Native Hawaiian or Other Pacific Islander,Hispanic or Latino,36,Stanford,none,none,proliferative,eutopic,none
+15,control,31,Asian,Hispanic or Latino,35,Stanford,none,none,secretory,eutopic,none
+16,control,21,Asian,Hispanic or Latino,19,Stanford,none,none,proliferative,eutopic,none
+17,control,30,Native American,Not hispanic or latino,29,Stanford,none,none,secretory,eutopic,none
+18,control,27,White,Hispanic or Latino,19,Stanford,none,none,proliferative,eutopic,none
+19,control,22,Asian,Not hispanic or latino,34,Stanford,none,none,secretory,eutopic,none
+20,control,27,White,Not hispanic or latino,32,Stanford,none,none,proliferative,eutopic,none
+21,control,27,Native Hawaiian or Other Pacific Islander,Not hispanic or latino,34,UCSF,none,none,secretory,eutopic,none
+22,control,33,Native American,Hispanic or Latino,42,UCSF,none,none,proliferative,eutopic,none
+23,control,41,Black,Hispanic or Latino,25,UCSF,none,none,secretory,eutopic,none
+24,control,35,Asian,Not hispanic or latino,30,UCSF,none,none,proliferative,eutopic,none
+25,control,32,Native Hawaiian or Other Pacific Islander,Hispanic or Latino,27,UCSF,none,none,secretory,eutopic,none
+26,control,38,Black,Hispanic or Latino,32,UCSF,none,none,proliferative,eutopic,none
+27,control,23,Asian,Hispanic or Latino,34,UCSF,none,none,secretory,eutopic,none
+28,control,36,Black,Hispanic or Latino,35,UCSF,none,none,proliferative,eutopic,none
+29,control,26,Black,Hispanic or Latino,27,UCSF,none,none,secretory,eutopic,none
+30,control,25,Asian,Hispanic or Latino,38,UCSF,none,none,proliferative,eutopic,none
+31,control,32,Asian,Hispanic or Latino,33,UCSF,none,none,secretory,eutopic,none
+32,control,23,Black,Not hispanic or latino,32,UCSF,none,none,proliferative,eutopic,none
+33,control,33,White,Not hispanic or latino,28,UCSF,none,none,secretory,eutopic,none
+34,control,29,Asian,Not hispanic or latino,35,UCSF,none,none,proliferative,eutopic,none
+35,control,31,Native Hawaiian or Other Pacific Islander,Hispanic or Latino,25,UCSF,none,none,secretory,eutopic,none
+36,control,36,Native Hawaiian or Other Pacific Islander,Not hispanic or latino,29,UCSF,none,none,proliferative,eutopic,none
+37,control,39,Black,Not hispanic or latino,30,UCSF,none,none,secretory,eutopic,none
+38,control,37,White,Hispanic or Latino,25,UCSF,none,none,proliferative,eutopic,none
+39,control,36,Black,Hispanic or Latino,40,UCSF,none,none,secretory,eutopic,none
+40,control,32,White,Not hispanic or latino,39,UCSF,none,none,proliferative,eutopic,none
+41,control,41,White,Not hispanic or latino,32,UCSF,none,none,secretory,eutopic,none
+42,control,26,Native American,Not hispanic or latino,24,UCSF,none,none,proliferative,eutopic,none
+43,control,36,Native Hawaiian or Other Pacific Islander,Hispanic or Latino,37,UCSF,none,none,secretory,eutopic,none
+44,control,21,Asian,Not hispanic or latino,33,UCSF,none,none,proliferative,eutopic,none
+45,control,30,Black,Not hispanic or latino,35,UCSF,none,none,secretory,eutopic,none
+46,control,38,Asian,Hispanic or Latino,30,UCSF,none,none,proliferative,eutopic,none
+47,control,29,Native American,Not hispanic or latino,36,UCSF,none,none,secretory,eutopic,none
+48,control,35,Asian,Hispanic or Latino,26,UCSF,none,none,proliferative,eutopic,none
+49,control,24,Native American,Not hispanic or latino,32,UCSF,none,none,secretory,eutopic,none
+50,control,28,Black,Not hispanic or latino,26,UCSF,none,none,proliferative,eutopic,none
+51,control,29,Native Hawaiian or Other Pacific Islander,Not hispanic or latino,27,UCSF,none,none,secretory,eutopic,none
+52,control,32,Asian,Hispanic or Latino,35,UCSF,none,none,proliferative,eutopic,none
+53,control,28,White,Hispanic or Latino,26,UCSF,none,none,secretory,eutopic,none
+54,control,31,White,Not hispanic or latino,35,UCSF,none,none,proliferative,eutopic,none
+55,control,30,Native American,Not hispanic or latino,30,UCSF,none,none,secretory,eutopic,none
+56,control,37,Native American,Not hispanic or latino,29,UCSF,none,none,proliferative,eutopic,none
+57,control,37,Native Hawaiian or Other Pacific Islander,Hispanic or Latino,34,UCSF,none,none,secretory,eutopic,none
+58,control,18,Native Hawaiian or Other Pacific Islander,Hispanic or Latino,31,UCSF,none,none,proliferative,eutopic,none
+59,control,30,Asian,Not hispanic or latino,23,UCSF,none,none,secretory,eutopic,none
+60,control,25,White,Hispanic or Latino,29,UCSF,none,none,proliferative,eutopic,none
+61,control,38,White,Not hispanic or latino,27,UCSF,none,none,secretory,eutopic,none
+62,control,27,White,Not hispanic or latino,25,UCSF,none,none,proliferative,eutopic,none
+63,control,34,Native Hawaiian or Other Pacific Islander,Not hispanic or latino,28,UCSF,none,none,secretory,eutopic,none
+64,control,26,Black,Not hispanic or latino,27,UCSF,none,none,proliferative,eutopic,none
+65,control,24,Asian,Not hispanic or latino,31,UCSF,none,none,secretory,eutopic,none
+66,control,33,Asian,Not hispanic or latino,23,UCSF,none,none,proliferative,eutopic,none
+67,control,35,Asian,Hispanic or Latino,36,UCSF,none,none,secretory,eutopic,none
+68,control,36,Asian,Hispanic or Latino,25,UCSF,none,none,proliferative,eutopic,none
+69,control,41,Black,Hispanic or Latino,32,UCSF,none,none,secretory,eutopic,none
+70,control,30,Black,Hispanic or Latino,34,UCSF,none,none,proliferative,eutopic,none
+71,control,26,Native American,Hispanic or Latino,26,UCSF,none,none,secretory,eutopic,none
+72,control,22,White,Not hispanic or latino,27,UCSF,none,none,proliferative,eutopic,none
+73,control,22,Native American,Not hispanic or latino,29,UCSF,none,none,secretory,eutopic,none
+74,control,31,Asian,Hispanic or Latino,37,UCSF,none,none,proliferative,eutopic,none
+75,control,26,Native Hawaiian or Other Pacific Islander,Not hispanic or latino,19,UCSF,none,none,secretory,eutopic,none
+76,control,38,Black,Hispanic or Latino,35,UCSF,none,none,proliferative,eutopic,none
+77,control,26,White,Hispanic or Latino,34,UCSF,none,none,secretory,eutopic,none
+78,control,29,Asian,Not hispanic or latino,35,UCSF,none,none,proliferative,eutopic,none
+79,control,35,Black,Not hispanic or latino,39,UCSF,none,none,secretory,eutopic,none
+80,control,37,Asian,Hispanic or Latino,23,UCSF,none,none,proliferative,eutopic,none
+81,control,33,Asian,Hispanic or Latino,32,UCSF,none,none,secretory,eutopic,none
+82,control,28,White,Hispanic or Latino,32,UCSF,none,none,proliferative,eutopic,none
+83,control,39,Asian,Hispanic or Latino,28,UCSF,none,none,secretory,eutopic,none
+84,control,35,Black,Hispanic or Latino,30,UCSF,none,none,proliferative,eutopic,none
+85,control,44,Black,Hispanic or Latino,29,UCSF,none,none,secretory,eutopic,none
+86,control,25,Native Hawaiian or Other Pacific Islander,Not hispanic or latino,21,UCSF,none,none,proliferative,eutopic,none
+87,control,20,Native American,Hispanic or Latino,23,UCSF,none,none,secretory,eutopic,none
+88,control,28,Native American,Hispanic or Latino,32,UCSF,none,none,proliferative,eutopic,none
+89,control,27,Asian,Hispanic or Latino,31,UCSF,none,none,secretory,eutopic,none
+90,control,34,White,Hispanic or Latino,21,UCSF,none,none,proliferative,eutopic,none
+91,control,34,Asian,Not hispanic or latino,21,UCSF,none,none,secretory,eutopic,none
+92,control,39,White,Not hispanic or latino,28,UCSF,none,none,proliferative,eutopic,none
+93,control,25,Black,Not hispanic or latino,24,UCSF,none,none,secretory,eutopic,none
+94,control,30,Native Hawaiian or Other Pacific Islander,Hispanic or Latino,27,UCSF,none,none,proliferative,eutopic,none
+95,control,27,White,Not hispanic or latino,24,UCSF,none,none,secretory,eutopic,none
+96,control,28,Native American,Not hispanic or latino,33,UCSF,none,none,proliferative,eutopic,none
+97,control,26,White,Hispanic or Latino,24,UCSF,none,none,secretory,eutopic,none
+98,control,25,Native American,Hispanic or Latino,33,UCSF,none,none,proliferative,eutopic,none
+99,control,33,Asian,Not hispanic or latino,33,UCSF,none,none,secretory,eutopic,none
+100,control,19,Asian,Not hispanic or latino,37,UCSF,none,none,proliferative,eutopic,none
+101,case,20,Asian,Hispanic or Latino,28,Other,site A,I/II,secretory,eutopic,type C
+102,case,39,White,Not hispanic or latino,36,Other,site B,III/IV,proliferative,eutopic,type B
+103,case,44,Native American,Not hispanic or latino,27,Other,site C,III/IV,proliferative,eutopic,type A
+104,case,38,Black,Not hispanic or latino,29,Other,site A,I/II,proliferative,eutopic,type A
+105,case,30,Asian,Not hispanic or latino,33,Other,site B,I/II,secretory,eutopic,type B
+106,case,28,Asian,Not hispanic or latino,33,Other,site C,I/II,secretory,eutopic,type C
+107,case,36,Native American,Hispanic or Latino,24,Other,site A,III/IV,proliferative,eutopic,type C
+108,case,27,Native Hawaiian or Other Pacific Islander,Not hispanic or latino,22,Other,site B,III/IV,proliferative,eutopic,type B
+109,case,31,Native Hawaiian or Other Pacific Islander,Not hispanic or latino,35,Other,site C,I/II,proliferative,eutopic,type A
+110,case,30,Black,Hispanic or Latino,35,Other,site A,I/II,secretory,eutopic,type A
+111,case,33,Native Hawaiian or Other Pacific Islander,Hispanic or Latino,35,Other,site B,I/II,secretory,eutopic,type B
+112,case,32,Native Hawaiian or Other Pacific Islander,Hispanic or Latino,35,Other,site C,III/IV,proliferative,eutopic,type C
+113,case,33,Asian,Not hispanic or latino,32,Other,site A,III/IV,proliferative,eutopic,type C
+114,case,33,Native Hawaiian or Other Pacific Islander,Hispanic or Latino,26,Other,site B,I/II,proliferative,eutopic,type B
+115,case,21,Native Hawaiian or Other Pacific Islander,Not hispanic or latino,28,Other,site C,I/II,secretory,eutopic,type A
+116,case,40,White,Hispanic or Latino,23,Other,site A,I/II,secretory,eutopic,type A
+117,case,31,Black,Hispanic or Latino,20,Other,site B,III/IV,proliferative,eutopic,type B
+118,case,24,White,Not hispanic or latino,27,Other,site C,III/IV,proliferative,eutopic,type C
+119,case,43,Asian,Hispanic or Latino,20,Other,site A,I/II,proliferative,eutopic,type C
+120,case,30,Asian,Hispanic or Latino,47,Other,site B,I/II,secretory,eutopic,type B
+121,case,27,Native American,Not hispanic or latino,35,Stanford,site C,I/II,secretory,eutopic,type A
+122,case,36,Native American,Not hispanic or latino,26,Stanford,site A,III/IV,proliferative,eutopic,type A
+123,case,33,Asian,Hispanic or Latino,34,Stanford,site B,III/IV,proliferative,eutopic,type B
+124,case,28,Native American,Hispanic or Latino,28,Stanford,site C,I/II,proliferative,eutopic,type C
+125,case,20,Native Hawaiian or Other Pacific Islander,Not hispanic or latino,30,Stanford,site A,I/II,secretory,eutopic,type C
+126,case,32,Native American,Hispanic or Latino,20,Stanford,site B,I/II,secretory,eutopic,type B
+127,case,27,White,Hispanic or Latino,24,Stanford,site C,III/IV,proliferative,eutopic,type A
+128,case,25,Native American,Not hispanic or latino,17,Stanford,site A,III/IV,proliferative,eutopic,type A
+129,case,27,Black,Hispanic or Latino,33,Stanford,site B,I/II,proliferative,eutopic,type B
+130,case,36,Native American,Hispanic or Latino,31,Stanford,site C,I/II,secretory,eutopic,type C
+131,case,32,Black,Hispanic or Latino,27,Stanford,site A,I/II,secretory,eutopic,type C
+132,case,27,Asian,Not hispanic or latino,32,Stanford,site B,III/IV,proliferative,eutopic,type B
+133,case,30,Native American,Not hispanic or latino,31,Stanford,site C,III/IV,proliferative,eutopic,type A
+134,case,38,Native Hawaiian or Other Pacific Islander,Hispanic or Latino,28,Stanford,site A,I/II,proliferative,eutopic,type A
+135,case,36,Asian,Hispanic or Latino,42,Stanford,site B,I/II,secretory,eutopic,type B
+136,case,43,Asian,Hispanic or Latino,33,Stanford,site C,I/II,secretory,eutopic,type C
+137,case,38,White,Hispanic or Latino,33,Stanford,site A,III/IV,proliferative,eutopic,type C
+138,case,26,Native Hawaiian or Other Pacific Islander,Not hispanic or latino,22,Stanford,site B,III/IV,proliferative,eutopic,type B
+139,case,34,Asian,Not hispanic or latino,34,Stanford,site C,I/II,proliferative,eutopic,type A
+140,case,33,White,Not hispanic or latino,28,Stanford,site A,I/II,secretory,eutopic,type A
+141,case,34,Asian,Hispanic or Latino,28,Stanford,site B,I/II,secretory,eutopic,type B
+142,case,26,Native Hawaiian or Other Pacific Islander,Not hispanic or latino,22,Stanford,site C,III/IV,proliferative,eutopic,type C
+143,case,30,Black,Not hispanic or latino,33,Stanford,site A,III/IV,proliferative,eutopic,type C
+144,case,27,Black,Not hispanic or latino,28,Stanford,site B,I/II,proliferative,eutopic,type B
+145,case,23,Black,Hispanic or Latino,32,Stanford,site C,I/II,secretory,eutopic,type A
+146,case,37,Asian,Not hispanic or latino,30,Stanford,site A,I/II,secretory,eutopic,type A
+147,case,25,White,Not hispanic or latino,39,Stanford,site B,III/IV,proliferative,eutopic,type B
+148,case,36,White,Not hispanic or latino,31,Stanford,site C,III/IV,proliferative,eutopic,type C
+149,case,22,Native American,Not hispanic or latino,33,Stanford,site A,I/II,proliferative,eutopic,type C
+150,case,19,White,Not hispanic or latino,20,Stanford,site B,I/II,secretory,eutopic,type B
+151,case,28,Native Hawaiian or Other Pacific Islander,Not hispanic or latino,28,Stanford,site C,I/II,secretory,eutopic,type A
+152,case,30,Native Hawaiian or Other Pacific Islander,Hispanic or Latino,25,Stanford,site A,III/IV,proliferative,eutopic,type A
+153,case,23,Native Hawaiian or Other Pacific Islander,Hispanic or Latino,36,Stanford,site B,III/IV,proliferative,eutopic,type B
+154,case,35,Native Hawaiian or Other Pacific Islander,Not hispanic or latino,34,Stanford,site C,I/II,proliferative,eutopic,type C
+155,case,31,White,Hispanic or Latino,33,Stanford,site A,I/II,secretory,eutopic,type C
+156,case,31,Native Hawaiian or Other Pacific Islander,Hispanic or Latino,30,Stanford,site B,I/II,secretory,eutopic,type B
+157,case,35,White,Not hispanic or latino,34,Stanford,site C,III/IV,proliferative,eutopic,type A
+158,case,31,Asian,Not hispanic or latino,26,Stanford,site A,III/IV,proliferative,eutopic,type A
+159,case,34,Asian,Hispanic or Latino,24,Stanford,site B,I/II,proliferative,eutopic,type B
+160,case,26,Native American,Not hispanic or latino,26,Stanford,site C,I/II,secretory,eutopic,type C
+161,case,27,Black,Hispanic or Latino,27,Stanford,site A,I/II,secretory,eutopic,type C
+162,case,24,White,Not hispanic or latino,28,Stanford,site B,III/IV,proliferative,eutopic,type B
+163,case,37,Asian,Hispanic or Latino,30,Stanford,site C,III/IV,proliferative,eutopic,type A
+164,case,40,Native American,Hispanic or Latino,36,Stanford,site A,I/II,proliferative,eutopic,type A
+165,case,36,Native Hawaiian or Other Pacific Islander,Not hispanic or latino,33,Stanford,site B,I/II,secretory,eutopic,type B
+166,case,22,White,Hispanic or Latino,29,Stanford,site C,I/II,secretory,eutopic,type C
+167,case,33,White,Not hispanic or latino,33,Stanford,site A,III/IV,proliferative,eutopic,type C
+168,case,31,Asian,Hispanic or Latino,29,Stanford,site B,III/IV,proliferative,eutopic,type B
+169,case,36,Native Hawaiian or Other Pacific Islander,Not hispanic or latino,30,Stanford,site C,I/II,proliferative,eutopic,type A
+170,case,19,White,Hispanic or Latino,40,Stanford,site A,I/II,secretory,eutopic,type A
+171,case,31,Native American,Hispanic or Latino,24,Stanford,site B,I/II,secretory,eutopic,type B
+172,case,24,White,Not hispanic or latino,25,Stanford,site C,III/IV,proliferative,eutopic,type C
+173,case,31,Asian,Hispanic or Latino,23,Stanford,site A,III/IV,proliferative,eutopic,type C
+174,case,31,Native American,Not hispanic or latino,25,Stanford,site B,I/II,proliferative,eutopic,type B
+175,case,25,Black,Hispanic or Latino,24,Stanford,site C,I/II,secretory,eutopic,type A
+176,case,17,Asian,Hispanic or Latino,29,Stanford,site A,I/II,secretory,eutopic,type A
+177,case,41,Native Hawaiian or Other Pacific Islander,Not hispanic or latino,24,Stanford,site B,III/IV,proliferative,eutopic,type B
+178,case,19,Native American,Hispanic or Latino,35,Stanford,site C,III/IV,proliferative,eutopic,type C
+179,case,33,Asian,Not hispanic or latino,40,UCSF,site A,I/II,proliferative,eutopic,type C
+180,case,32,White,Hispanic or Latino,30,UCSF,site B,I/II,secretory,eutopic,type B
+181,case,13,Asian,Hispanic or Latino,28,UCSF,site C,I/II,secretory,eutopic,type A
+182,case,16,Black,Not hispanic or latino,24,UCSF,site A,III/IV,proliferative,eutopic,type A
+183,case,31,Black,Hispanic or Latino,30,UCSF,site B,III/IV,proliferative,eutopic,type B
+184,case,22,Native Hawaiian or Other Pacific Islander,Hispanic or Latino,20,UCSF,site C,I/II,proliferative,eutopic,type C
+185,case,31,Black,Hispanic or Latino,30,UCSF,site A,I/II,secretory,eutopic,type C
+186,case,30,Black,Not hispanic or latino,29,UCSF,site B,I/II,secretory,eutopic,type B
+187,case,36,Native American,Not hispanic or latino,23,UCSF,site C,III/IV,proliferative,eutopic,type A
+188,case,29,Asian,Not hispanic or latino,29,UCSF,site A,III/IV,proliferative,eutopic,type A
+189,case,36,Asian,Hispanic or Latino,28,UCSF,site B,I/II,proliferative,eutopic,type B
+190,case,33,Native Hawaiian or Other Pacific Islander,Not hispanic or latino,36,UCSF,site C,I/II,secretory,eutopic,type C
+191,case,30,Black,Hispanic or Latino,27,UCSF,site A,I/II,secretory,eutopic,type C
+101,case,20,Asian,Hispanic or Latino,28,Other,site A,I/II,secretory,lesion1,type C
+102,case,39,White,Not hispanic or latino,36,Other,site B,III/IV,proliferative,lesion1,type B
+103,case,44,Native American,Not hispanic or latino,27,Other,site C,III/IV,proliferative,lesion1,type A
+104,case,38,Black,Not hispanic or latino,29,Other,site A,I/II,proliferative,lesion1,type A
+105,case,30,Asian,Not hispanic or latino,33,Other,site B,I/II,secretory,lesion1,type B
+106,case,28,Asian,Not hispanic or latino,33,Other,site C,I/II,secretory,lesion1,type C
+107,case,36,Native American,Hispanic or Latino,24,Other,site A,III/IV,proliferative,lesion1,type C
+108,case,27,Native Hawaiian or Other Pacific Islander,Not hispanic or latino,22,Other,site B,III/IV,proliferative,lesion1,type B
+109,case,31,Native Hawaiian or Other Pacific Islander,Not hispanic or latino,35,Other,site C,I/II,proliferative,lesion1,type A
+110,case,30,Black,Hispanic or Latino,35,Other,site A,I/II,secretory,lesion1,type A
+111,case,33,Native Hawaiian or Other Pacific Islander,Hispanic or Latino,35,Other,site B,I/II,secretory,lesion1,type B
+112,case,32,Native Hawaiian or Other Pacific Islander,Hispanic or Latino,35,Other,site C,III/IV,proliferative,lesion1,type C
+113,case,33,Asian,Not hispanic or latino,32,Other,site A,III/IV,proliferative,lesion1,type C
+114,case,33,Native Hawaiian or Other Pacific Islander,Hispanic or Latino,26,Other,site B,I/II,proliferative,lesion1,type B
+115,case,21,Native Hawaiian or Other Pacific Islander,Not hispanic or latino,28,Other,site C,I/II,secretory,lesion1,type A
+116,case,40,White,Hispanic or Latino,23,Other,site A,I/II,secretory,lesion1,type A
+117,case,31,Black,Hispanic or Latino,20,Other,site B,III/IV,proliferative,lesion1,type B
+118,case,24,White,Not hispanic or latino,27,Other,site C,III/IV,proliferative,lesion1,type C
+119,case,43,Asian,Hispanic or Latino,20,Other,site A,I/II,proliferative,lesion1,type C
+120,case,30,Asian,Hispanic or Latino,47,Other,site B,I/II,secretory,lesion1,type B
+121,case,27,Native American,Not hispanic or latino,35,Stanford,site C,I/II,secretory,lesion1,type A
+122,case,36,Native American,Not hispanic or latino,26,Stanford,site A,III/IV,proliferative,lesion1,type A
+123,case,33,Asian,Hispanic or Latino,34,Stanford,site B,III/IV,proliferative,lesion1,type B
+124,case,28,Native American,Hispanic or Latino,28,Stanford,site C,I/II,proliferative,lesion1,type C
+125,case,20,Native Hawaiian or Other Pacific Islander,Not hispanic or latino,30,Stanford,site A,I/II,secretory,lesion1,type C
+126,case,32,Native American,Hispanic or Latino,20,Stanford,site B,I/II,secretory,lesion1,type B
+127,case,27,White,Hispanic or Latino,24,Stanford,site C,III/IV,proliferative,lesion1,type A
+128,case,25,Native American,Not hispanic or latino,17,Stanford,site A,III/IV,proliferative,lesion1,type A
+129,case,27,Black,Hispanic or Latino,33,Stanford,site B,I/II,proliferative,lesion1,type B
+130,case,36,Native American,Hispanic or Latino,31,Stanford,site C,I/II,secretory,lesion1,type C
+131,case,32,Black,Hispanic or Latino,27,Stanford,site A,I/II,secretory,lesion1,type C
+132,case,27,Asian,Not hispanic or latino,32,Stanford,site B,III/IV,proliferative,lesion1,type B
+133,case,30,Native American,Not hispanic or latino,31,Stanford,site C,III/IV,proliferative,lesion1,type A
+134,case,38,Native Hawaiian or Other Pacific Islander,Hispanic or Latino,28,Stanford,site A,I/II,proliferative,lesion1,type A
+135,case,36,Asian,Hispanic or Latino,42,Stanford,site B,I/II,secretory,lesion1,type B
+136,case,43,Asian,Hispanic or Latino,33,Stanford,site C,I/II,secretory,lesion1,type C
+137,case,38,White,Hispanic or Latino,33,Stanford,site A,III/IV,proliferative,lesion1,type C
+138,case,26,Native Hawaiian or Other Pacific Islander,Not hispanic or latino,22,Stanford,site B,III/IV,proliferative,lesion1,type B
+139,case,34,Asian,Not hispanic or latino,34,Stanford,site C,I/II,proliferative,lesion1,type A
+140,case,33,White,Not hispanic or latino,28,Stanford,site A,I/II,secretory,lesion1,type A
+141,case,34,Asian,Hispanic or Latino,28,Stanford,site B,I/II,secretory,lesion1,type B
+142,case,26,Native Hawaiian or Other Pacific Islander,Not hispanic or latino,22,Stanford,site C,III/IV,proliferative,lesion1,type C
+143,case,30,Black,Not hispanic or latino,33,Stanford,site A,III/IV,proliferative,lesion1,type C
+144,case,27,Black,Not hispanic or latino,28,Stanford,site B,I/II,proliferative,lesion1,type B
+145,case,23,Black,Hispanic or Latino,32,Stanford,site C,I/II,secretory,lesion1,type A
+146,case,37,Asian,Not hispanic or latino,30,Stanford,site A,I/II,secretory,lesion1,type A
+147,case,25,White,Not hispanic or latino,39,Stanford,site B,III/IV,proliferative,lesion1,type B
+148,case,36,White,Not hispanic or latino,31,Stanford,site C,III/IV,proliferative,lesion1,type C
+149,case,22,Native American,Not hispanic or latino,33,Stanford,site A,I/II,proliferative,lesion1,type C
+150,case,19,White,Not hispanic or latino,20,Stanford,site B,I/II,secretory,lesion1,type B
+151,case,28,Native Hawaiian or Other Pacific Islander,Not hispanic or latino,28,Stanford,site C,I/II,secretory,lesion1,type A
+152,case,30,Native Hawaiian or Other Pacific Islander,Hispanic or Latino,25,Stanford,site A,III/IV,proliferative,lesion1,type A
+153,case,23,Native Hawaiian or Other Pacific Islander,Hispanic or Latino,36,Stanford,site B,III/IV,proliferative,lesion1,type B
+154,case,35,Native Hawaiian or Other Pacific Islander,Not hispanic or latino,34,Stanford,site C,I/II,proliferative,lesion1,type C
+155,case,31,White,Hispanic or Latino,33,Stanford,site A,I/II,secretory,lesion1,type C
+156,case,31,Native Hawaiian or Other Pacific Islander,Hispanic or Latino,30,Stanford,site B,I/II,secretory,lesion1,type B
+157,case,35,White,Not hispanic or latino,34,Stanford,site C,III/IV,proliferative,lesion1,type A
+158,case,31,Asian,Not hispanic or latino,26,Stanford,site A,III/IV,proliferative,lesion1,type A
+159,case,34,Asian,Hispanic or Latino,24,Stanford,site B,I/II,proliferative,lesion1,type B
+160,case,26,Native American,Not hispanic or latino,26,Stanford,site C,I/II,secretory,lesion1,type C
+161,case,27,Black,Hispanic or Latino,27,Stanford,site A,I/II,secretory,lesion1,type C
+162,case,24,White,Not hispanic or latino,28,Stanford,site B,III/IV,proliferative,lesion1,type B
+163,case,37,Asian,Hispanic or Latino,30,Stanford,site C,III/IV,proliferative,lesion1,type A
+164,case,40,Native American,Hispanic or Latino,36,Stanford,site A,I/II,proliferative,lesion1,type A
+165,case,36,Native Hawaiian or Other Pacific Islander,Not hispanic or latino,33,Stanford,site B,I/II,secretory,lesion1,type B
+166,case,22,White,Hispanic or Latino,29,Stanford,site C,I/II,secretory,lesion1,type C
+167,case,33,White,Not hispanic or latino,33,Stanford,site A,III/IV,proliferative,lesion1,type C
+168,case,31,Asian,Hispanic or Latino,29,Stanford,site B,III/IV,proliferative,lesion1,type B
+169,case,36,Native Hawaiian or Other Pacific Islander,Not hispanic or latino,30,Stanford,site C,I/II,proliferative,lesion1,type A
+170,case,19,White,Hispanic or Latino,40,Stanford,site A,I/II,secretory,lesion1,type A
+171,case,31,Native American,Hispanic or Latino,24,Stanford,site B,I/II,secretory,lesion1,type B
+172,case,24,White,Not hispanic or latino,25,Stanford,site C,III/IV,proliferative,lesion1,type C
+173,case,31,Asian,Hispanic or Latino,23,Stanford,site A,III/IV,proliferative,lesion1,type C
+174,case,31,Native American,Not hispanic or latino,25,Stanford,site B,I/II,proliferative,lesion1,type B
+175,case,25,Black,Hispanic or Latino,24,Stanford,site C,I/II,secretory,lesion1,type A
+176,case,17,Asian,Hispanic or Latino,29,Stanford,site A,I/II,secretory,lesion1,type A
+177,case,41,Native Hawaiian or Other Pacific Islander,Not hispanic or latino,24,Stanford,site B,III/IV,proliferative,lesion1,type B
+178,case,19,Native American,Hispanic or Latino,35,Stanford,site C,III/IV,proliferative,lesion1,type C
+179,case,33,Asian,Not hispanic or latino,40,UCSF,site A,I/II,proliferative,lesion1,type C
+180,case,32,White,Hispanic or Latino,30,UCSF,site B,I/II,secretory,lesion1,type B
+181,case,13,Asian,Hispanic or Latino,28,UCSF,site C,I/II,secretory,lesion1,type A
+182,case,16,Black,Not hispanic or latino,24,UCSF,site A,III/IV,proliferative,lesion1,type A
+183,case,31,Black,Hispanic or Latino,30,UCSF,site B,III/IV,proliferative,lesion1,type B
+184,case,22,Native Hawaiian or Other Pacific Islander,Hispanic or Latino,20,UCSF,site C,I/II,proliferative,lesion1,type C
+185,case,31,Black,Hispanic or Latino,30,UCSF,site A,I/II,secretory,lesion1,type C
+186,case,30,Black,Not hispanic or latino,29,UCSF,site B,I/II,secretory,lesion1,type B
+187,case,36,Native American,Not hispanic or latino,23,UCSF,site C,III/IV,proliferative,lesion1,type A
+188,case,29,Asian,Not hispanic or latino,29,UCSF,site A,III/IV,proliferative,lesion1,type A
+189,case,36,Asian,Hispanic or Latino,28,UCSF,site B,I/II,proliferative,lesion1,type B
+190,case,33,Native Hawaiian or Other Pacific Islander,Not hispanic or latino,36,UCSF,site C,I/II,secretory,lesion1,type C
+191,case,30,Black,Hispanic or Latino,27,UCSF,site A,I/II,secretory,lesion1,type C
+148,case,36,White,Not hispanic or latino,31,Stanford,site B,III/IV,proliferative,lesion2,type C
+149,case,22,Native American,Not hispanic or latino,33,Stanford,site A,I/II,proliferative,lesion2,type C
+150,case,19,White,Not hispanic or latino,20,Stanford,site B,I/II,secretory,lesion2,type B
+151,case,28,Native Hawaiian or Other Pacific Islander,Not hispanic or latino,28,Stanford,site C,I/II,secretory,lesion2,type A
+152,case,30,Native Hawaiian or Other Pacific Islander,Hispanic or Latino,25,Stanford,site A,III/IV,proliferative,lesion2,type A
+153,case,23,Native Hawaiian or Other Pacific Islander,Hispanic or Latino,36,Stanford,site B,III/IV,proliferative,lesion2,type B
+154,case,35,Native Hawaiian or Other Pacific Islander,Not hispanic or latino,34,Stanford,site C,I/II,proliferative,lesion2,type C
+155,case,31,White,Hispanic or Latino,33,Stanford,site A,I/II,secretory,lesion2,type C
+156,case,31,Native Hawaiian or Other Pacific Islander,Hispanic or Latino,30,Stanford,site B,I/II,secretory,lesion2,type B
+157,case,35,White,Not hispanic or latino,34,Stanford,site C,III/IV,proliferative,lesion2,type A
+158,case,31,Asian,Not hispanic or latino,26,Stanford,site A,III/IV,proliferative,lesion2,type A
+159,case,34,Asian,Hispanic or Latino,24,Stanford,site B,I/II,proliferative,lesion2,type B
+160,case,26,Native American,Not hispanic or latino,26,Stanford,site C,I/II,secretory,lesion2,type C
+161,case,27,Black,Hispanic or Latino,27,Stanford,site A,I/II,secretory,lesion2,type C
+162,case,24,White,Not hispanic or latino,28,Stanford,site B,III/IV,proliferative,lesion2,type B
+163,case,37,Asian,Hispanic or Latino,30,Stanford,site C,III/IV,proliferative,lesion2,type A
+164,case,40,Native American,Hispanic or Latino,36,Stanford,site A,I/II,proliferative,lesion2,type A
+165,case,36,Native Hawaiian or Other Pacific Islander,Not hispanic or latino,33,Stanford,site B,I/II,secretory,lesion2,type B
+166,case,22,White,Hispanic or Latino,29,Stanford,site C,I/II,secretory,lesion2,type C
+167,case,33,White,Not hispanic or latino,33,Stanford,site A,III/IV,proliferative,lesion2,type C
+168,case,31,Asian,Hispanic or Latino,29,Stanford,site B,III/IV,proliferative,lesion2,type B
+169,case,36,Native Hawaiian or Other Pacific Islander,Not hispanic or latino,30,Stanford,site C,I/II,proliferative,lesion2,type A
+170,case,19,White,Hispanic or Latino,40,Stanford,site A,I/II,secretory,lesion2,type A
+171,case,31,Native American,Hispanic or Latino,24,Stanford,site B,I/II,secretory,lesion2,type B
+172,case,24,White,Not hispanic or latino,25,Stanford,site C,III/IV,proliferative,lesion2,type C
+173,case,31,Asian,Hispanic or Latino,23,Stanford,site A,III/IV,proliferative,lesion2,type C
+174,case,31,Native American,Not hispanic or latino,25,Stanford,site B,I/II,proliferative,lesion2,type B
+175,case,25,Black,Hispanic or Latino,24,Stanford,site C,I/II,secretory,lesion2,type A
+176,case,17,Asian,Hispanic or Latino,29,Stanford,site A,I/II,secretory,lesion2,type A
+177,case,41,Native Hawaiian or Other Pacific Islander,Not hispanic or latino,24,Stanford,site B,III/IV,proliferative,lesion2,type B
+178,case,19,Native American,Hispanic or Latino,35,Stanford,site C,III/IV,proliferative,lesion2,type C
+179,case,33,Asian,Not hispanic or latino,40,UCSF,site A,I/II,proliferative,lesion2,type C
+180,case,32,White,Hispanic or Latino,30,UCSF,site B,I/II,secretory,lesion2,type B
+181,case,13,Asian,Hispanic or Latino,28,UCSF,site C,I/II,secretory,lesion2,type A
+182,case,16,Black,Not hispanic or latino,24,UCSF,site A,III/IV,proliferative,lesion2,type A
+183,case,31,Black,Hispanic or Latino,30,UCSF,site B,III/IV,proliferative,lesion2,type B
+184,case,22,Native Hawaiian or Other Pacific Islander,Hispanic or Latino,20,UCSF,site C,I/II,proliferative,lesion2,type C
+185,case,31,Black,Hispanic or Latino,30,UCSF,site A,I/II,secretory,lesion2,type C
+186,case,30,Black,Not hispanic or latino,29,UCSF,site B,I/II,secretory,lesion2,type B
+187,case,36,Native American,Not hispanic or latino,23,UCSF,site C,III/IV,proliferative,lesion2,type A
+188,case,29,Asian,Not hispanic or latino,29,UCSF,site A,III/IV,proliferative,lesion2,type A
+189,case,36,Asian,Hispanic or Latino,28,UCSF,site B,I/II,proliferative,lesion2,type B
+190,case,33,Native Hawaiian or Other Pacific Islander,Not hispanic or latino,36,UCSF,site C,I/II,secretory,lesion2,type C
+191,case,30,Black,Hispanic or Latino,27,UCSF,site A,I/II,secretory,lesion2,type C
+161,case,27,Black,Hispanic or Latino,27,Stanford,site A,I/II,secretory,lesion3,type C
+162,case,24,White,Not hispanic or latino,28,Stanford,site B,III/IV,proliferative,lesion3,type B
+163,case,37,Asian,Hispanic or Latino,30,Stanford,site C,III/IV,proliferative,lesion3,type A
+164,case,40,Native American,Hispanic or Latino,36,Stanford,site A,I/II,proliferative,lesion3,type A
+165,case,36,Native Hawaiian or Other Pacific Islander,Not hispanic or latino,33,Stanford,site B,I/II,secretory,lesion3,type B
+166,case,22,White,Hispanic or Latino,29,Stanford,site C,I/II,secretory,lesion3,type C
+167,case,33,White,Not hispanic or latino,33,Stanford,site A,III/IV,proliferative,lesion3,type C
+168,case,31,Asian,Hispanic or Latino,29,Stanford,site B,III/IV,proliferative,lesion3,type B
+169,case,36,Native Hawaiian or Other Pacific Islander,Not hispanic or latino,30,Stanford,site C,I/II,proliferative,lesion3,type A
+170,case,19,White,Hispanic or Latino,40,Stanford,site A,I/II,secretory,lesion3,type A
+171,case,31,Native American,Hispanic or Latino,24,Stanford,site B,I/II,secretory,lesion3,type B
+172,case,24,White,Not hispanic or latino,25,Stanford,site C,III/IV,proliferative,lesion3,type C
+173,case,31,Asian,Hispanic or Latino,23,Stanford,site A,III/IV,proliferative,lesion3,type C
+174,case,31,Native American,Not hispanic or latino,25,Stanford,site B,I/II,proliferative,lesion3,type B
+175,case,25,Black,Hispanic or Latino,24,Stanford,site C,I/II,secretory,lesion3,type A
+176,case,17,Asian,Hispanic or Latino,29,Stanford,site A,I/II,secretory,lesion3,type A
+177,case,41,Native Hawaiian or Other Pacific Islander,Not hispanic or latino,24,Stanford,site B,III/IV,proliferative,lesion3,type B
+178,case,19,Native American,Hispanic or Latino,35,Stanford,site C,III/IV,proliferative,lesion3,type C
+179,case,33,Asian,Not hispanic or latino,40,UCSF,site A,I/II,proliferative,lesion3,type C
+180,case,32,White,Hispanic or Latino,30,UCSF,site B,I/II,secretory,lesion3,type B
+181,case,13,Asian,Hispanic or Latino,28,UCSF,site C,I/II,secretory,lesion3,type A
+182,case,16,Black,Not hispanic or latino,24,UCSF,site A,III/IV,proliferative,lesion3,type A
+183,case,31,Black,Hispanic or Latino,30,UCSF,site B,III/IV,proliferative,lesion3,type B
+184,case,22,Native Hawaiian or Other Pacific Islander,Hispanic or Latino,20,UCSF,site C,I/II,proliferative,lesion3,type C
+185,case,31,Black,Hispanic or Latino,30,UCSF,site A,I/II,secretory,lesion3,type C
+186,case,30,Black,Not hispanic or latino,29,UCSF,site B,I/II,secretory,lesion3,type B
+187,case,36,Native American,Not hispanic or latino,23,UCSF,site C,III/IV,proliferative,lesion3,type A
+188,case,29,Asian,Not hispanic or latino,29,UCSF,site A,III/IV,proliferative,lesion3,type A
+189,case,36,Asian,Hispanic or Latino,28,UCSF,site B,I/II,proliferative,lesion3,type B
+190,case,33,Native Hawaiian or Other Pacific Islander,Not hispanic or latino,36,UCSF,site C,I/II,secretory,lesion3,type C
+191,case,30,Black,Hispanic or Latino,27,UCSF,site A,I/II,secretory,lesion3,type C
+185,case,31,Black,Hispanic or Latino,30,UCSF,site A,I/II,secretory,lesion4,type C
+186,case,30,Black,Not hispanic or latino,29,UCSF,site B,I/II,secretory,lesion4,type B
+187,case,36,Native American,Not hispanic or latino,23,UCSF,site C,III/IV,proliferative,lesion4,type A
+188,case,29,Asian,Not hispanic or latino,29,UCSF,site A,III/IV,proliferative,lesion4,type A
+189,case,36,Asian,Hispanic or Latino,28,UCSF,site B,I/II,proliferative,lesion4,type B
+190,case,33,Native Hawaiian or Other Pacific Islander,Not hispanic or latino,36,UCSF,site C,I/II,secretory,lesion4,type C
+191,case,30,Black,Hispanic or Latino,27,UCSF,site A,I/II,secretory,lesion4,type C
+188,case,29,Asian,Not hispanic or latino,29,UCSF,site A,III/IV,proliferative,lesion5,type A
+189,case,36,Asian,Hispanic or Latino,28,UCSF,site B,I/II,proliferative,lesion5,type B
+190,case,33,Native Hawaiian or Other Pacific Islander,Not hispanic or latino,36,UCSF,site C,I/II,secretory,lesion5,type C
+191,case,30,Black,Hispanic or Latino,27,UCSF,site A,I/II,secretory,lesion5,type C
+191,case,30,Black,Hispanic or Latino,27,UCSF,site A,I/II,secretory,lesion6,type C
+191,case,30,Black,Hispanic or Latino,27,UCSF,site A,I/II,secretory,lesion7,type C
