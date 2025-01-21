@@ -1,14 +1,14 @@
 # oast_vs_anticlust.R
 
-library(anticlust) # I used version 0.8.7, which has must_link argument for `anticlustering()`
+library(anticlust) # I used version 0.8.9-1
 library(OSAT) # I got version OSAT_1.52.0 from Bioconductor
 library(here) # for managing relative paths in the project
-source(here("Simulation", "functions.R"))
+source(here("Simulation", "functions.R")) # functions used for the simulation 
 
 sessionInfo()
 
-# set.seed(100) # set seed for final simulation 
-nsim <- 500
+#set.seed(100) # for reproducibility; "uncomment" for running different data sets
+nsim <- 100
 
 # Unfortunately, the PS implementation needs a seed. It also sets seeds 
 # repeatedly, which can easily mess with the logic of the remaining 
@@ -57,7 +57,8 @@ for (i in 1:nsim) {
   ANTICLUST2 <- anticlustering(
     dists,
     K = K,
-    must_link = must_link
+    must_link = must_link,
+    method = "2PML"
   )
   ANTICLUST2_t <- as.numeric(difftime(Sys.time(), start, units = "s"))
   
@@ -122,5 +123,3 @@ for (i in 1:nsim) {
     )
   )
 }
-
-

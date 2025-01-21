@@ -1,5 +1,5 @@
 
-## Some functions that are used in the simulation (and possibly the application)
+## Some functions that are used in the simulation (and possibly the application in the paper)
 
 
 # Wrapper function for OSAT method that can be used in the context 
