@@ -2,8 +2,8 @@
 title: "Supplementary materials to TITLE"
 author: "Martin Papenberg"
 output:
-  pdf_document: default
-  word_document: default
+  pdf_document: 
+    keep_md: true
 bibliography: lit.bib
 ---
 
@@ -57,7 +57,7 @@ An anticlustering algorithm assigns samples to batches in such a way that the ob
 
 We used an heuristic exchange algorithm to maximize the diversity (Späth 1986; Papenberg & Klau, 2021; Weitz & Lakshminarayanan, 1998). It consists of two steps: an initialization step and an optimization step. As initialization, it randomly assigns samples to equal-sized batches. In principle, unequal-sized batches would also be possible, but equal-sized batches were required in the current application (and in general, this requirement is most common. After initialization, the algorithm selects the first sample and checks how the diversity would change if the sample were swapped with each sample that is currently assigned to a different batch. After simulating each exchange, it realizes the one exchange that increases the diversity the most. It does not conduct an exchange if no improvement in diversity is possible. This procedure is repeated for each sample and it terminates after the last sample was processed. The procedure might also restart at the first element and reiterate through all samples until no exchange leads to an improvement any more, i.e., until a local maximum is found. In anticlust, we also implemented this local maximum search, which corresponds to the algorithm LCW by Weitz and Lakshminarayanan (1998).7 For better results, it is also possible to restart the search algorithm multiple times using different (random) initializations (Späth 1986). For the anticlustering assignment illustrated in Table 1, we employed 10 repetitions of the local maximum search LCW, using the squared Euclidean distance as measure of pairwise dissimilarity. To ensure comparable weight of the three features, we also applied a standardization of the input variables before the distance was computed. Using a standardization is recommended if the variables differ strongly in their ranges (Papenberg, 2024).
 
-```{r, fig.width = 6, fig.height = 6, fig.cap = "Illustrates the conversion from numeric features to Euclidean distance, and (anti)clustering assignments based on minimum and maximum diversity using the Euclidean distance. Panel A illustrates the BMI and age of twelve women in our synthetic data in a scatter plot. Panel B represents the Euclidean distances between features as a straight line in the two-dimensional space. The Euclidean distance is proportional to the length of the connecting lines in panel B. Panel C illustrates a clustering assignment of the 12 data points to $K = 3$ equal-sized groups via \\textit{minimum} diversity. Panel D illustrates an anticlustering assignment of the 12 data points to $K = 3$ equal-sized groups via \\textit{maximum} diversity. The diversity is computed as the sum of within-(anti)cluster distances, which are highlighted in Panel C and Panel D through connecting lines. Maximizing the diversity simultaneously leads to similar distribution of the input features among batches."}
+```{r, fig.width = 6, fig.height = 6, fig.cap = "Illustrates the conversion from numeric features to Euclidean distance, and (anti)clustering assignments based on minimum and maximum diversity using the Euclidean distance. Panel A illustrates the BMI and age of twelve women in our synthetic data in a scatter plot. Panel B represents the Euclidean distances between features as a straight line in the two-dimensional space. The Euclidean distance is proportional to the length of the connecting lines in panel B. Panel C illustrates a clustering assignment of the 12 data points to $K = 3$ equal-sized groups via \\textit{minimum} diversity. Panel D illustrates an anticlustering assignment of the 12 data points to $K = 3$ equal-sized groups via \\textit{maximum} diversity. The diversity is computed as the sum of within-(anti)cluster distances, which are highlighted in Panel C and Panel D through connecting lines. Maximizing the diversity simultaneously leads to similar distribution of the input features among batches.", dev=c('png', 'pdf', 'svg', 'tiff')}
 
 # this is an old file, which I use for the BMI and age values in it
 old <- read.csv(here("Supplementary_Materials", "sample_data_old.csv"))
@@ -174,7 +174,7 @@ As mentioned above due the computational complexity of anticlustering, batch ass
 ## Simulation Study
 
 ```{r}
-tt <- read.csv(here("Simulation", "results.csv"), sep = ";")
+tt <- read.csv(here("Simulation", "results_N=2000_save.csv"), sep = ";")
 tt$ID <- 1:nrow(tt)
 p_values <- tt[, grepl("p_", colnames(tt))]
 
@@ -207,7 +207,7 @@ For each simulation run, we computed $\chi^2$-tests to assess the imbalance amon
 
 The anticlustering assignment that was subjected to must-link constraints on average achieved `r avg_constrained_obj`% of the objective value of the unconstrained assignment. Hence, must-link constraints are not only desirable from a user's point of view, but they also do not decrease batch balance considerably; in `r constrained_not_worse`% of all cases, balance was not at all reduced by the constraints. Remarkably, the constrained anticlustering assignment led to better balance than the OSAT and PSBA assignments that did not employ any constraints (see Figure 2).
 
-```{r, fig.cap= "Average \\textit{p} values in dependence of the number of batches and the number of variables. Higher \\textit{p} values indicate better balance. Anticlustering maintained a comparable level of balance in all conditions. OSAT's performance decreased with increasing number of variables most strongly."}
+```{r, fig.cap= "Average \\textit{p} values in dependence of the number of batches and the number of variables. Higher \\textit{p} values indicate better balance. Anticlustering maintained a comparable level of balance in all conditions. OSAT's performance decreased with increasing number of variables most strongly.", dev=c('png', 'pdf', 'svg', 'tiff')}
 
 ## Some more sophisticated analyes:
 dfl <- tt |> 
