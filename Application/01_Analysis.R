@@ -39,7 +39,7 @@ vars <- c("endo", "site", "phase", "stage")
 
 # Level of samples 
 save_t1(
-  tableone::CreateCatTable(data = dataset, vars = vars, strata = "BatchAnticlust"),
+  tableone::CreateCatTable(data = dataset, vars = vars, strata = "BatchAnticlust"), #From the docs: By default all p-values are from large sample approximation tests (chisq.test).
   file = here("Application", paste0(format(Sys.time(), "%Y %m %d"), " Tableone Unrestricted Anticlustering Assignment - All Samples.csv"))
 )
 save_t1(
