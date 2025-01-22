@@ -15,10 +15,10 @@ source(here("Simulation", "functions.R")) # functions used for the simulation
 
 sessionInfo()
 
-#set.seed(100) # for reproducibility; "uncomment" for running different data sets
+set.seed(100) # for reproducibility; "uncomment" for running different data sets
 # Use 10000 data sets for final simulation. If done in one setting, should run in about 
 # 3 days on a personal computer (mostly because PSBA is really slow).
-nsim <- 1000
+nsim <- 10000
 
 # Unfortunately, the PS implementation needs a seed. It also sets seeds 
 # repeatedly, which can easily mess with the logic of the remaining 
