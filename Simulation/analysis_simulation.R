@@ -92,8 +92,8 @@ dfl |>
   ylab("Average p value")
 
 
-## Expected number of must-link partners:
-
+## Expected number of must-link partners in the simulation:
+Ns <- tt$N
 tables <- lapply(lapply(Ns, function(x) sample(x, replace = TRUE)), function(x) table(table(x)))
 # make each member the same length:
 largest_group <- max(lengths(tables))
@@ -114,6 +114,3 @@ results |> round(2)
 #         1         2         3 4 or more 
 #      0.58      0.29      0.10      0.03 
 # These results are quite stable
-
-# example application has:
-# 0.523560209 0.246073298 0.068062827 0.125654450 0.015706806 0.015706806 0.005235602
