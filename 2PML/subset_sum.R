@@ -1,4 +1,8 @@
 
+# Author: Martin Papenberg
+# Year: 2025
+
+
 ## For Phase 2 of the 2PML algorithm, we generate all combinations of numbers 
 # (representing the sizes of cliques / singletons) sizes that in total add
 # up to the size of a clique for which we search exchange partners. 

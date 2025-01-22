@@ -1,5 +1,8 @@
 
-## Some functions that are used in the simulation (and possibly the application in the paper)
+# Author: Martin Papenberg
+# Year: 2025
+
+## Some functions that are used in the simulation
 
 
 # Wrapper function for OSAT method that can be used in the context 

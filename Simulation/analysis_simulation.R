@@ -1,4 +1,10 @@
 
+# Author: Martin Papenberg
+# Year: 2025
+
+# This file implements the analysis of the simulation study, making the results
+# in the paper reproducible.
+
 library(here)
 library(tidyverse)
 library(santoku)

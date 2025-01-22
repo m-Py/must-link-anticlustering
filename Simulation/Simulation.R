@@ -1,4 +1,12 @@
-# oast_vs_anticlust.R
+
+# Author: Martin Papenberg
+# Year: 2025
+
+## This file implements the simulation reported in the manuscript
+# "Anticlustering for Sample Allocation To Minimize Batch Effects"
+# that compares anticlustering, OSAT and PSBA (propensity score batch assignment)
+
+# It uses the script "functions.R", which implements some helper methods (e.g. wrappers for OSAT and PSBA methods)
 
 library(anticlust) # I used version 0.8.9-1
 library(OSAT) # I got version OSAT_1.52.0 from Bioconductor
@@ -8,7 +16,9 @@ source(here("Simulation", "functions.R")) # functions used for the simulation
 sessionInfo()
 
 #set.seed(100) # for reproducibility; "uncomment" for running different data sets
-nsim <- 100
+# Use 10000 data sets for final simulation. If done in one setting, should run in about 
+# 3 days on a personal computer (mostly because PSBA is really slow).
+nsim <- 1000
 
 # Unfortunately, the PS implementation needs a seed. It also sets seeds 
 # repeatedly, which can easily mess with the logic of the remaining 
@@ -52,7 +62,7 @@ for (i in 1:nsim) {
     must_link <- sample(N, replace = TRUE)
   }
   
-  # Perform anticlustering using default exchange method + constraints
+  # Perform must-link anticlustering using 2PML
   start <- Sys.time()
   ANTICLUST2 <- anticlustering(
     dists,
@@ -74,8 +84,8 @@ for (i in 1:nsim) {
   }
 
   
-  # OSAT vignette uses p values to quantify discrepancy in each category between batches
-  # (I would also use p values in the simulation in our paper I guess)
+  # OSAT paper uses p values to quantify discrepancy in each category between batches, which makes sense
+  # We do that as well.
   pvalues_osat <- rep(NA, 5)
   pvalues_anticlust <- rep(NA, 5)
   pvalues_anticlust2 <- rep(NA, 5)
