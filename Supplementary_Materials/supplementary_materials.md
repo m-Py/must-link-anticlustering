@@ -13,7 +13,7 @@ date: "Generated on 2025-01-23"
 
 # Overview
 
-This document is found at the accompaying online repository for the manuscript "Anticlustering for Sample Allocation To Minimize Batch Effects". It can be retrieved from https://osf.io/eu5gd/?view_only=5d3cefa960434b108c36985dc2f759fe. The repository also contains other information, data and files concerning this project are stored. 
+This document is found at the accompanying online repository for the manuscript "Anticlustering for Sample Allocation To Minimize Batch Effects". It can be retrieved from https://osf.io/eu5gd/?view_only=5d3cefa960434b108c36985dc2f759fe. The repository also contains other information, data and files concerning this project are stored. 
 
 This document is meant to 
 
