@@ -26,14 +26,14 @@ df_ind <- df[!duplicated(df$patient_id), ]
 
 # Overview
 
-This document is found at the accompanying online repository for the manuscript "Anticlustering for Sample Allocation To Minimize Batch Effects". It can be retrieved from https://osf.io/eu5gd/?view_only=5d3cefa960434b108c36985dc2f759fe. The repository also contains other information, data and files concerning this project are stored. 
+This document is found at the accompanying online repository for the manuscript "Anticlustering for Sample Allocation To Minimize Batch Effects". It can be retrieved from https://osf.io/eu5gd/?view_only=5d3cefa960434b108c36985dc2f759fe. The repository also contains other information, data and files concerning the project. 
 
 This document is meant to 
 
-- reproduce all analyses and Figures (in this case, this includes formulas) reported in the  See the corresponding .Rmd file---also retrievable from the online repository---for all R code.
+- reproduce all analyses and Figures (in this case, this includes formulas) reported in the manuscript. See the corresponding .Rmd file---also retrievable from the online repository---for all R code.
 - illustrate some additional analyses of the simulation study that are not included in the main text due a lack of space (in particular, Figures 3 and 4 are not shown in the paper).
 
-Basically, it contains a slightly modified/augmented version of the "Results" section in the paper (before final proof editing, plus the additional Figures), which is fully reproducible via R and R Markdown.
+Basically, it contains a slightly modified/augmented version of the "Results" section in the paper (written before final proof editing, plus the additional Figures). It is fully reproducible via R and R Markdown.
 
 ## Anticlustering algorithm
 
