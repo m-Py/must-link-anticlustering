@@ -9,7 +9,7 @@ library(here)
 library(tidyverse)
 library(santoku)
 
-tt <- read.csv(here("Simulation", "results_save_N=1100.csv"), sep = ";")
+tt <- read.csv(here("Simulation", "results.csv"), sep = ";")
 tt$ID <- 1:nrow(tt) # ID that identifies a single simulation run / data set in the data. Useful when data is transformed into long format.
 nrow(tt)
 p_values <- tt[, grepl("p_", colnames(tt))]
