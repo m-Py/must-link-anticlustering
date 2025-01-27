@@ -14,7 +14,6 @@ date: "Generated on `r format(Sys.time(), '%Y-%m-%d')`"
 library(knitr)
 library(anticlust)
 library(here)
-library(tidyverse)
 library(kableExtra)
 opts_chunk$set(message = FALSE, warning = FALSE, fig.align = "center", echo = FALSE)
 
