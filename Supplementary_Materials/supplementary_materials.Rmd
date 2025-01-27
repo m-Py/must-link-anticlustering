@@ -1,10 +1,12 @@
 ---
-title: "Supplementary materials to TITLE"
+title: Anticlustering for Sample Allocation To Minimize Batch Effects
+subtitle: Supplementary Materials
 author: "Martin Papenberg"
 output:
   pdf_document: 
     keep_md: true
 bibliography: lit.bib
+date: "Generated on `r format(Sys.time(), '%Y-%m-%d')`"
 ---
 
 ```{r include = FALSE}
@@ -13,7 +15,6 @@ library(knitr)
 library(anticlust)
 library(here)
 library(tidyverse)
-library(patchwork)
 library(kableExtra)
 opts_chunk$set(message = FALSE, warning = FALSE, fig.align = "center", echo = FALSE)
 
@@ -23,39 +24,31 @@ df_ind <- df[!duplicated(df$patient_id), ]
 
 ```
 
-# Example Application
+# Overview
 
-```{r}
-must_link_frequencies <- table(table(df$patient_id))
-N_unique <- length(unique(df$patient_id))
-```
+This document is found at the accompanying online repository for the manuscript "Anticlustering for Sample Allocation To Minimize Batch Effects". It can be retrieved from https://osf.io/eu5gd/?view_only=5d3cefa960434b108c36985dc2f759fe. The repository also contains other information, data and files concerning the project. 
 
+This document is meant to 
 
-The ENACT project is concerned with researching endometriosis disease. One of the ENACT projects required to assign 320 cell samples of women either carrying the disease or not to 20 batches. To illustrate the application, we prepared a synthetic data set that resembles the actual data set, which is not disclosed for reasons of medical confidentiality. Women in varying disease stages provided a varying number of samples. All women who did not carry the disease (*n* = `r sum(df_ind$endo == "no")`) provided exactly one sample, while all women who carried the disease (*n* = `r sum(df_ind$endo == "yes")`) provided multiple samples: 
-`r must_link_frequencies[2]` patients provided 2 samples, 
-`r must_link_frequencies[3]` patients provided 3 samples, 
-`r must_link_frequencies[4]` patients provided 4 samples, 
-`r must_link_frequencies[5]` patients provided 5 samples, 
-and 6, 7 or 8 samples were provided by one patient, respectively.
-In total, the data set consists of `r N` samples from `r N_unique` unique individuals. 
+- reproduce all analyses and Figures (in this case, this includes formulas) reported in the manuscript. See the corresponding .Rmd file---also retrievable from the online repository---for all R code.
+- illustrate some additional analyses of the simulation study that are not included in the main text due a lack of space (in particular, Figures 3 and 4 are not shown in the paper).
 
-For the assignment, we strived for balance with regard to four categorical variables: is disease present (yes or no); stage of disease ("none", "Stage I or II", "Stage III or IV"); clinical site (University of California SF, or other); phase (PE or SE) (what is this?). Other demographic variables such as age and BMI were also assessed but not deemed critical as covariates for the batch assignment. Post-hoc checks however revealed that no significant discrepancies occurred in these other variables, despite not being included.
+Basically, it contains a slightly modified/augmented version of the "Results" section in the paper (written before final proof editing, plus the additional Figures). It is fully reproducible via R and R Markdown.
 
-For the purpose of illustration, we first applied an unconstrained anticlustering assignment and OSAT (see Table 1 and 2). Both methods successfully balanced all four variables among batches (all *p*s > .99). While the assignment was conducted using the 320 samples---as opposed to the `r N_unique` individual patients---as input, we also verified satisfactory balance on the level of individuals. Table 3 illustrates the results of constrained anticlustering, which through the 2PML algorithm ensured that samples belonging to the same patient were assigned to the same batch. Note that the must-link constraints put rather severe restrictions to the assignments that were possible; for example, up to 50% of a batch had to be occupied with the samples of a single patient. Still, using 2PML, batches turned out to be highly balanced  (*p*s > .99 on batch level and *p*s > .98 on individual level). All assignments and results are reproducible via the accompanying online repository (link).
+## Anticlustering algorithm
 
-# Methods
+Anticlustering is an optimization method that is characterized by (a) an objective function that quantifies the balance among batches, and (b) an algorithm that conducts the batch assignment in such a way that balance among batches is maximized. Anticlustering owes its name to the fact that the objective functions it uses are the reversal of criteria used in cluster analysis. For example, @spath1986 already recognized that by maximizing instead of minimizing the k-means criterion (the "variance"), he was able to create groups that are similar to each other, and presented it as an improvement over the more intuitive random assignment [@steinley2006]. @brusco2019 recognized that other objective functions known from cluster analysis can also be implemented in the context of anticlustering.
 
-Anticlustering is an optimization method that is characterized by (a) an objective function that quantifies the balance among batches, and (b) an algorithm that conducts the batch assignment in such a way that balance among batches is maximized. Anticlustering owes its name to the fact that the objective functions it uses are the reversal of criteria used in cluster analysis. For example, Späth (1986) already recognized that by maximizing instead of minimizing the k-means criterion (the “variance”), he was able to create groups that are similar to each other, and presented it as an improvement over the more intuitive random assignment (Steinley, 2006). Brusco et al. (2020) recognized that other objective functions known from cluster analysis can also be implemented in the context of anticlustering.
-
-In our application, we optimized the diversity objective to maximize similarity among batches. While the diversity is technically a measure of within-batch heterogeneity, its maximization simultaneously leads to minimal difference between the distribution of the input variables among batches (Feo & Khellaf 1990; cf. Papenberg, 2024). Papenberg and Klau (2021) referred to the maximization of the diversity as anticluster editing because the minimization of the diversity is also well-known from the area of cluster analysis—under the term “cluster editing” (Shamir et al., 2004; Böcker et al., 2011). The diversity is computed on the basis of a measure of pairwise dissimilarity among samples. In particular, it is defined as the overall sum of all dissimilarities among samples that are assigned to the same batch (Brusco et al., 2020). Hence, the diversity is not directly computed on the basis of the samples’ features, but instead it relies on distance measure that is computed on the basis of the features, for each pair of samples. In the context of anticlustering, the Euclidean distance is the most common measure that translates features to pairwise dissimilarities (Gallego et al. 2013; Papenberg & Klau, 2021). However, using other distance measures such as the squared Euclidean distance is also possible (Brusco et al., 2020). The Euclidean distance is defined as
+In our application, we optimized the diversity objective to maximize similarity among batches. While the diversity is technically a measure of within-batch heterogeneity, its maximization simultaneously leads to minimal difference between the distribution of the input variables among batches [@feo1990; cf. @papenberg2024]. Papenberg and Klau [-@papenberg2020] referred to the maximization of the diversity as anticluster editing because the minimization of the diversity is also well-known from the area of cluster analysis---under the term "cluster editing" [@shamir2004vf; @bocker2011]. The diversity is computed on the basis of a measure of pairwise dissimilarity among samples. In particular, it is defined as the overall sum of all dissimilarities among samples that are assigned to the same batch [@brusco2019]. Hence, the diversity is not directly computed on the basis of the samples’ features, but instead it relies on distance measure that is computed on the basis of the features, for each pair of samples. In the context of anticlustering, the Euclidean distance is the most common measure that translates features to pairwise dissimilarities [@gallego2013; @papenberg2020]. However, using other distance measures such as the squared Euclidean distance is also possible [@brusco2019]. The Euclidean distance is defined as
 
 $$
 d(x, y) =  \sqrt{\sum\limits_{i = 1}^{M}(x_i - y_i)^2}
 $$
-When samples are described by two features, the Euclidean distance corresponds to the geometric, “straight line” distance between two points in a two-dimensional space; more similar data points are closer to each other (see Figure 1). For categorical variables, we use binary coding before including them in the computation of the Euclidean distance (see Table 2). 
-An anticlustering algorithm assigns samples to batches in such a way that the objective function—here, the diversity—is maximized. Anticlustering usually employs heuristic optimization algorithms (Yang et al., 2022). While heuristics generally provide satisfying results in the context of anticlustering (Papenberg & Klau, 2021), they do not guarantee to find the globally best assignment among all possibilities. In principle, enumerating all possible assignments is a valid strategy to obtain an optimal assignment. However, this approach quickly becomes impossible due to an exponential growth of the way in which assignments can be conducted (Papenberg & Klau, 2021). Moreover, because anticlustering problems (with the exception of some special cases) are also NP-hard (Feo & Khellaf, 1990), there is probably no algorithm that identifies the globally best assignment without considering all possibilities (at least in the worst case). In practice, heuristics are therefore indispensable. In the following, we present an anticlustering heuristic that is generally applicable to large data sets, and outline how we included must-link constraints with this algorithm. 
+When samples are described by two features, the Euclidean distance corresponds to the geometric, “straight line” distance between two points in a two-dimensional space; more similar data points are closer to each other (see Figure 1). For categorical variables, we use binary coding before including them in the computation of the Euclidean distance (see Table 1). 
 
-We used an heuristic exchange algorithm to maximize the diversity (Späth 1986; Papenberg & Klau, 2021; Weitz & Lakshminarayanan, 1998). It consists of two steps: an initialization step and an optimization step. As initialization, it randomly assigns samples to equal-sized batches. In principle, unequal-sized batches would also be possible, but equal-sized batches were required in the current application (and in general, this requirement is most common. After initialization, the algorithm selects the first sample and checks how the diversity would change if the sample were swapped with each sample that is currently assigned to a different batch. After simulating each exchange, it realizes the one exchange that increases the diversity the most. It does not conduct an exchange if no improvement in diversity is possible. This procedure is repeated for each sample and it terminates after the last sample was processed. The procedure might also restart at the first element and reiterate through all samples until no exchange leads to an improvement any more, i.e., until a local maximum is found. In anticlust, we also implemented this local maximum search, which corresponds to the algorithm LCW by Weitz and Lakshminarayanan (1998).7 For better results, it is also possible to restart the search algorithm multiple times using different (random) initializations (Späth 1986). For the anticlustering assignment illustrated in Table 1, we employed 10 repetitions of the local maximum search LCW, using the squared Euclidean distance as measure of pairwise dissimilarity. To ensure comparable weight of the three features, we also applied a standardization of the input variables before the distance was computed. Using a standardization is recommended if the variables differ strongly in their ranges (Papenberg, 2024).
+An anticlustering algorithm assigns samples to batches in such a way that the objective function---here, the diversity---is maximized. Anticlustering usually employs heuristic optimization algorithms [@yang2022]. While heuristics generally provide satisfying results in the context of anticlustering [@papenberg2020], they do not guarantee to find the globally best assignment among all possibilities. In principle, enumerating all possible assignments is a valid strategy to obtain an optimal assignment. However, this approach quickly becomes impossible due to an exponential growth of the way in which assignments can be conducted [@papenberg2020]. Moreover, because anticlustering problems (with the exception of some special cases) are also NP-hard [@feo1990], there is probably no algorithm that identifies the globally best assignment without considering all possibilities (at least in the worst case). In practice, heuristics are therefore indispensable. In the following, we present an anticlustering heuristic that is generally applicable to large data sets, and outline how we included must-link constraints with this algorithm. 
+
+We used an heuristic exchange algorithm to maximize the diversity [@spath1986; @papenberg2020; @weitz1998]. It consists of two steps: an initialization step and an optimization step. As initialization, it randomly assigns samples to equal-sized batches. In principle, unequal-sized batches would also be possible, but equal-sized batches were required in the current application (and in general, this requirement is most common. After initialization, the algorithm selects the first sample and checks how the diversity would change if the sample were swapped with each sample that is currently assigned to a different batch. After simulating each exchange, it realizes the one exchange that increases the diversity the most. It does not conduct an exchange if no improvement in diversity is possible. This procedure is repeated for each sample and it terminates after the last sample was processed. The procedure might also restart at the first element and reiterate through all samples until no exchange leads to an improvement any more, i.e., until a local maximum is found. In anticlust, we also implemented this local maximum search, which corresponds to the algorithm LCW by @weitz1998. For better results, it is also possible to restart the search algorithm multiple times using different (random) initializations [@spath1986]. 
 
 ```{r, fig.width = 6, fig.height = 6, fig.cap = "Illustrates the conversion from numeric features to Euclidean distance, and (anti)clustering assignments based on minimum and maximum diversity using the Euclidean distance. Panel A illustrates the BMI and age of twelve women in our synthetic data in a scatter plot. Panel B represents the Euclidean distances between features as a straight line in the two-dimensional space. The Euclidean distance is proportional to the length of the connecting lines in panel B. Panel C illustrates a clustering assignment of the 12 data points to $K = 3$ equal-sized groups via \\textit{minimum} diversity. Panel D illustrates an anticlustering assignment of the 12 data points to $K = 3$ equal-sized groups via \\textit{maximum} diversity. The diversity is computed as the sum of within-(anti)cluster distances, which are highlighted in Panel C and Panel D through connecting lines. Maximizing the diversity simultaneously leads to similar distribution of the input features among batches.", dev=c('png', 'pdf', 'svg', 'tiff')}
 
@@ -148,11 +141,96 @@ knitr::kable(
 ```
 
 
-### Including Must-Link Constraints with Anticlustering
+## Example Application
 
-In our application, samples belonging to the same patient were required to be assigned to the same batch. We refer to a set of samples that must be assigned to the same batch as a must-link clique. In our application, not all samples were part of a clique. For the synthetic data set that resembled our actual application, we simulated 370 samples from 191 unique patients. To include the must-link constraints with anticlustering, we basically use a downscaled data set where each unique patient—but not each single sample—constitutes a unit in the anticlustering process. Hence, in our application, the effective sample size was 191 instead of 370. Some adjustments of the exchange method are required to ensure (a) we still obtain a valid partitioning regarding the size constraints (equal-sized batches) and (b) the diversity is computed correctly during optimization. We therefore had to adjust both the initialization phase as well as the optimization phase of the exchange algorithm.
+```{r}
+must_link_frequencies <- table(table(df$patient_id))
+N_unique <- length(unique(df$patient_id))
+```
 
-During initialization, we first assign all samples to a batch that are part of a clique (270 samples). Each clique must be assigned completely to one of the batches and samples within a clique must not be split apart. At the same time, the maximum capacity of each batch must not be exceeded. Using this conceptualization, the initialization step corresponds to a bin packing problem, which is one the classical NP complete problem in computer science (Garey & Johnson, 1979). That is, we assign a weight to each clique, corresponding to the number of samples it contains. When filling batches, the sum of the weights of the cliques in each batch must not exceed its capacity. Many optimal and heuristic algorithms have been developed to address such a bin packing problem. As the default method, we use a randomized first fit heuristic to fill batches: For each must-link clique, we iterate through all batches in random order and assign it to the first batch where it fits. The process is expected to evenly distribute the must-link cliques among batches. This random component is particularly useful if we use multiple restarts of the optimization algorithm. After assigning the must-link cliques to batches, the remaining samples can be assigned randomly to fill the remaining space. Note that our randomized first fit algorithm is a heuristic that may not find an assignment of must-link groups to batches even if one is theoretically available. If the heuristic indicates that the batches cannot hold the must-link groups, we therefore use an optimal algorithm based on integer linear programming as a fallback option, which allows us to verify if the constraints really cannot be fulfilled. To this end, we implemented an adaptation of the standard bin packing ILP model by Martello and Toth, [-@martello1990, p. 221]. It is given as
+UCSF-Stanford Endometriosis Center for Discovery, Innovation, Training and Community Engagement ("ENACT, https://enactcenter.org/)  is concerned with researching endometriosis disease. One of the ENACT projects required to assign 320 cell samples of women either carrying the disease or not to 20 batches. To illustrate the application, we prepared a synthetic data set that resembles the actual data set, which is not disclosed for reasons of medical confidentiality. Women in varying disease stages provided a varying number of samples. All women who did not carry the disease (*n* = `r sum(df_ind$endo == "no")`) provided exactly one sample, while all women who carried the disease (*n* = `r sum(df_ind$endo == "yes")`) provided multiple samples: 
+`r must_link_frequencies[2]` patients provided 2 samples, 
+`r must_link_frequencies[3]` patients provided 3 samples, 
+`r must_link_frequencies[4]` patients provided 4 samples, 
+`r must_link_frequencies[5]` patients provided 5 samples, 
+and 6, 7 or 8 samples were provided by one patient, respectively.
+In total, the data set consists of `r N` samples from `r N_unique` unique individuals. 
+
+For the assignment, we strived for balance with regard to four categorical variables: is disease present (yes or no); stage of disease ("none", "Stage I or II", "Stage III or IV"); clinical site (University of California SF, or other); menstrual cycle phase (proliferative ("PE") or secretory ("SE"). Other demographic variables such as age and BMI were also assessed but not deemed critical as covariates for the batch assignment. Post-hoc checks however revealed that no significant discrepancies occurred in these other variables, despite not being included.
+
+For the purpose of illustration, we first applied an unconstrained anticlustering assignment and OSAT (see Table 2-5). Both methods successfully balanced all four variables among batches (all *p*s > .999). While the assignment was conducted using the 320 samples---as opposed to the `r N_unique` individual patients---as input, we also verified satisfactory balance on the level of individuals. Tables 6 and 7 illustrates the results of constrained anticlustering, which through the 2PML algorithm ensured that samples belonging to the same patient were assigned to the same batch. Note that the must-link constraints put rather severe restrictions to the assignments that were possible; for example, up to 50% of a batch had to be occupied with the samples of a single patient. Still, using 2PML, batches turned out to be highly balanced (*p*s > .999 on batch level and *p*s > .980 on individual level). 
+
+```{r}
+
+
+u1 <- read.csv(here("Application", "2025 01 17 Tableone Unrestricted Anticlustering Assignment - Individuals.csv"))
+u2 <- read.csv(here("Application", "2025 01 17 Tableone Unrestricted Anticlustering Assignment - All Samples.csv"))
+o1 <- read.csv(here("Application", "2025 01 17 Tableone OSAT Assignment - Individuals.csv"))
+o2 <- read.csv(here("Application", "2025 01 17 Tableone OSAT Assignment - All Samples.csv"))
+m1 <- read.csv(here("Application", "2025 01 17 Tableone Must-Link Assignment - Individuals.csv"))
+m2 <- read.csv(here("Application", "2025 01 17 Tableone Must-Link Assignment - All Samples.csv"))
+
+# function to reformat the tableone output for PDF....
+reformat_t1 <- function(t1, unique) {
+  p_value_stage <- t1[5, "X.p."]
+  tab <- t(t1)
+  tab <- tab[, -5]
+  colnames(tab) <- tab[1, ]
+  tab <- tab[-1, ]
+  colnames(tab)[5] <- "Stage = None"
+  colnames(tab) <- trimws(gsub('\"', "", colnames(tab)))
+  tab <- tab[-nrow(tab), ]
+  rownames(tab) <- c(paste0("B", 1:20), "p value")
+  tab[nrow(tab), c(1, 5:7)] <- c("", "", p_value_stage, "")
+  cbind(tab[, 1, drop = FALSE], "Unique" = c(as.numeric(unique), ""), tab[, -1])
+}
+
+## Encode per batch if individuals in it are unique to the Batch
+## Batch assignment of the application is included in the Application directory, check out the code there for how it was done.
+dataset <- read.csv(here("Application", "assignments_synthetic_dataset.csv"), sep = ";")
+# (a) OSAT
+unique_osat <- sapply(1:20, function(i) !any(dataset$patient_id[dataset$BatchOSAT == i] %in% dataset$patient_id[dataset$BatchOSAT != i]))
+# (b) unrestricted anticlustering
+unique_anticlust1 <- sapply(1:20, function(i) !any(dataset$patient_id[dataset$BatchAnticlust == i] %in% dataset$patient_id[dataset$BatchAnticlust != i]))
+# (c) must-link constrained anticlustering
+unique_anticlust2 <-sapply(1:20, function(i) !any(dataset$patient_id[dataset$BatchAnticlustML == i] %in% dataset$patient_id[dataset$BatchAnticlustML != i]))
+
+
+generate_caption <- function(method_name, sample_vs_individual) {
+  paste("Application results of the", method_name, "assignment. Balance is assessed on", sample_vs_individual, "level.", 
+        "Column 'Unique' encodes if a batch consists only of samples of individuals that are unique to this batch; '0' means there is at least one individual with a sample in this batch who also has at least one sample in another batch, '1' otherwise.")
+}
+ 
+kbl(reformat_t1(u1, unique_anticlust1), booktabs = TRUE, 
+    caption = generate_caption("unrestricted anticlustering", "individuals'"), align = "c") |> 
+  kable_styling(latex_options = "HOLD_position")
+
+kbl(reformat_t1(u2, unique_anticlust1), booktabs = TRUE, 
+    caption = generate_caption("unrestricted anticlustering", "samples'"), align = "c") |> 
+  kable_styling(latex_options = "HOLD_position")
+
+kbl(reformat_t1(o1, unique_osat), booktabs = TRUE, 
+    caption = generate_caption("OSAT", "individuals'"), align = "c") |> 
+  kable_styling(latex_options = "HOLD_position")
+
+kbl(reformat_t1(o2, unique_osat), booktabs = TRUE, 
+    caption = generate_caption("OSAT", "samples'"), align = "c") |> 
+  kable_styling(latex_options = "HOLD_position")
+
+kbl(reformat_t1(m1, unique_anticlust2), booktabs = TRUE, 
+    caption = generate_caption("must-link constrained anticlustering", "individuals'"), align = "c") |> 
+  kable_styling(latex_options = "HOLD_position")
+
+kbl(reformat_t1(m2, unique_anticlust2), booktabs = TRUE, 
+    caption = generate_caption("must-link constrained anticlustering", "samples'"), align = "c") |> 
+  kable_styling(latex_options = "HOLD_position")
+```
+
+## Including Must-Link Constraints with Anticlustering
+
+In our application, samples belonging to the same patient were required to be assigned to the same batch. We refer to a set of samples that must be assigned to the same batch as a must-link clique. To include the must-link constraints with anticlustering, we basically use a revised data set where each unique patient---but not each single sample---constitutes a unit in the anticlustering process. Some adjustments of the exchange method are required to ensure (a) we still obtain a valid partitioning regarding the size constraints (equal-sized batches) and (b) the diversity is computed correctly during optimization. We therefore had to adjust both the initialization phase as well as the optimization phase of the exchange algorithm.
+
+During initialization, we first assign all samples to a batch that are part of a clique. Each clique must be assigned completely to one of the batches and samples within a clique must not be split apart. At the same time, the maximum capacity of each batch must not be exceeded. Using this conceptualization, the initialization step corresponds to a bin packing problem, which is one the classical NP complete problem in computer science [@garey1979]. That is, we assign a weight to each clique, corresponding to the number of samples it contains. When filling batches, the sum of the weights of the cliques in each batch must not exceed its capacity. Many optimal and heuristic algorithms have been developed to address such a bin packing problem. As the default method, we use a randomized first fit heuristic to fill batches: For each must-link clique, we iterate through all batches in random order and assign it to the first batch where it fits. The process is expected to evenly distribute the must-link cliques among batches. This random component is particularly useful if we use multiple restarts of the optimization algorithm. After assigning the must-link cliques to batches, the remaining samples can be assigned randomly to fill the remaining space. Note that our randomized first fit algorithm is a heuristic that may not find an assignment of must-link groups to batches even if one is theoretically available. If the heuristic indicates that the batches cannot hold the must-link groups, we therefore use an optimal algorithm based on integer linear programming as a fallback option, which allows us to verify if the constraints really cannot be fulfilled. To this end, we implemented an adaptation of the standard bin packing ILP model by Martello and Toth, [-@martello1990, p. 221]. It is given as
 
 \begin{equation*}
 \begin{array}{ll@{}ll@{}rr}
@@ -165,47 +243,54 @@ During initialization, we first assign all samples to a batch that are part of a
 
 The number of must-link cliques is given by $n$. The model has decision variables $x_{ij}$ to encode whether clique $j$ $(j = 1, \ldots, n)$ is assigned to batch $i$ $(i = 1, \ldots, K)$. It uses $K$ values $c_i$ to represent the capacity of each batch; in the default case of equal-sized batches, we have $c_i = \frac{N}{K}$ for each batch. It uses $n$ values $w_j$ to encode the weight of each clique, i.e., the number of samples it represents that must be assigned to the same batch in order to fulfil the must-link constraints. Constraint (2) realizes that the weight of each batch is not exceeded; constraint (3) realizes that each clique is assigned to exactly one batch. Note that during the initialization step that assigns cliques to batches, we only need to test if the constraints (2) and (3) can be fulfilled at all; any feasible assignment is equally valid. For this reason, the objective function (1) is chosen to be constant for each assignment that satisfies the constraints ($n$). It does not actually contribute to solving the problem, and the model only test if the must-link constraints can be fulfilled.
 
-Like the initialization step, the optimization step of the exchange algorithm uses a downscaled data set where each patient rather than each sample corresponds to a unit of analysis. However, to obtain valid results according to the original data set (which incorporates all samples), an adjustment to the data input is needed. In particular, we must change the matrix of pairwise dissimilarities: To obtain a reduced distance matrix that preserves all information of the original distance matrix, we sum up all pairwise distances between samples in different cliques. In the context of maximizing the diversity, this transformation sufficiently preserves the relevant information in the original distance matrix (Böcker et al., 2011). Using the initial assignment and the reduced distance matrix, we apply the same exchange algorithm as we described for the unrestricted anticlustering application, with one adjustment: During the exchange process, we only exchange cliques of the same size (e.g., patients providing the same number of samples) to ensure that the cardinality constraints are respected throughout (i.e., usually equal-sized batches).
-
-### Optimal anticlustering using must-link constraints
-
-As mentioned above due the computational complexity of anticlustering, batch assignment problems are usually tackled using heuristic algorithms. Still, for some problem constellations, in particular when $N$ is not large, it is possible to employ optimal algorithms that find the globally best batch assignment. Papenberg and Klau (2021) presented an ILP model to find globally optimal batch assignments for the diversity objective. It can be used to solve problem instances of up to about $N = 30$ in an acceptable running time; Schulz (2022; ). In this paper, we extend the model by Papenberg and Klau (2021) by allowing it to include must-link constraints. The extension is actually quite straight forward: To induce must-link constraints in the context of an optimal algorithm, it is sufficient to adjust the distance matrix used as input. Whenever the pairwise distance between two samples it set to $\infty$---and the set of must-link constraints can be fulfilled---any globally optimal assignment will place these samples in the same batch, because the objective value associated with such an assignment is necessarily better than that of an assignment that places them in different batches. This feature of adjusting the data input has long been used in the context of optimal algorithms for cluster editing (Böcker et al. 2011). Including must-link constraints in the anticlustering problem specification increases the number of samples that can be processed. In our online supplementary materials, we show that up to about 40-50 samples can be processed in a time limit of 1800 seconds on a personal computer; after that, the running time is expected to increase exponentially with increasing number of samples. 
+Like the initialization step, the optimization step of the exchange algorithm uses a downscaled data set where each patient rather than each sample corresponds to a unit of analysis. However, to obtain valid results according to the original data set (which incorporates all samples), an adjustment to the data input is needed. In particular, we must change the matrix of pairwise dissimilarities: To obtain a reduced distance matrix that preserves all information of the original distance matrix, we sum up all pairwise distances between samples in different cliques. In the context of maximizing the diversity, this transformation sufficiently preserves the relevant information in the original distance matrix [@bocker2011]. Using the initial assignment and the reduced distance matrix, we apply the same exchange algorithm as we described for the unrestricted anticlustering application, with one adjustment: During the exchange process, we only exchange cliques of the same size (e.g., patients providing the same number of samples) to ensure that the cardinality constraints are respected throughout (i.e., usually equal-sized batches).
 
 ## Simulation Study
 
 ```{r}
-tt <- read.csv(here("Simulation", "results_N=2000_save.csv"), sep = ";")
+tt <- read.csv(here("Simulation", "results_save_N=1100.csv"), sep = ";")
 tt$ID <- 1:nrow(tt)
 p_values <- tt[, grepl("p_", colnames(tt))]
 
 # global results OSAT vs. anticlust. How often is p value of anticlust better (i.e. larger)?
-anticlust_better1 <- apply(p_values, 1, function(x) x[1:5] < x[6:10])
-osat_better <- apply(p_values, 1, function(x) x[1:5] > x[6:10])
-same1 <- apply(p_values, 1, function(x) x[1:5] == x[6:10])
+anticlust_better1 <- apply(p_values, 1, function(x) x[paste0("p_anticlust", 1:5)] > x[paste0("p_osat", 1:5)])
+osat_better <- apply(p_values, 1, function(x) x[paste0("p_anticlust", 1:5)] < x[paste0("p_osat", 1:5)])
+same1 <- apply(p_values, 1, function(x) x[paste0("p_anticlust", 1:5)] < x[paste0("p_osat", 1:5)])
 
 anticlust_better_percent1 <- round(mean(anticlust_better1, na.rm = TRUE) * 100)
-osat_better_percent <- round(mean(osat_better, na.rm = TRUE) * 100)
+osat_better_percent <- round(mean(osat_better, na.rm = TRUE), 4) * 100
 same_percent1 <- round(mean(same1, na.rm = TRUE) * 100)
 
 # global results PS vs. anticlust. How often is p value of anticlust better (i.e. larger)?
-anticlust_better2 <- apply(p_values, 1, function(x) x[1:5] < x[16:20])
-ps_better <- apply(p_values, 1, function(x) x[1:5] > x[16:20])
-same2 <- apply(p_values, 1, function(x) x[1:5] == x[16:20])
+anticlust_better2 <- apply(p_values, 1, function(x) x[paste0("p_anticlust", 1:5)] > x[paste0("p_ps", 1:5)])
+ps_better <- apply(p_values, 1, function(x) x[paste0("p_anticlust", 1:5)] < x[paste0("p_ps", 1:5)])
+same2 <- apply(p_values, 1, function(x) x[paste0("p_anticlust", 1:5)] == x[paste0("p_ps", 1:5)])
 
 anticlust_better_percent2 <- round(mean(anticlust_better2, na.rm = TRUE) * 100)
-ps_better_percent <- round(mean(ps_better, na.rm = TRUE)  * 100)
+ps_better_percent <- round(mean(ps_better, na.rm = TRUE), 4)  * 100
 same_percent2 <- round(mean(same2, na.rm = TRUE) * 100)
 
 avg_constrained_obj <- round(mean(tt$diversity_constrained / tt$diversity_unconstrained) * 100, 1)
 constrained_not_worse <- round(mean(apply(p_values, 1, function(x) x[6:10] <= x[11:15]), na.rm = TRUE)*100)
 
+
+# How often was OSAT better than anticlust (frequency):
+sum_osat_better <- sum(osat_better, na.rm = TRUE)
+# Total number of comparisons between OSAT and anticlust:
+n_comparisons_osat <- length(osat_better[!is.na(osat_better)]) 
+# How often was PSBA better than anticlust (frequency):
+sum_psba_better <- sum(ps_better, na.rm = TRUE) 
+# Total number of comparisons between PSBA and anticlust (it's lower than for OSAT because PSBA was not used for K = 10)
+n_comparisons_psba <- length(ps_better[!is.na(ps_better)])
+
 ```
 
 For the simulation, we generated `r nrow(tt)` data sets. Data sets were processed via (a) OSAT, (b) PSBA, (c) unconstrained anticlustering and (d) anticlustering subject to must-link constraints. Because the OSAT method is only applicable to categorical variables, we used categorical variables in our simulation. For anticlustering and for PSBA, the categorical variables were binary coded before the methods were applied (see Table 2). For each data set, we randomly determined the number of categorical variables (2-5), the number of classes per variable (2-5; the distribution of classes was uniform), the total sample size $N$ (between 50 and 500) and the number of batches $K$ (2, 4, or 10 equal-sized batches). PSBA was only applied for $K = 2$ and $K = 4$ ($n = `r sum(tt[["K"]] < 10)`$ data sets) because the authors' implementation only allows the assignment to a maximum of four batches. Must-link constraints were generating a random integer between 1 and $N$ (with equal probability), and using the resulting numbers as must-link grouping variables. This rule resulted in a distribution of constraints that resembled our motivating application: 58% of all elements had no must-link partner; 29% had 1 must-link partner; 10% had 2 must-link partners, and 3% had 3 or more must-link partners.
 
-For each simulation run, we computed $\chi^2$-tests to assess the imbalance among batches for each of the 2-5 variables, for each of the three competing methods. We stored the *p*-value associated with each test. A higher *p*-value indicates that there is less imbalance among batches, i.e., that the batches are more similar. The simulation revealed that in `r anticlust_better_percent1`% of all variable comparisons, balance among batches was better when using anticlustering as compared to OSAT. Balance was equal in `r same_percent1`% of all comparisons, and only in `r osat_better_percent`% OSAT outperformed `anticlust`. In `r anticlust_better_percent2`% of all variable comparisons, balance was better when using anticlustering as compared to PSBA. Balance was equal in `r same_percent2`% of all comparisons, and in `r ps_better_percent`% PSBA outperformed anticlustering. Figure 2 illustrates the average *p*-values in dependence of the number of variables ($M$) and the number of batches ($K$). The online supplement also includes additional Figures illustrating average *p*-values in dependence of the other factors that varied in the simulation (the sample size $N$ and the number of classes per categorical variables; **TODO**). Figure 2 shows that increasing the number of variables posed severe challenges for OSAT, but hardly affected anticlustering. PSBA also showed decreased performance with an increasing number of variables, but less so than OSAT.
+For each simulation run, we computed $\chi^2$-tests to assess the imbalance among batches for each of the 2-5 variables, for each of the three competing methods. We stored the *p*-value associated with each test. A higher *p*-value indicates that there is less imbalance among batches, i.e., that the batches are more similar. The simulation revealed that in `r anticlust_better_percent1`% of all variable comparisons, balance among batches was better when using anticlustering as compared to OSAT. Balance was equal in `r same_percent1`% of all comparisons, and only in `r osat_better_percent`% (= `r sum_osat_better` of all `r n_comparisons_osat` pairwise comparisons) OSAT outperformed `anticlust`. In `r anticlust_better_percent2`% of all variable comparisons, balance was better when using anticlustering as compared to PSBA. Balance was equal in `r same_percent2`% of all comparisons, and only in `r ps_better_percent`% (= `r sum_psba_better` of all `r n_comparisons_psba` pairwise comparisons) PSBA outperformed anticlustering. There are fewer comparisons between anticlustering and PSBA than between anticlustering and OSAT because PSBA was not applied in the simulation runs where 10 batches were assigned. 
 
-The anticlustering assignment that was subjected to must-link constraints on average achieved `r avg_constrained_obj`% of the objective value of the unconstrained assignment. Hence, must-link constraints are not only desirable from a user's point of view, but they also do not decrease batch balance considerably; in `r constrained_not_worse`% of all cases, balance was not at all reduced by the constraints. Remarkably, the constrained anticlustering assignment led to better balance than the OSAT and PSBA assignments that did not employ any constraints (see Figure 2).
+Figure 2 illustrates the average *p*-values in dependence of the number of variables ($M$) and the number of batches ($K$). Figure 2 shows that increasing the number of variables posed severe challenges for OSAT, but hardly affected anticlustering. PSBA also showed decreased performance with an increasing number of variables, but less so than OSAT. Figures 3 and 4 display the results of the simulation study aggregating via the size of the data set (*N*, categorized for the purpose of illustration) and the number of categories per variable *P*, respectively. Increasing the number of categories per variable aggravated finding balance for OSAT and PSBA, while again, anticlustering was mostly unaffected. Increasing the number of samples led to improved balance for the OSAT method, while it was generally outperformed by anticlustering as well as PSBA.
+
 
 ```{r, fig.cap= "Average \\textit{p} values in dependence of the number of batches and the number of variables. Higher \\textit{p} values indicate better balance. Anticlustering maintained a comparable level of balance in all conditions. OSAT's performance decreased with increasing number of variables most strongly.", dev=c('png', 'pdf', 'svg', 'tiff')}
 
@@ -240,8 +325,47 @@ dfl |>
   ylab("Average p value") + 
   theme(legend.position = "top", legend.title = element_blank())
 
+```
+
+
+```{r, fig.cap= "Average \\textit{p} values in dependence of the number of batches and the number of simulated samples \\textit{N} (categorized). Higher \\textit{p} values indicate better balance. Anticlustering maintained a comparable level of balance in all conditions. OSAT's performance increased with an increasing number of samples, and was most affected when few samples were available.", dev=c('png', 'pdf', 'svg', 'tiff')}
+
+dfl$N_category <- santoku::chop(dfl$N, breaks = c(100, 300))
+
+dfl |> 
+  group_by(Method, N_category = as.numeric(N_category), K) |> # I hate it so much that ggplot does not draw geom_line for ordered factors
+  summarise(`p value` = mean(value)) |> 
+  ggplot(aes(y = `p value`, x = N_category, color = Method), group = 1) +
+  geom_point(aes(color = Method, shape = Method)) + 
+  geom_line(aes(color = Method, linetype = Method)) +
+  facet_grid(cols = vars(`K`), labeller = as_labeller(facets))+
+  theme_bw(base_size = 11) +
+  xlab("Sample size (categorized)") +
+  ylab("Average p value") +
+  scale_x_continuous(breaks = 1:3, labels = levels(dfl$N_category)) +
+  expand_limits(x=c(0.5, 3.5)) + 
+  theme(legend.position = "top", legend.title = element_blank())
 
 ```
+
+```{r, fig.cap= "Average \\textit{p} values in dependence of the number of batches and the number of categories per variable \\textit{P}. Higher \\textit{p} values indicate better balance. Anticlustering maintained a comparable level of balance in all conditions. OSAT's and PSBA's performance decreased with an increasing number of categories per variable.", dev=c('png', 'pdf', 'svg', 'tiff')}
+
+# P (number of categories per variable)
+
+dfl |> 
+  group_by(Method, P, K) |> 
+  summarise(`p value` = mean(value)) |> 
+  ggplot(aes(y = `p value`, x = P, color = Method)) +
+  geom_point(aes(color = Method, shape = Method)) + 
+  geom_line(aes(color = Method, linetype = Method)) +
+  facet_grid(cols = vars(`K`), labeller = as_labeller(facets))+
+  theme_bw(base_size = 12) +
+  xlab("Number of categories per variable") +
+  ylab("Average p value") + 
+  theme(legend.position = "top", legend.title = element_blank())
+```
+
+The anticlustering assignment that was subjected to must-link constraints on average achieved `r avg_constrained_obj`% of the objective value of the unconstrained assignment. Hence, must-link constraints are not only desirable from a user's point of view, but they also do not decrease batch balance considerably; in `r constrained_not_worse`% of all cases, balance was not at all reduced by the constraints. Remarkably, the constrained anticlustering assignment led to better balance than the OSAT and PSBA assignments that did not employ any constraints (see Figures 2-4).
 
 \clearpage
 
