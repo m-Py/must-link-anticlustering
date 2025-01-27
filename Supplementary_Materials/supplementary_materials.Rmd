@@ -248,14 +248,14 @@ Like the initialization step, the optimization step of the exchange algorithm us
 ## Simulation Study
 
 ```{r}
-tt <- read.csv(here("Simulation", "results_save_N=1100.csv"), sep = ";")
+tt <- read.csv(here("Simulation", "results.csv"), sep = ";")
 tt$ID <- 1:nrow(tt)
 p_values <- tt[, grepl("p_", colnames(tt))]
 
 # global results OSAT vs. anticlust. How often is p value of anticlust better (i.e. larger)?
 anticlust_better1 <- apply(p_values, 1, function(x) x[paste0("p_anticlust", 1:5)] > x[paste0("p_osat", 1:5)])
 osat_better <- apply(p_values, 1, function(x) x[paste0("p_anticlust", 1:5)] < x[paste0("p_osat", 1:5)])
-same1 <- apply(p_values, 1, function(x) x[paste0("p_anticlust", 1:5)] < x[paste0("p_osat", 1:5)])
+same1 <- apply(p_values, 1, function(x) x[paste0("p_anticlust", 1:5)] == x[paste0("p_osat", 1:5)])
 
 anticlust_better_percent1 <- round(mean(anticlust_better1, na.rm = TRUE) * 100)
 osat_better_percent <- round(mean(osat_better, na.rm = TRUE), 4) * 100
