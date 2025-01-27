@@ -1,5 +1,8 @@
 # README
 
+Author: Martin Papenberg
+Year: 2025
+
 This repository contains additional documentation, code and data for the manuscript
 
 "Anticlustering for Sample Allocation To Minimize Batch Effects"

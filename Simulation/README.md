@@ -1,5 +1,8 @@
 # Simulation study
 
+Author: Martin Papenberg
+Year: 2025
+
 This directory contains code and data to reproduce the simulation reported in the manuscript
 
 "Anticlustering for Sample Allocation To Minimize Batch Effects"
