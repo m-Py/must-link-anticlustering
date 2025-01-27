@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2024.4.9)  27 JAN 2025 09:50
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2024.4.9)  27 JAN 2025 11:35
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -745,7 +745,7 @@ le.7}) has been already used, duplicate ignored
 l.547 
       ]
 LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 6
-24.
+29.
 (/usr/share/texmf/tex/latex/lm/t1lmtt.fd
 File: t1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
 ) [10]
@@ -755,7 +755,7 @@ File: supplementary_materials_files/figure-latex/unnamed-chunk-7-1.pdf Graphic
 file (type pdf)
 <use supplementary_materials_files/figure-latex/unnamed-chunk-7-1.pdf>
 Package pdftex.def Info: supplementary_materials_files/figure-latex/unnamed-chu
-nk-7-1.pdf  used on input line 649.
+nk-7-1.pdf  used on input line 653.
 (pdftex.def)             Requested size: 463.73842pt x 304.14014pt.
 <supplementary_materials_files/figure-latex/unnamed-chunk-8-1.pdf, id=108, 463.
 7325pt x 305.14pt>
@@ -763,7 +763,7 @@ File: supplementary_materials_files/figure-latex/unnamed-chunk-8-1.pdf Graphic
 file (type pdf)
 <use supplementary_materials_files/figure-latex/unnamed-chunk-8-1.pdf>
 Package pdftex.def Info: supplementary_materials_files/figure-latex/unnamed-chu
-nk-8-1.pdf  used on input line 658.
+nk-8-1.pdf  used on input line 662.
 (pdftex.def)             Requested size: 463.73842pt x 305.14389pt.
 <supplementary_materials_files/figure-latex/unnamed-chunk-9-1.pdf, id=109, 463.
 7325pt x 304.13625pt>
@@ -771,38 +771,38 @@ File: supplementary_materials_files/figure-latex/unnamed-chunk-9-1.pdf Graphic
 file (type pdf)
 <use supplementary_materials_files/figure-latex/unnamed-chunk-9-1.pdf>
 Package pdftex.def Info: supplementary_materials_files/figure-latex/unnamed-chu
-nk-9-1.pdf  used on input line 667.
+nk-9-1.pdf  used on input line 671.
 (pdftex.def)             Requested size: 463.73842pt x 304.14014pt.
 [11pdfTeX warning (ext4): destination with the same identifier (name{figure.2})
  has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.683 \clearpage
-                 <./supplementary_materials_files/figure-latex/unnamed-chunk-7-
-1.pdf>] [12pdfTeX warning (ext4): destination with the same identifier (name{fi
-gure.3}) has been already used, duplicate ignored
+l.686 
+       <./supplementary_materials_files/figure-latex/unnamed-chunk-7-1.pdf>] [1
+2pdfTeX warning (ext4): destination with the same identifier (name{figure.3}) h
+as been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.683 \clearpage
-                 <./supplementary_materials_files/figure-latex/unnamed-chunk-8-
-1.pdf>] [13pdfTeX warning (ext4): destination with the same identifier (name{fi
-gure.4}) has been already used, duplicate ignored
+l.686 
+       <./supplementary_materials_files/figure-latex/unnamed-chunk-8-1.pdf>] [1
+3pdfTeX warning (ext4): destination with the same identifier (name{figure.4}) h
+as been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.683 \clearpage
-                 <./supplementary_materials_files/figure-latex/unnamed-chunk-9-
-1.pdf>]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 760.
-[14
+l.686 
+       <./supplementary_materials_files/figure-latex/unnamed-chunk-9-1.pdf>] [1
+4]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 764.
+[15
 
 ]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 760.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 764.
 (./supplementary_materials.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 760.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 760.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 764.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 764.
 Package rerunfilecheck Info: File `supplementary_materials.out' has not changed
 .
 (rerunfilecheck)             Checksum: 41811CC55DEDA0326B071C93ED73338F;975.
@@ -811,8 +811,8 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 14424 strings out of 483130
- 210518 string characters out of 5963884
+ 14425 strings out of 483130
+ 210525 string characters out of 5963884
  521973 words of memory out of 5000000
  28984 multiletter control sequences out of 15000+600000
  591561 words of font info for 130 fonts, out of 8000000 for 9000
@@ -830,10 +830,10 @@ blic/lm/lmr17.pfb></usr/share/texmf/fonts/type1/public/lm/lmr7.pfb></usr/share/
 texmf/fonts/type1/public/lm/lmri10.pfb></usr/share/texmf/fonts/type1/public/lm/
 lmsy10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy7.pfb></usr/share/texmf/
 fonts/type1/public/lm/lmtt10.pfb>
-Output written on supplementary_materials.pdf (14 pages, 254014 bytes).
+Output written on supplementary_materials.pdf (15 pages, 254560 bytes).
 PDF statistics:
- 237 PDF objects out of 1000 (max. 8388607)
- 195 compressed objects within 2 object streams
- 52 named destinations out of 1000 (max. 500000)
+ 241 PDF objects out of 1000 (max. 8388607)
+ 198 compressed objects within 2 object streams
+ 53 named destinations out of 1000 (max. 500000)
  12357 words of extra memory for PDF output out of 14400 (max. 10000000)
 
