@@ -1,4 +1,10 @@
 
+# Author: Martin Papenberg
+# Year: 2025
+
+# Some analyses on optimal anticlustering with must-link feature. Also see the supplementary materials.
+# (Supplementary_Materials/supplemetary_materials.pdf)
+
 library(dplyr)
 library(tidyr)
 library(ggplot2)

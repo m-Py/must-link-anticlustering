@@ -1,4 +1,8 @@
-# Running times 
+# Author: Martin Papenberg
+# Year: 2025
+
+# This script tests how many samples can be processed by anticlustering with the must-link feature
+# (using a time limit of 1800s)
 
 library(anticlust)
 
