@@ -4,10 +4,15 @@ library(tidyr)
 library(ggplot2)
 library(here)
 
-## Currently the data are not complete!! (need to rerun using gurobi solver on my computer at university)
-
 ti <- read.csv(here("Running_Time_Optimal_Algorithm", "results_runningtime.csv"), sep = ";")
-mean(ti$diversity_heuristic == ti$diversity_optimal, na.rm = TRUE)
+
+# we need comparator that allows for numeric imprecision of double, to test if heuristic solutions were optimal 
+# (as in file running_times.R)
+
+"%==%" <- function(x, y) abs(x - y) < .0000000001
+"%>%" <- function(x, y) (x - y) > (.0000000001)
+
+mean(ti$diversity_optimal %>% ti$diversity_heuristic, na.rm = TRUE) 
 ti$ID <- 1:nrow(ti)
 
 dfl <- ti |> 

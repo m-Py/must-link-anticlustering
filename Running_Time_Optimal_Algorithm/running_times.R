@@ -2,12 +2,10 @@
 
 library(anticlust)
 
-## Optimal dispersion only: 
-
 nrep <- 5
 results_file <- "results_runningtime.csv"
 
-solver <- c("glpk") 
+solver <- c("gurobi") # you can use lpSolve, glpk or symphony as open source options; we will not get as far as with gurobi though
 
 ## Set min and max for sample sizes by K
 Ns <- list()
@@ -87,7 +85,7 @@ for (K in c(2:5, 10)) {
       while (!MUST_LINK_CONSTRAINS_FULFILLED) {
         start <- Sys.time()
         heuristic <- tryCatch(
-          anticlustering(distances, K = K, must_link = must_link, method = "local-maximum", repetitions = 1000),
+          anticlustering(distances, K = K, must_link = must_link, method = "2PML", repetitions = 1000),
           error = function(e) e
         )
         time1 <- as.numeric(difftime(Sys.time(), start, units = "s")) |> round(2)
@@ -139,7 +137,7 @@ for (K in c(2:5, 10)) {
             row.names = FALSE,
             sep = ";"
           )
-          cat("Something went wrong, ILP did not find optimal solution. Data set was stored.")
+          cat("Something went wrong, ILP did not find optimal solution. Data set was stored.") #FYI this does not happen
         }
       } else {
         diversity_heuristic <- NA
