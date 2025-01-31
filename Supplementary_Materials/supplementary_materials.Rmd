@@ -274,8 +274,6 @@ For the simulation, we generated `r nrow(tt)` data sets. Data sets were processe
 
 Across the `r nrow(tt)` simulation runs, the average run time for the competing assignment methods was `r runtimes["ANTICLUST_t"]`s for unconstrained anticlustering, `r runtimes["ANTICLUST_t_c"]`s for anticlustering with the must-link feature, `r runtimes["OSAT_t"]`s for OSAT, and `r runtimes["PS_t"]`s for PSBA, making anticlustering about `r runtimes_relative["OSAT_t"]` and `r runtimes_relative["PS_t"]` times faster than OSAT and PSBA, respectively. For each simulation run, we computed $\chi^2$-tests to assess the imbalance among batches for each of the 2-5 variables, for each of the three competing methods. We stored the *p*-value associated with each test. A higher *p*-value indicates that there is less imbalance among batches, i.e., that the batches are more similar. The simulation revealed that in `r anticlust_better_percent1`% of all variable comparisons, balance among batches was better when using anticlustering as compared to OSAT. Balance was equal in `r same_percent1`% of all comparisons, and only in `r osat_better_percent`% (= `r sum_osat_better` of all `r n_comparisons_osat` pairwise comparisons) OSAT outperformed `anticlust`. In `r anticlust_better_percent2`% of all variable comparisons, balance was better when using anticlustering as compared to PSBA. Balance was equal in `r same_percent2`% of all comparisons, and only in `r ps_better_percent`% (= `r sum_psba_better` of all `r n_comparisons_psba` pairwise comparisons) PSBA outperformed anticlustering. There are fewer comparisons between anticlustering and PSBA than between anticlustering and OSAT because PSBA was not applied in the simulation runs where 10 batches were assigned. 
 
-Figure 2 illustrates the average *p*-values in dependence of the number of variables ($M$) and the number of batches ($K$). Figure 2 shows that increasing the number of variables posed severe challenges for OSAT, but hardly affected anticlustering. PSBA also showed decreased performance with an increasing number of variables, but less so than OSAT. Figures 3 and 4 display the results of the simulation study aggregating via the size of the data set (*N*, categorized for the purpose of illustration) and the number of categories per variable *P*, respectively. Increasing the number of categories per variable aggravated finding balance for OSAT and PSBA, while again, anticlustering was mostly unaffected. Increasing the number of samples led to improved balance for the OSAT method, while it was generally outperformed by anticlustering as well as PSBA.
-
 
 ```{r, fig.cap= "Average \\textit{p} values in dependence of the number of batches and the number of variables. Higher \\textit{p} values indicate better balance. Anticlustering maintained a comparable level of balance in all conditions. OSAT's performance decreased with increasing number of variables most strongly.", dev=c('png', 'pdf', 'svg', 'tiff')}
 
@@ -310,8 +308,26 @@ dfl |>
   ylab("Average p value") + 
   theme(legend.position = "top", legend.title = element_blank())
 
+# only aggregated by M
+ps_by_m <- dfl |> 
+  group_by(Method, M) |> 
+  summarise(`p value` = mean(value)) 
+
+best_osat_p <- round(subset(ps_by_m, Method == "OSAT" & M == 2, "p value")[[1]], 2)
+worst_osat_p <- round(subset(ps_by_m, Method == "OSAT" & M == 5, "p value")[[1]], 2)
+
+best_ps_p <- round(subset(ps_by_m, Method == "PSBA" & M == 2, "p value")[[1]], 2)
+worst_ps_p <- round(subset(ps_by_m, Method == "PSBA" & M == 5, "p value")[[1]], 2)
+
+anticlust_greater_than <- 0.99
+# ensure that I do not falsely claim in text that all p values are greater than .99
+stopifnot(all(ps_by_m$`p value`[ps_by_m$Method == "Anticlustering"] > anticlust_greater_than))
+
 ```
 
+Figure 2 illustrates the average *p*-values in dependence of the number of variables ($M$) and the number of batches ($K$). When increasing the number of variables from 2 to 5, the average *p*-value for OSAT declined from `r best_osat_p` to `r worst_osat_p` whereas the average *p*-value for anticlustering remained greater than `r anticlust_greater_than`. PSBA also demonstrated a decrease in *p*-value when increasing the number of variables, but less so than OSAT (from `r best_ps_p` to `r worst_ps_p`).
+
+Figures 3 and 4 display the results of the simulation study aggregating via the size of the data set (*N*, categorized for the purpose of illustration) and the number of categories per variable *P*, respectively. Increasing the number of categories per variable aggravated finding balance for OSAT and PSBA, while again, anticlustering was mostly unaffected. Increasing the number of samples led to improved balance for the OSAT method, while it was generally outperformed by anticlustering as well as PSBA.
 
 ```{r, fig.cap= "Average \\textit{p} values in dependence of the number of batches and the number of simulated samples \\textit{N} (categorized). Higher \\textit{p} values indicate better balance. Anticlustering maintained a comparable level of balance in all conditions. OSAT's performance increased with an increasing number of samples, and was most affected when few samples were available.", dev=c('png', 'pdf', 'svg', 'tiff')}
 
