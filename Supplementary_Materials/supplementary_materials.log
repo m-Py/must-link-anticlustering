@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2024.3.25)  31 JAN 2025 10:24
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2024.3.25)  3 FEB 2025 13:32
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -491,19 +491,19 @@ File: l3backend-pdftex.def 2022-01-12 L3 backend support: PDF output (pdfTeX)
 \l__pdf_internal_box=\box73
 ) (./supplementary_materials.aux
 
-LaTeX Warning: Label `tab:unnamed-chunk-5' multiply defined.
+LaTeX Warning: Label `tab:unnamed-chunk-4' multiply defined.
 
 
-LaTeX Warning: Label `tab:unnamed-chunk-5' multiply defined.
+LaTeX Warning: Label `tab:unnamed-chunk-4' multiply defined.
 
 
-LaTeX Warning: Label `tab:unnamed-chunk-5' multiply defined.
+LaTeX Warning: Label `tab:unnamed-chunk-4' multiply defined.
 
 
-LaTeX Warning: Label `tab:unnamed-chunk-5' multiply defined.
+LaTeX Warning: Label `tab:unnamed-chunk-4' multiply defined.
 
 
-LaTeX Warning: Label `tab:unnamed-chunk-5' multiply defined.
+LaTeX Warning: Label `tab:unnamed-chunk-4' multiply defined.
 
 )
 \openout1 = `supplementary_materials.aux'.
@@ -661,15 +661,15 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-<supplementary_materials_files/figure-latex/unnamed-chunk-2-1.pdf, id=17, 433.6
-2pt x 433.62pt>
-File: supplementary_materials_files/figure-latex/unnamed-chunk-2-1.pdf Graphic 
-file (type pdf)
-<use supplementary_materials_files/figure-latex/unnamed-chunk-2-1.pdf>
-Package pdftex.def Info: supplementary_materials_files/figure-latex/unnamed-chu
-nk-2-1.pdf  used on input line 245.
+<supplementary_materials_files/figure-latex/Figure1-1.pdf, id=17, 433.62pt x 43
+3.62pt>
+File: supplementary_materials_files/figure-latex/Figure1-1.pdf Graphic file (ty
+pe pdf)
+<use supplementary_materials_files/figure-latex/Figure1-1.pdf>
+Package pdftex.def Info: supplementary_materials_files/figure-latex/Figure1-1.p
+df  used on input line 245.
 (pdftex.def)             Requested size: 433.63878pt x 433.63878pt.
-[2] [3 <./supplementary_materials_files/figure-latex/unnamed-chunk-2-1.pdf>]
+[2] [3 <./supplementary_materials_files/figure-latex/Figure1-1.pdf>]
 Overfull \hbox (70.21754pt too wide) in paragraph at lines 316--347
  [][] 
  []
@@ -705,43 +705,42 @@ LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 5
 (/usr/share/texmf/tex/latex/lm/t1lmtt.fd
 File: t1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
 ) [9]
-<supplementary_materials_files/figure-latex/unnamed-chunk-7-1.pdf, id=74, 469.7
-55pt x 325.215pt>
-File: supplementary_materials_files/figure-latex/unnamed-chunk-7-1.pdf Graphic 
-file (type pdf)
-<use supplementary_materials_files/figure-latex/unnamed-chunk-7-1.pdf>
-Package pdftex.def Info: supplementary_materials_files/figure-latex/unnamed-chu
-nk-7-1.pdf  used on input line 579.
+<supplementary_materials_files/figure-latex/Figure2-1.pdf, id=74, 469.755pt x 3
+25.215pt>
+File: supplementary_materials_files/figure-latex/Figure2-1.pdf Graphic file (ty
+pe pdf)
+<use supplementary_materials_files/figure-latex/Figure2-1.pdf>
+Package pdftex.def Info: supplementary_materials_files/figure-latex/Figure2-1.p
+df  used on input line 579.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<supplementary_materials_files/figure-latex/unnamed-chunk-8-1.pdf, id=75, 469.7
-55pt x 325.215pt>
-File: supplementary_materials_files/figure-latex/unnamed-chunk-8-1.pdf Graphic 
-file (type pdf)
-<use supplementary_materials_files/figure-latex/unnamed-chunk-8-1.pdf>
-Package pdftex.def Info: supplementary_materials_files/figure-latex/unnamed-chu
-nk-8-1.pdf  used on input line 605.
+<supplementary_materials_files/figure-latex/Figure3-1.pdf, id=75, 469.755pt x 3
+25.215pt>
+File: supplementary_materials_files/figure-latex/Figure3-1.pdf Graphic file (ty
+pe pdf)
+<use supplementary_materials_files/figure-latex/Figure3-1.pdf>
+Package pdftex.def Info: supplementary_materials_files/figure-latex/Figure3-1.p
+df  used on input line 605.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<supplementary_materials_files/figure-latex/unnamed-chunk-9-1.pdf, id=76, 469.7
-55pt x 325.215pt>
-File: supplementary_materials_files/figure-latex/unnamed-chunk-9-1.pdf Graphic 
-file (type pdf)
-<use supplementary_materials_files/figure-latex/unnamed-chunk-9-1.pdf>
-Package pdftex.def Info: supplementary_materials_files/figure-latex/unnamed-chu
-nk-9-1.pdf  used on input line 614.
+<supplementary_materials_files/figure-latex/Figure4-1.pdf, id=76, 469.755pt x 3
+25.215pt>
+File: supplementary_materials_files/figure-latex/Figure4-1.pdf Graphic file (ty
+pe pdf)
+<use supplementary_materials_files/figure-latex/Figure4-1.pdf>
+Package pdftex.def Info: supplementary_materials_files/figure-latex/Figure4-1.p
+df  used on input line 614.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[10 <./supplementary_materials_files/figure-latex/unnamed-chunk-7-1.pdf>] [11 <
-./supplementary_materials_files/figure-latex/unnamed-chunk-8-1.pdf>] [12 <./sup
-plementary_materials_files/figure-latex/unnamed-chunk-9-1.pdf>] [13]
-<supplementary_materials_files/figure-latex/unnamed-chunk-11-1.pdf, id=116, 469
-.755pt x 325.215pt>
-File: supplementary_materials_files/figure-latex/unnamed-chunk-11-1.pdf Graphic
- file (type pdf)
-<use supplementary_materials_files/figure-latex/unnamed-chunk-11-1.pdf>
-Package pdftex.def Info: supplementary_materials_files/figure-latex/unnamed-chu
-nk-11-1.pdf  used on input line 761.
+[10 <./supplementary_materials_files/figure-latex/Figure2-1.pdf>] [11 <./supple
+mentary_materials_files/figure-latex/Figure3-1.pdf>] [12 <./supplementary_mater
+ials_files/figure-latex/Figure4-1.pdf>] [13]
+<supplementary_materials_files/figure-latex/Figure5-1.pdf, id=116, 469.755pt x 
+325.215pt>
+File: supplementary_materials_files/figure-latex/Figure5-1.pdf Graphic file (ty
+pe pdf)
+<use supplementary_materials_files/figure-latex/Figure5-1.pdf>
+Package pdftex.def Info: supplementary_materials_files/figure-latex/Figure5-1.p
+df  used on input line 761.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[14] [15 <./supplementary_materials_files/figure-latex/unnamed-chunk-11-1.pdf>]
-[16
+[14] [15 <./supplementary_materials_files/figure-latex/Figure5-1.pdf>] [16
 
 ] (./supplementary_materials.aux)
 
@@ -750,7 +749,7 @@ LaTeX Warning: There were multiply-defined labels.
  ) 
 Here is how much of TeX's memory you used:
  15371 strings out of 480194
- 245711 string characters out of 5893742
+ 245300 string characters out of 5893742
  602008 words of memory out of 5000000
  32827 multiletter control sequences out of 15000+600000
  530257 words of font info for 152 fonts, out of 8000000 for 9000
@@ -767,7 +766,7 @@ s/type1/public/lm/lmr10.pfb></usr/share/texmf/fonts/type1/public/lm/lmr12.pfb><
 public/lm/lmr7.pfb></usr/share/texmf/fonts/type1/public/lm/lmri10.pfb></usr/sha
 re/texmf/fonts/type1/public/lm/lmsy10.pfb></usr/share/texmf/fonts/type1/public/
 lm/lmsy7.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt10.pfb>
-Output written on supplementary_materials.pdf (16 pages, 275777 bytes).
+Output written on supplementary_materials.pdf (16 pages, 275621 bytes).
 PDF statistics:
  257 PDF objects out of 1000 (max. 8388607)
  201 compressed objects within 3 object streams

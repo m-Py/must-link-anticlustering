@@ -6,7 +6,7 @@ output:
   pdf_document: 
     keep_md: true
 bibliography: lit.bib
-date: "Generated on 2025-01-31"
+date: "Generated on 2025-02-03"
 ---
 
 
@@ -36,11 +36,11 @@ We used an heuristic exchange algorithm to maximize the diversity [@spath1986; @
 
 \begin{figure}
 
-{\centering \includegraphics{supplementary_materials_files/figure-latex/unnamed-chunk-2-1} 
+{\centering \includegraphics{supplementary_materials_files/figure-latex/Figure1-1} 
 
 }
 
-\caption{Illustrates the conversion from numeric features to Euclidean distance, and (anti)clustering assignments based on minimum and maximum diversity using the Euclidean distance. Panel A illustrates the BMI and age of twelve women in our synthetic data in a scatter plot. Panel B represents the Euclidean distances between features as a straight line in the two-dimensional space. The Euclidean distance is proportional to the length of the connecting lines in panel B. Panel C illustrates a clustering assignment of the 12 data points to $K = 3$ equal-sized groups via \textit{minimum} diversity. Panel D illustrates an anticlustering assignment of the 12 data points to $K = 3$ equal-sized groups via \textit{maximum} diversity. The diversity is computed as the sum of within-(anti)cluster distances, which are highlighted in Panel C and Panel D through connecting lines. Maximizing the diversity simultaneously leads to similar distribution of the input features among batches.}\label{fig:unnamed-chunk-2}
+\caption{Illustrates the conversion from numeric features to Euclidean distance, and (anti)clustering assignments based on minimum and maximum diversity using the Euclidean distance. Panel A illustrates the BMI and age of twelve women in our synthetic data in a scatter plot. Panel B represents the Euclidean distances between features as a straight line in the two-dimensional space. The Euclidean distance is proportional to the length of the connecting lines in panel B. Panel C illustrates a clustering assignment of the 12 data points to $K = 3$ equal-sized groups via \textit{minimum} diversity. Panel D illustrates an anticlustering assignment of the 12 data points to $K = 3$ equal-sized groups via \textit{maximum} diversity. The diversity is computed as the sum of within-(anti)cluster distances, which are highlighted in Panel C and Panel D through connecting lines. Maximizing the diversity simultaneously leads to similar distribution of the input features among batches.}\label{fig:Figure1}
 \end{figure}
 
 
@@ -71,7 +71,7 @@ For the purpose of illustration, we first applied an unconstrained anticlusterin
 
 \begin{table}[H]
 \centering
-\caption{\label{tab:unnamed-chunk-5}Application results of the unrestricted anticlustering assignment. Balance is assessed on individuals' level. Column 'Unique' encodes if a batch consists only of samples of individuals that are unique to this batch; '0' means there is at least one individual with a sample in this batch who also has at least one sample in another batch, '1' otherwise.}
+\caption{\label{tab:unnamed-chunk-4}Application results of the unrestricted anticlustering assignment. Balance is assessed on individuals' level. Column 'Unique' encodes if a batch consists only of samples of individuals that are unique to this batch; '0' means there is at least one individual with a sample in this batch who also has at least one sample in another batch, '1' otherwise.}
 \centering
 \begin{tabular}[t]{lcccccccc}
 \toprule
@@ -108,7 +108,7 @@ p value &  &  & 1 & 1 & 1 &  & 1 & \\
 
 \begin{table}[H]
 \centering
-\caption{\label{tab:unnamed-chunk-5}Application results of the unrestricted anticlustering assignment. Balance is assessed on samples' level. Column 'Unique' encodes if a batch consists only of samples of individuals that are unique to this batch; '0' means there is at least one individual with a sample in this batch who also has at least one sample in another batch, '1' otherwise.}
+\caption{\label{tab:unnamed-chunk-4}Application results of the unrestricted anticlustering assignment. Balance is assessed on samples' level. Column 'Unique' encodes if a batch consists only of samples of individuals that are unique to this batch; '0' means there is at least one individual with a sample in this batch who also has at least one sample in another batch, '1' otherwise.}
 \centering
 \begin{tabular}[t]{lcccccccc}
 \toprule
@@ -145,7 +145,7 @@ p value &  &  & 1 & 1 & 1 &  & 1 & \\
 
 \begin{table}[H]
 \centering
-\caption{\label{tab:unnamed-chunk-5}Application results of the OSAT assignment. Balance is assessed on individuals' level. Column 'Unique' encodes if a batch consists only of samples of individuals that are unique to this batch; '0' means there is at least one individual with a sample in this batch who also has at least one sample in another batch, '1' otherwise.}
+\caption{\label{tab:unnamed-chunk-4}Application results of the OSAT assignment. Balance is assessed on individuals' level. Column 'Unique' encodes if a batch consists only of samples of individuals that are unique to this batch; '0' means there is at least one individual with a sample in this batch who also has at least one sample in another batch, '1' otherwise.}
 \centering
 \begin{tabular}[t]{lcccccccc}
 \toprule
@@ -182,7 +182,7 @@ p value &  &  & 1 & 1 & 1 &  & 1 & \\
 
 \begin{table}[H]
 \centering
-\caption{\label{tab:unnamed-chunk-5}Application results of the OSAT assignment. Balance is assessed on samples' level. Column 'Unique' encodes if a batch consists only of samples of individuals that are unique to this batch; '0' means there is at least one individual with a sample in this batch who also has at least one sample in another batch, '1' otherwise.}
+\caption{\label{tab:unnamed-chunk-4}Application results of the OSAT assignment. Balance is assessed on samples' level. Column 'Unique' encodes if a batch consists only of samples of individuals that are unique to this batch; '0' means there is at least one individual with a sample in this batch who also has at least one sample in another batch, '1' otherwise.}
 \centering
 \begin{tabular}[t]{lcccccccc}
 \toprule
@@ -219,7 +219,7 @@ p value &  &  & 1 & 1 & 1 &  & 1 & \\
 
 \begin{table}[H]
 \centering
-\caption{\label{tab:unnamed-chunk-5}Application results of the must-link constrained anticlustering assignment. Balance is assessed on individuals' level. Column 'Unique' encodes if a batch consists only of samples of individuals that are unique to this batch; '0' means there is at least one individual with a sample in this batch who also has at least one sample in another batch, '1' otherwise.}
+\caption{\label{tab:unnamed-chunk-4}Application results of the must-link constrained anticlustering assignment. Balance is assessed on individuals' level. Column 'Unique' encodes if a batch consists only of samples of individuals that are unique to this batch; '0' means there is at least one individual with a sample in this batch who also has at least one sample in another batch, '1' otherwise.}
 \centering
 \begin{tabular}[t]{lcccccccc}
 \toprule
@@ -256,7 +256,7 @@ p value &  &  & 1.000 & 0.981 & 0.995 &  & 1 & \\
 
 \begin{table}[H]
 \centering
-\caption{\label{tab:unnamed-chunk-5}Application results of the must-link constrained anticlustering assignment. Balance is assessed on samples' level. Column 'Unique' encodes if a batch consists only of samples of individuals that are unique to this batch; '0' means there is at least one individual with a sample in this batch who also has at least one sample in another batch, '1' otherwise.}
+\caption{\label{tab:unnamed-chunk-4}Application results of the must-link constrained anticlustering assignment. Balance is assessed on samples' level. Column 'Unique' encodes if a batch consists only of samples of individuals that are unique to this batch; '0' means there is at least one individual with a sample in this batch who also has at least one sample in another batch, '1' otherwise.}
 \centering
 \begin{tabular}[t]{lcccccccc}
 \toprule
@@ -302,11 +302,11 @@ Across the 10000 simulation runs, the average run time for the competing assignm
 
 \begin{figure}
 
-{\centering \includegraphics{supplementary_materials_files/figure-latex/unnamed-chunk-7-1} 
+{\centering \includegraphics{supplementary_materials_files/figure-latex/Figure2-1} 
 
 }
 
-\caption{Average \textit{p} values in dependence of the number of batches and the number of variables. Higher \textit{p} values indicate better balance. Anticlustering maintained a comparable level of balance in all conditions. OSAT's performance decreased with increasing number of variables most strongly.}\label{fig:unnamed-chunk-7}
+\caption{Average \textit{p} values in dependence of the number of batches and the number of variables. Higher \textit{p} values indicate better balance. Anticlustering maintained a comparable level of balance in all conditions. OSAT's performance decreased with increasing number of variables most strongly.}\label{fig:Figure2}
 \end{figure}
 
 Figure 2 illustrates the average *p*-values in dependence of the number of variables ($M$) and the number of batches ($K$). When increasing the number of variables from 2 to 5, the average *p*-value for OSAT declined from 0.99 to 0.72 whereas the average *p*-value for anticlustering remained greater than 0.99. PSBA also demonstrated a decrease in *p*-value when increasing the number of variables, but less so than OSAT (from 0.99 to 0.91).
@@ -315,24 +315,23 @@ Figures 3 and 4 display the results of the simulation study aggregating via the 
 
 \begin{figure}
 
-{\centering \includegraphics{supplementary_materials_files/figure-latex/unnamed-chunk-8-1} 
+{\centering \includegraphics{supplementary_materials_files/figure-latex/Figure3-1} 
 
 }
 
-\caption{Average \textit{p} values in dependence of the number of batches and the number of simulated samples \textit{N} (categorized). Higher \textit{p} values indicate better balance. Anticlustering maintained a comparable level of balance in all conditions. OSAT's performance increased with an increasing number of samples, and was most affected when few samples were available.}\label{fig:unnamed-chunk-8}
+\caption{Average \textit{p} values in dependence of the number of batches and the number of simulated samples \textit{N} (categorized). Higher \textit{p} values indicate better balance. Anticlustering maintained a comparable level of balance in all conditions. OSAT's performance increased with an increasing number of samples, and was most affected when few samples were available.}\label{fig:Figure3}
 \end{figure}
 
 \begin{figure}
 
-{\centering \includegraphics{supplementary_materials_files/figure-latex/unnamed-chunk-9-1} 
+{\centering \includegraphics{supplementary_materials_files/figure-latex/Figure4-1} 
 
 }
 
-\caption{Average \textit{p} values in dependence of the number of batches and the number of categories per variable \textit{P}. Higher \textit{p} values indicate better balance. Anticlustering maintained a comparable level of balance in all conditions. OSAT's and PSBA's performance decreased with an increasing number of categories per variable.}\label{fig:unnamed-chunk-9}
+\caption{Average \textit{p} values in dependence of the number of batches and the number of categories per variable \textit{P}. Higher \textit{p} values indicate better balance. Anticlustering maintained a comparable level of balance in all conditions. OSAT's and PSBA's performance decreased with an increasing number of categories per variable.}\label{fig:Figure4}
 \end{figure}
 
 The anticlustering assignment that was subjected to must-link constraints on average achieved 99.9% of the objective value of the unconstrained assignment. Hence, must-link constraints are not only desirable from a user's point of view, but they also do not decrease batch balance considerably; in 75% of all cases, balance was not at all reduced by the constraints. Remarkably, the constrained anticlustering assignment led to better balance than the OSAT and PSBA assignments that did not employ any constraints (see Figures 2-4).
-
 
 ## Bin Packing to Initialize a Must-Link Assignment
 
@@ -361,7 +360,7 @@ Starting with $N = 20$ (or $N = 21$ for $K = 3$) we generated five data sets for
 
 \begin{table}
 
-\caption{\label{tab:unnamed-chunk-10}Illustrates the run time of the exact ILP algorithm and the 2PML heuristic (using 1000 repetitions).}
+\caption{\label{tab:unnamed-chunk-6}Illustrates the run time of the exact ILP algorithm and the 2PML heuristic (using 1000 repetitions).}
 \centering
 \begin{tabular}[t]{llrr}
 \toprule
@@ -385,11 +384,11 @@ K & Algorithm & max\_mean\_runtime & N\_max\\
 
 \begin{figure}
 
-{\centering \includegraphics{supplementary_materials_files/figure-latex/unnamed-chunk-11-1} 
+{\centering \includegraphics{supplementary_materials_files/figure-latex/Figure5-1} 
 
 }
 
-\caption{Illustrates the increase of the run time of the optimal and heuristic algorithms with increasing N. Note that the y-axis on a log scale, so a linear increase in the plot implies exponential increase of running time.}\label{fig:unnamed-chunk-11}
+\caption{Illustrates the increase of the run time of the optimal and heuristic algorithms with increasing N. Note that the y-axis on a log scale, so a linear increase in the plot implies exponential increase of running time.}\label{fig:Figure5}
 \end{figure}
 
 
