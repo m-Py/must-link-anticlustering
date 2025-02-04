@@ -1,0 +1,54 @@
+---
+title: "Anticlust Application - Showcase Shiny"
+author: "Martin Papenberg"
+date: "2025-02-04"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+
+library(anticlust)
+library(tableone)
+
+dataset <- read.csv("Application/synthetic_dataset_20250114.csv")
+
+# We use distances as input, not the features directly
+input <- dist(categories_to_binary(dataset[, 3:6]))^2 # squared Euclidean distance on binary coded features
+
+reps <- 500 # number of restarts of the heuristic algorithms (may be a user parameter in shiny app)
+number_of_batches <- 20 # 20 was used in application (may be a user parameter in shiny app)
+
+start <- Sys.time()
+dataset$BatchAnticlust <- anticlustering(
+  input, 
+  K = number_of_batches, 
+  method = "local-maximum", # this should be the default method in the app, I guess
+  repetitions = reps
+)
+Sys.time() - start 
+
+start <- Sys.time()
+dataset$BatchAnticlustML <- anticlustering(
+  input, 
+  K = number_of_batches, 
+  method = "2PML", 
+  repetitions = reps, 
+  must_link = dataset$patient_id
+)
+Sys.time() - start 
+
+dataset$BatchRandom <- sample(dataset$BatchAnticlust)
+vars <- c("endo", "site", "phase", "stage")
+print(tableone::CreateCatTable(data = dataset, vars = vars, strata = "BatchAnticlust"), smd = TRUE)
+print(tableone::CreateCatTable(data = dataset, vars = vars, strata = "BatchAnticlustML"), smd = TRUE)
+print(tableone::CreateCatTable(data = dataset, vars = vars, strata = "BatchRandom"), smd = TRUE)
+
+# Diversity: 
+diversity_objective(input, dataset$BatchAnticlust) # unrestricted
+diversity_objective(input, dataset$BatchAnticlustML) # must-link constrained
+
+```
