@@ -52,3 +52,27 @@ diversity_objective(input, dataset$BatchAnticlust) # unrestricted
 diversity_objective(input, dataset$BatchAnticlustML) # must-link constrained
 
 ```
+
+
+```{r}
+
+# Use iris data set
+df2 <- iris
+
+category_input <- categories_to_binary(df2$Species) 
+numeric_input <- df2[, 1:4]
+
+# pretend that categories are numeric variables and just appends both types of variables to the same data frame
+all_input <- cbind(category_input, numeric_input)
+
+df2$Groups <- anticlustering(
+  all_input, 
+  K = 3, 
+  method = "local-maximum",
+  repetitions = 20,
+  standardize = TRUE
+)
+
+print(tableone::CreateTableOne(data = df2, vars = colnames(iris)[1:5], strata = "Groups"), smd = TRUE)
+
+```
