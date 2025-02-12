@@ -8,7 +8,6 @@ library(anticlust) # at least requires anticlust version 0.8.9
 library(here)
 
 dataset <- read.csv(here("Application", "synthetic_dataset_10x_20250211.csv"))
-data_ind <- dataset[!duplicated(dataset$patient_id), ] # only unique patients / individuals
 
 table(table(dataset$patient_id))
 
@@ -19,7 +18,6 @@ CreateTableOne(data = dataset, vars = c(vars_categorical, vars_numeric))
 
 categorical_input <- categories_to_binary(dataset[, vars_categorical])
 input <- cbind(categorical_input, dataset$age)
-# squared Euclidean distance on binary coded features
 
 K <- 20
 
@@ -45,7 +43,7 @@ dataset$BatchAnticlustML <- anticlustering(
   K = K, 
   method = "2PML",
   must_link = dataset$patient_id, 
-  repetitions = 1 # 1 usually leads to significant differences on the features endo and stage; 100 had good results for me but took 13min
+  repetitions = 10 # 1 usually leads to significant differences on the features endo and stage; 100 had good results for me but took 13min
 )
 Sys.time() - start 
 
