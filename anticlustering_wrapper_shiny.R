@@ -39,6 +39,33 @@ anticlustering_shiny <- function(
   anticlustering(input, K = K, method = "local-maximum", repetitions = repetitions, standardize = TRUE)
 }
 
+
+must_link_anticlustering_shiny <- function(numeric_vars, categorical_vars, must_link_constraints, K) {
+  if (!is.null(categorical_vars)) {
+    categorical_vars <- categories_to_binary(categorical_vars)
+  }
+  input <- cbind(numeric_vars, categorical_vars)
+  N <- nrow(input) 
+  repetitions <- 2
+  if (N > 15000) {
+    stop("Sorry, we do not offer the must-link for data sets with more than 15000 elements. Try out the R package anticlust directly.")
+  }
+  if (N <= 1000) {
+    repetitions <- 1
+  }
+  if (N <= 200) {
+    repetitions <- 10
+  }
+  if (N <= 100) {
+    repetitions <- 100
+  }
+  reps <- paste0(repetitions, " repetitions (", repetitions/2, "x Phase 1, ", repetitions/2, "x Phase 2)")
+  
+  message("N = ", N, ". Using anticlustering with diversity criterion, method is '2PML' (for must-link constraints) with ", reps, ".\n")
+  anticlustering(input, K = K, method = "2PML", repetitions = repetitions, standardize = TRUE, must_link = must_link_constraints)
+  
+}
+
 fast_anticlustering_shiny <- function(numeric_vars, categorical_vars, K) {
   if (!is.null(categorical_vars)) {
     categorical_vars <- categories_to_binary(categorical_vars)

@@ -1,5 +1,7 @@
 
 
+## This file uses different input for the new anticlustering wrapper function
+
 library(anticlust)
 library(tableone)
 source("anticlustering_wrapper_shiny.R")
@@ -89,7 +91,7 @@ data$Groups <- anticlustering_shiny(
 print(tableone::CreateTableOne(data = data, vars = colnames(data)[1:(M_numeric+M_categorical)], strata = "Groups"), smd = TRUE)
 
 
-# Very large data:
+# "Very large" data:
 
 N <- 12000
 M_numeric <- 3  # number of numeric features
@@ -103,6 +105,47 @@ head(data)
 data$Groups <- anticlustering_shiny(
   numeric_vars = numeric_vars,
   categorical_vars = categorical_vars, 
+  K = 5
+)
+
+print(tableone::CreateTableOne(data = data, vars = colnames(data)[1:(M_numeric+M_categorical)], strata = "Groups"), smd = TRUE)
+
+
+# "Very very large" data:
+
+N <- 120000
+M_numeric <- 3  # number of numeric features
+M_categorical <- 3
+numeric_vars <- matrix(rnorm(N*M_numeric), ncol = M_numeric)
+categorical_vars <- generate_categorical_data(N, M_categorical, 3)
+
+data <- data.frame(numeric_vars, categorical_vars)
+head(data)
+
+data$Groups <- anticlustering_shiny(
+  numeric_vars = numeric_vars,
+  categorical_vars = categorical_vars, 
+  K = 5
+)
+
+print(tableone::CreateTableOne(data = data, vars = colnames(data)[1:(M_numeric+M_categorical)], strata = "Groups"), smd = TRUE)
+
+
+## COnstraints
+
+N <- 1500
+M_numeric <- 3  # number of numeric features
+M_categorical <- 3
+numeric_vars <- matrix(rnorm(N*M_numeric), ncol = M_numeric)
+categorical_vars <- generate_categorical_data(N, M_categorical, 3)
+must_link <- sample(N, size = N, replace = TRUE)
+data <- data.frame(numeric_vars, categorical_vars)
+head(data)
+
+data$Groups <- anticlustering_shiny(
+  numeric_vars = numeric_vars,
+  categorical_vars = categorical_vars, 
+  must_link_constraints = must_link,
   K = 5
 )
 
