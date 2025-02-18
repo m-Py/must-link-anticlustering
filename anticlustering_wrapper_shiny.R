@@ -14,22 +14,22 @@ anticlustering_shiny <- function(
   
   
   N <- max(nrow(numeric_vars), nrow(categorical_vars)) # deal with NULL input
-  if (N > 1000) { # "Large" data sets: 
+  if (N > 500) { # "Large" data sets: 
     if (!is.null(must_link_constraints)) stop("deal with must link constraints and large N")
     return(fast_anticlustering_shiny(numeric_vars, categorical_vars, K))
   }
   
   if (N <= 1000) {
-    repetitions <- 1
-    reps <- "1 repetition"
+    repetitions <- 10
+    reps <- "10 repetition"
   }
   if (N <= 200) {
-    repetitions <- 10
-    reps <- "10 repetitions"
-  }
-  if (N <= 100) {
     repetitions <- 100
     reps <- "100 repetitions"
+  }
+  if (N <= 100) {
+    repetitions <- 1000
+    reps <- "1000 repetitions"
   }
   if (!is.null(categorical_vars)) {
     categorical_vars <- categories_to_binary(categorical_vars)
@@ -51,13 +51,13 @@ must_link_anticlustering_shiny <- function(numeric_vars, categorical_vars, must_
     stop("Sorry, we do not offer the must-link for data sets with more than 15000 elements. Try out the R package anticlust directly.")
   }
   if (N <= 1000) {
-    repetitions <- 1
-  }
-  if (N <= 200) {
     repetitions <- 10
   }
-  if (N <= 100) {
+  if (N <= 400) {
     repetitions <- 100
+  }
+  if (N <= 100) {
+    repetitions <- 1000
   }
   reps <- paste0(repetitions, " repetitions (", repetitions/2, "x Phase 1, ", repetitions/2, "x Phase 2)")
   
