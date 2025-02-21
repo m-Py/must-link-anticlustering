@@ -585,6 +585,7 @@ server <- function(input, output, session) {
   dataset_synthetic <- reactive({
     # Replace with the path to your local CSV, if necessary
     read.csv("~/Desktop/UCSF Lab Work/Anticlust App/synthetic_dataset_20250211.csv", 
+    #read.csv("/srv/shiny-server/anticlustering/synthetic_dataset_20250211.csv",
              stringsAsFactors = FALSE)
   })
   
