@@ -376,7 +376,8 @@ ui <- fluidPage(
   # Application Header with Logo
   # --------------------------------------------------------------------------
   div(class = "top-section", 
-      img(src = "anticlust logo.png", width = "100%", height = "500")
+      text-align = "center;", # centers the image
+      img(src = "anticlust logo.png", width = "1000", height = "500")
   ),
   
   # --------------------------------------------------------------------------
