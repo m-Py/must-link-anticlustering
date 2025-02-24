@@ -7,11 +7,14 @@ This repository contains additional documentation, code and data for the manuscr
 
 "Anticlustering for Sample Allocation To Minimize Batch Effects"
 
+It also has the code for the [anticlust Shiny App](https://comphealth.ucsf.edu/app/anticlustering/) that was first described in that paper. 
+
 - Directory `Supplementary_Materials` has a document that has supplementary information and analysis on the project. It is a reproducible (via R markdown) document that generates all analyses, Figures and Tables reported in the paper, as well as some additional analyses not reported in the paper. 
 - Directory `Application` contains code and data to reproduce the example application.
 - Directory `Simulation` implements a simulation that compares the quality of the anticlustering method and alternative approaches. It contains code to do the simulation, data from the simulation, and code to analyze the simulation data .
 - Directory `Running_Time_Optimal_Algorithm` has code that investigates the feasibility of an optimal algorithm for must-link anticlustering
 - Directory `2PML` contains an R script that solves the (NP-hard) subset sum problem for up to 27 elements via complete enumeration, to generate combinations of numbers that are used in Phase 2 of the 2PML algorithm
+- Directory `Web app` has the code for the Shiny App.
 
 ## Dependencies
 
