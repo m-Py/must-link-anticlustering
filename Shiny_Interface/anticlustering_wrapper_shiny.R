@@ -1,4 +1,17 @@
-# anticlustering wrapper function for shiny
+# Author: Martin Papenberg
+# Year: 2025
+
+# Anticlustering wrapper function for shiny app.
+# This function is used in the shiny app to determine which anticlustering algorithm to use,
+# depending on the input. In the app, users do not select the method themselves; instead, the 
+# App selects some "smart" defaults. 
+
+# The most important decisions that are made for the user:
+# - The function always uses standardization of the input variables
+# - For N < 500, we use the diversity criterion and the local-maximum algorithm (number of restarts depends on N)
+# - For N >= 500, we use the k-plus criterion and the default exchange method (via `fast_anticlustering()`)
+# - Categorical variables are always included in the computation of the anticlustering criterion via `anticlust::categories_to_binary()`. We do not use the argument `categories`. 
+
 
 library(anticlust)
 ## Error handling must be done (at least partly) outside of this function

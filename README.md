@@ -15,6 +15,7 @@ It also has the code for the [anticlust Shiny App](https://comphealth.ucsf.edu/a
 - Directory `Running_Time_Optimal_Algorithm` has code that investigates the feasibility of an optimal algorithm for must-link anticlustering
 - Directory `2PML` contains an R script that solves the (NP-hard) subset sum problem for up to 27 elements via complete enumeration, to generate combinations of numbers that are used in Phase 2 of the 2PML algorithm
 - Directory `Web app` has the code for the Shiny App.
+- Directory `Shiny_Interface` includes the function that is used for anticlustering in the Shiny App. It "smartly" selects an anticlustering method depending on the input (primarily, depending on the size of the data set). 
 
 ## Dependencies
 

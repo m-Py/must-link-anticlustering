@@ -1,10 +1,11 @@
 
 
-## This file uses different input for the new anticlustering wrapper function
+## This file uses some test input for the new anticlustering wrapper function
 
 library(anticlust)
 library(tableone)
-source("anticlustering_wrapper_shiny.R")
+library(here)
+source(here("Shiny_Interface", "anticlustering_wrapper_shiny.R"))
 
 generate_categorical_data <- function(N, M, P) {
   data <- data.frame(matrix(sample(P, replace = TRUE, size = N*M), ncol = M))
@@ -131,9 +132,9 @@ data$Groups <- anticlustering_shiny(
 print(tableone::CreateTableOne(data = data, vars = colnames(data)[1:(M_numeric+M_categorical)], strata = "Groups"), smd = TRUE)
 
 
-## COnstraints
+## Use must-link constraints
 
-N <- 1500
+N <- 150
 M_numeric <- 3  # number of numeric features
 M_categorical <- 3
 numeric_vars <- matrix(rnorm(N*M_numeric), ncol = M_numeric)
@@ -150,6 +151,3 @@ data$Groups <- anticlustering_shiny(
 )
 
 print(tableone::CreateTableOne(data = data, vars = colnames(data)[1:(M_numeric+M_categorical)], strata = "Groups"), smd = TRUE)
-
-
-
