@@ -20,7 +20,7 @@ library(dplyr)
 library(ggplot2)
 opts_chunk$set(message = FALSE, warning = FALSE, fig.align = "center", echo = FALSE)
 
-df <- read.csv(here("Application", "synthetic_dataset_20250114.csv"))
+df <- read.csv(here("Application", "synthetic_dataset_20250211.csv"))
 N <- nrow(df)
 df_ind <- df[!duplicated(df$patient_id), ]
 
@@ -28,7 +28,7 @@ df_ind <- df[!duplicated(df$patient_id), ]
 
 # Overview
 
-This document is found at the accompanying online repository for the manuscript "Anticlustering for Sample Allocation To Minimize Batch Effects". It can be retrieved from https://osf.io/eu5gd/?view_only=5d3cefa960434b108c36985dc2f759fe. The repository also contains other information, data and files concerning the project. 
+This document is found at the accompanying online repository for the manuscript "Anticlustering for Sample Allocation To Minimize Batch Effects". It can be retrieved from https://osf.io/eu5gd/. The repository also contains other information, data and files concerning the project. 
 
 This document is meant to (a) reproduce all analyses and Figures (in this case, this includes formulas) reported in the manuscript and (b) illustrate some additional analyses not included in the main text due to space constraints (in particular, Figures 3 and 4 and section "Optimal Anticlustering With the Must-Link Feature" contain results not reported in the paper).
 
@@ -43,7 +43,7 @@ In our application, we optimized the diversity objective to maximize similarity 
 $$
 d(x, y) =  \sqrt{\sum\limits_{i = 1}^{M}(x_i - y_i)^2}
 $$
-When samples are described by two features, the Euclidean distance corresponds to the geometric, “straight line” distance between two points in a two-dimensional space; more similar data points are closer to each other (see Figure 1). For categorical variables, we use binary coding before including them in the computation of the Euclidean distance (see Table 1). 
+When samples are described by two features, the Euclidean distance corresponds to the geometric, “straight line” distance between two points in a two-dimensional space; more similar data points are closer to each other (see Figure 1). For categorical variables, we use "one-hot" binary coding before including them in the computation of the Euclidean distance (see Table 1). In our example application, we used binary coded categories and the squared Euclidean distance. 
 
 An anticlustering algorithm assigns samples to batches in such a way that the objective function---here, the diversity---is maximized. Anticlustering usually employs heuristic optimization algorithms [@yang2022]. While heuristics generally provide satisfying results in the context of anticlustering [@papenberg2020], they do not guarantee to find the globally best assignment among all possibilities. In principle, enumerating all possible assignments is a valid strategy to obtain an optimal assignment. However, this approach quickly becomes impossible due to an exponential growth of the way in which assignments can be conducted [@papenberg2020]. Moreover, because anticlustering problems (with the exception of some special cases) are also NP-hard [@feo1990], there is probably no algorithm that identifies the globally best assignment without considering all possibilities (at least in the worst case). In practice, heuristics are therefore indispensable. In the following, we present an anticlustering heuristic that is generally applicable to large data sets, and outline how we included must-link constraints with this algorithm. 
 
@@ -135,7 +135,7 @@ rownames(mat) <- mat[,1]
 knitr::kable(
   mat[!duplicated(mat), -1][c(1, 3, 2), ], # some reordering necessary
   col.names = gsub("categories", "", colnames(mat)), 
-  caption = "Illustrates the recoding of the categorical variable Stage using three binary variables."
+  caption = "Illustrates the 'one-hot' recoding of the categorical variable Stage using three binary variables."
 )
 ```
 
@@ -157,17 +157,17 @@ In total, the data set consists of `r N` samples from `r N_unique` unique indivi
 
 For the assignment, we strived for balance with regard to four categorical variables: is disease present (yes or no); stage of disease ("none", "Stage I or II", "Stage III or IV"); clinical site (University of California SF, or other); menstrual cycle phase (proliferative ("PE") or secretory ("SE"). Other demographic variables such as age and BMI were also assessed but not deemed critical as covariates for the batch assignment. Post-hoc checks however revealed that no significant discrepancies occurred in these other variables, despite not being included.
 
-For the purpose of illustration, we first applied an unconstrained anticlustering assignment and OSAT (see Table 2-5). Both methods successfully balanced all four variables among batches (all *p*s > .999). While the assignment was conducted using the 320 samples---as opposed to the `r N_unique` individual patients---as input, we also verified satisfactory balance on the level of individuals. Tables 6 and 7 illustrates the results of constrained anticlustering, which through the 2PML algorithm ensured that samples belonging to the same patient were assigned to the same batch. Note that the must-link constraints put rather severe restrictions to the assignments that were possible; for example, up to 50% of a batch had to be occupied with the samples of a single patient. Still, using 2PML, batches turned out to be highly balanced (*p*s > .999 on batch level and *p*s > .980 on individual level). 
+For the purpose of illustration, we first applied an unconstrained anticlustering assignment and OSAT (see Table 2-5). Both methods successfully balanced all four variables among batches (all *p*s > .999 for anticlustering, all *p*s > .99 for OSAT). While the assignment was conducted using the 320 samples---as opposed to the `r N_unique` individual patients---as input, we also verified satisfactory balance on the level of individuals. Tables 6 and 7 illustrates the results of constrained anticlustering, which through the 2PML algorithm ensured that samples belonging to the same patient were assigned to the same batch. Note that the must-link constraints put rather severe restrictions to the assignments that were possible; for example, up to 50% of a batch had to be occupied with the samples of a single patient. Still, using 2PML, batches turned out to be highly balanced (all *p*s > .99). 
 
 ```{r}
 
 
-u1 <- read.csv(here("Application", "2025 01 17 Tableone Unrestricted Anticlustering Assignment - Individuals.csv"))
-u2 <- read.csv(here("Application", "2025 01 17 Tableone Unrestricted Anticlustering Assignment - All Samples.csv"))
-o1 <- read.csv(here("Application", "2025 01 17 Tableone OSAT Assignment - Individuals.csv"))
-o2 <- read.csv(here("Application", "2025 01 17 Tableone OSAT Assignment - All Samples.csv"))
-m1 <- read.csv(here("Application", "2025 01 17 Tableone Must-Link Assignment - Individuals.csv"))
-m2 <- read.csv(here("Application", "2025 01 17 Tableone Must-Link Assignment - All Samples.csv"))
+u1 <- read.csv(here("Application", "2025 02 24 Tableone Unrestricted Anticlustering Assignment - Individuals.csv"))
+u2 <- read.csv(here("Application", "2025 02 24 Tableone Unrestricted Anticlustering Assignment - All Samples.csv"))
+o1 <- read.csv(here("Application", "2025 02 24 Tableone OSAT Assignment - Individuals.csv"))
+o2 <- read.csv(here("Application", "2025 02 24 Tableone OSAT Assignment - All Samples.csv"))
+m1 <- read.csv(here("Application", "2025 02 24 Tableone Must-Link Assignment - Individuals.csv"))
+m2 <- read.csv(here("Application", "2025 02 24 Tableone Must-Link Assignment - All Samples.csv"))
 
 # function to reformat the tableone output for PDF....
 reformat_t1 <- function(t1, unique) {

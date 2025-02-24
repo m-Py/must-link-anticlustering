@@ -21,16 +21,19 @@ library(dplyr)
 source(here("Simulation", "functions.R")) # I have a wrapper for the OSAT method in the Simulation directory
 
 
-dataset <- read.csv(here("Application", "synthetic_dataset_20250114.csv"))
+dataset <- read.csv(here("Application", "synthetic_dataset_20250211.csv"))
 data_ind <- dataset[!duplicated(dataset$patient_id), ] # only unique patients / individuals
 
 table(table(dataset$patient_id))
 table(table(data_ind$patient_id)) # 139 individuals
 
-CreateTableOne(data = dataset, vars = c("endo", "site", "phase", "stage"))
-CreateTableOne(data = data_ind, vars = c("endo", "site", "phase", "stage"))
+vars <- c("endo", "site", "phase", "stage")
 
-input <- dist(categories_to_binary(dataset[, 3:6]))^2 # squared Euclidean distance on binary coded features
+CreateTableOne(data = dataset, vars = vars)
+CreateTableOne(data = data_ind, vars = vars)
+
+features <- categories_to_binary(dataset[, vars])
+input <- dist(scale(features))^2 # squared Euclidean distance on binary coded features
 
 reps <- 500 # 500 restarts for anticlustering methods
 K <- 20
@@ -44,6 +47,8 @@ dataset$BatchAnticlust <- anticlustering(
 )
 Sys.time() - start 
 
+tableone::CreateCatTable(data = dataset, vars = vars, strata = "BatchAnticlust")
+
 start <- Sys.time()
 dataset$BatchAnticlustML <- anticlustering(
   input, 
@@ -54,14 +59,18 @@ dataset$BatchAnticlustML <- anticlustering(
 )
 Sys.time() - start 
 
+tableone::CreateCatTable(data = dataset, vars = vars, strata = "BatchAnticlustML")
+
 start <- Sys.time()
-dataset$BatchOSAT <- my_osat(dataset[, 3:6], K = 20, nSim = 5000)
+dataset$BatchOSAT <- my_osat(dataset[, vars], K = 20, nSim = 5000)
 Sys.time() - start 
 
+tableone::CreateCatTable(data = dataset, vars = vars, strata = "BatchOSAT")
+
 # check balance / diversity (diversity is being optimized via the algorithms)
-diversity_objective(input, dataset$BatchAnticlust) # 8244
-diversity_objective(input, dataset$BatchOSAT) # 8204
-diversity_objective(input, dataset$BatchAnticlustML) # 8182 with 2PML method (250x Phase 1, 250x Phase 2)
+diversity_objective(input, dataset$BatchAnticlust) # 45701.25
+diversity_objective(input, dataset$BatchOSAT) # 45201.85
+diversity_objective(input, dataset$BatchAnticlustML) # 45146.07 with 2PML method (250x Phase 1, 250x Phase 2)
 
 ## NOW: Encode if a sample is a duplicated within a batch (this information is used to assess balance on individuals' rather than samples' level)
 
