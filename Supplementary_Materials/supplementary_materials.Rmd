@@ -375,8 +375,8 @@ In our application, samples belonging to the same patient were required to be as
 \begin{equation*}
 \begin{array}{ll@{}ll@{}rr}
 \text{minimize}  & \displaystyle \sum_{1 \le i \le K} \sum_{1 \le j \le n} x_{ij} & & & \qquad \qquad (1) \\
-\text{subject to}& \displaystyle \sum_{j = 1}^K w_j x_{ij} \le c_i   &  & \qquad \qquad i = (1, \ldots, n) & \qquad \qquad (2) \\
-                 & \displaystyle \sum_{i = 1}^n x_{ij} = 1     &  & \qquad \qquad j = (1, \ldots, K) & \qquad \qquad (3) \\
+\text{subject to}& \displaystyle \sum_{i = 1}^n w_j x_{ij} \le c_i   &  & \qquad \qquad j = (1, \ldots, K) & \qquad \qquad (2) \\
+                 & \displaystyle \sum_{j = 1}^K x_{ij} = 1     &  & \qquad \qquad i = (1, \ldots, n) & \qquad \qquad (3) \\
                  & \displaystyle x_{ij} \in \{0, 1\}           &  & \qquad \qquad i = (1, \ldots, K), j = (1, \ldots, n)  & \qquad \qquad (4)
 \end{array}
 \end{equation*}
