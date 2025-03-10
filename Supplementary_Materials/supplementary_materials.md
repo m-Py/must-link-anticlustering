@@ -6,7 +6,7 @@ output:
   pdf_document: 
     keep_md: true
 bibliography: lit.bib
-date: "Generated on 2025-02-24"
+date: "Generated on 2025-03-10"
 ---
 
 
@@ -339,14 +339,14 @@ In our application, samples belonging to the same patient were required to be as
 
 \begin{equation*}
 \begin{array}{ll@{}ll@{}rr}
-\text{minimize}  & \displaystyle \sum_{1 \le i \le K} \sum_{1 \le j \le n} x_{ij} & & & \qquad \qquad (1) \\
-\text{subject to}& \displaystyle \sum_{j = 1}^K w_j x_{ij} \le c_i   &  & \qquad \qquad i = (1, \ldots, n) & \qquad \qquad (2) \\
-                 & \displaystyle \sum_{i = 1}^n x_{ij} = 1     &  & \qquad \qquad j = (1, \ldots, K) & \qquad \qquad (3) \\
+\text{minimize}  & \displaystyle \sum_{1 \le i \le n} \sum_{1 \le j \le K} x_{ij} & & & \qquad \qquad (1) \\
+\text{subject to}& \displaystyle \sum_{i = 1}^n w_i x_{ij} \le c_j   &  & \qquad \qquad j = (1, \ldots, K) & \qquad \qquad (2) \\
+                 & \displaystyle \sum_{j = 1}^K x_{ij} = 1     &  & \qquad \qquad i = (1, \ldots, n) & \qquad \qquad (3) \\
                  & \displaystyle x_{ij} \in \{0, 1\}           &  & \qquad \qquad i = (1, \ldots, K), j = (1, \ldots, n)  & \qquad \qquad (4)
 \end{array}
 \end{equation*}
 
-The number of must-link cliques is given by $n$. The model has decision variables $x_{ij}$ to encode whether clique $j$ $(j = 1, \ldots, n)$ is assigned to batch $i$ $(i = 1, \ldots, K)$. It uses $K$ values $c_i$ to represent the capacity of each batch; in the default case of equal-sized batches, we have $c_i = \frac{N}{K}$ for each batch. It uses $n$ values $w_j$ to encode the weight of each clique, i.e., the number of samples it represents that must be assigned to the same batch in order to fulfil the must-link constraints. Constraint (2) realizes that the weight of each batch is not exceeded; constraint (3) realizes that each clique is assigned to exactly one batch. Note that during the initialization step that assigns cliques to batches, we only need to test if the constraints (2) and (3) can be fulfilled at all; any feasible assignment is equally valid. For this reason, the objective function (1) is chosen to be constant for each assignment that satisfies the constraints ($n$). It does not actually contribute to solving the problem, and the model only test if the must-link constraints can be fulfilled.
+The number of must-link cliques is given by $n$. The model has decision variables $x_{ij}$ to encode whether clique $i$ $(i = 1, \ldots, n)$ is assigned to batch $j$ $(j = 1, \ldots, K)$. It uses $K$ values $c_j$ to represent the capacity of each batch; in the default case of equal-sized batches, we have $c_j = \frac{N}{K}$ for each batch. It uses $n$ values $w_i$ to encode the weight of each clique, i.e., the number of samples it represents that must be assigned to the same batch in order to fulfil the must-link constraints.  Constraint (2) realizes that the weight of each batch is not exceeded; constraint (3) realizes that each clique is assigned to exactly one batch. Note that during the initialization step that assigns cliques to batches, we only need to test if the constraints (2) and (3) can be fulfilled at all; any feasible assignment is equally valid. For this reason, the objective function (1) is chosen to be constant for each assignment that satisfies the constraints ($n$). It does not actually contribute to solving the problem, and the model only test if the must-link constraints can be fulfilled.
 
 ## Optimal Anticlustering With the Must-Link Feature
 
