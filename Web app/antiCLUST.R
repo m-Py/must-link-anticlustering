@@ -105,8 +105,10 @@ anticlustering_shiny <- function(
   }
   
   # Convert categorical variables to binary (dummy) columns if needed
-  if (!is.null(categorical_vars)) {
+  if (!is.null(categorical_vars) && ncol(categorical_vars) > 0) {
     categorical_vars <- categories_to_binary(categorical_vars)
+  } else {
+    categorical_vars <- matrix(, nrow = nrow(numeric_vars), ncol = 0)  # Ensure an empty matrix with correct row count
   }
   
   # Combine numeric and dummy-coded categorical features
@@ -142,13 +144,16 @@ anticlustering_shiny <- function(
 #   A vector of length N specifying each row's batch assignment (with must-link).
 # ------------------------------------------------------------------------------
 must_link_anticlustering_shiny <- function(numeric_vars, categorical_vars, must_link_constraints, K) {
-  # Convert any categorical vars to dummy columns
-  if (!is.null(categorical_vars)) {
+  # Convert categorical variables to binary (dummy) columns if needed
+  if (!is.null(categorical_vars) && ncol(categorical_vars) > 0) {
     categorical_vars <- categories_to_binary(categorical_vars)
+  } else {
+    categorical_vars <- matrix(, nrow = nrow(numeric_vars), ncol = 0)  # Ensure an empty matrix with correct row count
   }
   
   # Combine numeric and dummy-coded categorical features
   input <- cbind(numeric_vars, categorical_vars)
+  
   
   N <- nrow(input)
   repetitions <- 2  # default, will be overwritten based on data size
@@ -309,11 +314,11 @@ ui <- fluidPage(
       
       /* Center align all table headers */
       .table thead th {
-        text-align: center !important;
+        text-align: left !important;
       }
 
       .summary-container {
-        text-align: center;
+        text-align: left;
         padding: 10px;
       }
       
@@ -499,7 +504,11 @@ ui <- fluidPage(
              # -----------------------------------------------------------------
              fluidRow(
                column(3, div(
-                 fileInput("file", "Upload CSV/Excel File", accept = c(".csv", ".xlsx"))
+                 fileInput("file", "Upload CSV/Excel File", 
+                           accept = c(".csv", ".xlsx"),
+                           multiple = FALSE,
+                           placeholder = "No file selected") %>%
+                   shiny::tagAppendAttributes(title = "⚠️ Maximum file size: 5MB")
                )),
                column(4, div(
                  uiOutput("feature_select")
@@ -1025,4 +1034,3 @@ server <- function(input, output, session) {
 }
 
 shinyApp(ui = ui, server = server)
-
