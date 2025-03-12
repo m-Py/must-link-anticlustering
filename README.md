@@ -5,9 +5,7 @@ Year: 2025
 
 This repository contains additional documentation, code and data for the manuscript
 
-"Anticlustering for Sample Allocation To Minimize Batch Effects"
-
-It available as preprint from [bioRxiv](https://doi.org/10.1101/2025.03.03.641320)
+"Anticlustering for Sample Allocation To Minimize Batch Effects", available as preprint from [bioRxiv](https://doi.org/10.1101/2025.03.03.641320).
 
 It also has the code for the [anticlust Shiny App](https://anticlust.org) that was first described in that paper. 
 
