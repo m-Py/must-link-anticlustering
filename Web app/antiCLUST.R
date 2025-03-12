@@ -465,11 +465,27 @@ ui <- fluidPage(
              ),
              
              # -----------------------------------------------------------------
+             # Research Paper Link
+             # -----------------------------------------------------------------
+             fluidRow(
+               column(12, align = "justify",
+                      br(),
+                      tags$p(
+                        tags$strong("Preprint: Anticlustering for Sample Allocation To Minimize Batch Effects."),
+                        " Martin Papenberg, Cheng Wang, Maïgane Diop, Syed Hassan Bukhari, Boris Oskotsky, Brittany R. Davidson, Kim Chi Vo, Binya Liu, Juan C. Irwin, Alexis Combes, Brice Gaudilliere, Jingjing Li, David K. Stevenson, Gunnar W. Klau, Linda C. Giudice, Marina Sirota, Tomiko T. Oskotsky. bioRxiv 2025.03.03.641320; ",
+                        tags$a(
+                          href = "https://doi.org/10.1101/2025.03.03.641320",
+                          "doi: https://doi.org/10.1101/2025.03.03.641320",
+                          target = "_blank"
+                        )
+                      )
+               )
+             ),
+             # -----------------------------------------------------------------
              # GitHub Repository Link
              # -----------------------------------------------------------------
              fluidRow(
                column(12, align = "center",
-                      br(),
                       tags$p(
                         tags$strong("For further details and to access the complete code and dataset for the webapp and the package, please visit our GitHub repository:"),
                         tags$br(),
