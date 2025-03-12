@@ -7,6 +7,8 @@ This repository contains additional documentation, code and data for the manuscr
 
 "Anticlustering for Sample Allocation To Minimize Batch Effects"
 
+It available as preprint from [bioRxiv](https://doi.org/10.1101/2025.03.03.641320)
+
 It also has the code for the [anticlust Shiny App](https://anticlust.org) that was first described in that paper. 
 
 - Directory `Supplementary_Materials` has a document that has supplementary information and analysis on the project. It is a reproducible (via R markdown) document that generates all analyses, Figures and Tables reported in the paper, as well as some additional analyses not reported in the paper. 
