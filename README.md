@@ -1,6 +1,6 @@
 # README
 
-Author: Martin Papenberg
+Author: Martin Papenberg  
 Year: 2025
 
 This repository contains additional documentation, code and data for the manuscript
