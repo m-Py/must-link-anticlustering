@@ -55,13 +55,4 @@ Additionally, the following R packages / scripts were used in the analyses:
 
 **Additional dependencies for `Running_Time_Optimal_Algorithm`**
 
-In the directory `Running_Time_Optimal_Algorithm`, we evaluate an optimal algorithm for anticlustering using must-link constraints. To use the optimal method, we need a "solver" for integer linear programming. We use [gurobi](https://www.gurobi.com/), which generally outperforms open source solvers (i.e., it can be used to process larger data sets). However, gurobi is generally not free to use and requires a license for usage. For academics, [free to use licenses are available](https://www.gurobi.com/academia/academic-program-and-licenses/). The gurobi software also ships an R package gurobi, which has to be installed to be used as solver for optimal anticlustering algorithms in `anticlust`. To use gurobi for anticlustering, however, we need to install `anticlust` from a separate branch on Github, and I do not expect that the anticlust that supports gurobi will be distributed via CRAN:
-
-```
-if (!require("remotes", quietly = TRUE)) 
-  install.packages("remotes")
-remotes::install_github("m-Py/anticlust", ref = "gurobi")
-```
-
-I made the analysis using version 0.8.9-1.604 (latest commit 9ccde8bc1ec2c925cb9340ab2710b14c382b96ca), which is version 0.8.9-1 with the only difference that it can use the gurobi solver as backend for ILP algorithms.
-
+In the directory `Running_Time_Optimal_Algorithm`, we evaluate an optimal algorithm for anticlustering using must-link constraints. To use the optimal method, we need a "solver" for integer linear programming. We use [gurobi](https://www.gurobi.com/), which generally outperforms open source solvers (i.e., it can be used to process larger data sets). However, gurobi is generally not free to use and requires a license for usage. For academics, [free to use licenses are available](https://www.gurobi.com/academia/academic-program-and-licenses/). The gurobi software also ships an R package gurobi, which has to be installed to be used as solver for optimal anticlustering algorithms in `anticlust`. The gurobi solver is supported since version 0.8.10 in the released version of `anticlust`.
