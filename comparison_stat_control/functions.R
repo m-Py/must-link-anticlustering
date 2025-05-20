@@ -1,24 +1,23 @@
 
-# N = 200; K = 20; M = 10; P = 5; 
-# scale_batch_effect = 10; SD_residual = 2;
-# treatment_effect = 1.2
+N = 200; K = 2; M = 10; P = 5;
+scale_batch_effect = 10; SD_residual = 2;
+treatment_effect = 1.2; prob_treatment = .5
 
 simulate <- function(
     N = 200, K = 20, M = 10, P = 5, 
     scale_batch_effect = 10, SD_residual = 2, 
-    treatment_effect = 1.2) {
+    treatment_effect = 1.2, prob_treatment = .5) {
   covariates <- generate_categorical_data(N, M, P = P)
   covariates_binary <- categories_to_binary(covariates)
   b1 <- rnorm(ncol(covariates_binary)) # effect of covariate on outcome
   b2 <- treatment_effect #effect of treatment on outcome
   
   batches_rnd <- sample(rep_len(1:K, N))
-  treatment_rnd <- sample(0:1, size = N, replace = TRUE) 
-  treatment_confound <- batches_rnd + rnorm(N, sd = 10) < (K/2) 
-  
+  treatment_rnd <- sample(0:1, size = N, replace = TRUE, prob = c(1-prob_treatment, prob_treatment))
+  treatment_confound <- scale(batches_rnd) + rnorm(N, sd = K/2) > 0 # higher batch number = higher probability of treatment
+
   batches_anticlust <- fast_anticlustering(cbind(covariates_binary, treatment_rnd), K = K) # balance treatment + covariates
-  b0 <- ((1:K) / K) * scale_batch_effect # batch effect on outcome
-  
+  b0 <- ((1:K) / K) * scale_batch_effect # higher batch number = stronger positive influence on outcome
   residual <- rnorm(N, sd = SD_residual)
   
   outcome_rnd <- get_batch_data(
@@ -78,8 +77,11 @@ get_p_value_treatment <- function(N, outcome, treatment, batches, statistical_ad
   analysis$anova_table["treatment", "Pr(>F)"] 
 }
 
-# get outcome data depending on assignment scheme; without residual error though (is added later, the same for all assignments to reduce error variance between assignment schemes in the simulation)
-get_batch_data <- function(N, batches, treatment, covariates, b0, b1, b2) {
+# get outcome data depending on assignment scheme; without residual error though
+# (residual is added later on output of this function for different assignments,
+# so it is the same for all assignments to reduce error variance between
+# assignment schemes in the simulation)
+get_batch_data <- function(N, batches, treatment, covariates, b0, b1, b2, b3) {
   stopifnot(length(batches) == N)
   stopifnot(length(b0) == length(unique(batches)))
   covariate_effect <- c(covariates %*% b1) # get as vector
