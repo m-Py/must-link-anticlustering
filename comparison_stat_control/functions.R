@@ -1,7 +1,7 @@
 
-N = 200; K = 2; M = 10; P = 5;
-scale_batch_effect = 10; SD_residual = 2;
-treatment_effect = 1.2; prob_treatment = .5
+# N = 200; K = 2; M = 10; P = 5;
+# scale_batch_effect = 10; SD_residual = 2;
+# treatment_effect = 1.2; prob_treatment = .5
 
 simulate <- function(
     N = 200, K = 20, M = 10, P = 5, 
@@ -33,7 +33,6 @@ simulate <- function(
   ) + residual
 
 
-  
   c(
     p_rnd_no_control = get_p_value_treatment(N, outcome_rnd, treatment, batches_rnd, FALSE),
     p_rnd_control = get_p_value_treatment(N, outcome_rnd, treatment, batches_rnd, TRUE),

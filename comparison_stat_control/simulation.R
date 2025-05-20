@@ -26,29 +26,23 @@ start <- Sys.time()
 results <- replicate(
   nsim, 
   simulate(
-    N = 320,  # number of samples
+    N = 200,  # number of samples
     K = 20,   # number of batches. Seems that anticlustering improves inferences for smaller batches (i.e., more batches with constant N)
-    M = 3,    # number of covariates
+    M = 4,    # number of covariates
     P = 4,    # number of class per covariate
-    scale_batch_effect = 10,  # relative effect of batches. Must be somewhat large (e.g., >= 10 to see the effect of statistically adjusting for the covariate). Mainly determine the differences in power between adjusted and unadjusted analysis. 
-    treatment_effect = .9,   # effect size of a treatment (0 = null effect; check for alpha errors)
+    scale_batch_effect = 10,  # relative effect of batches. Must be somewhat large (e.g., >= 10). 
+    treatment_effect = 1,     # effect size of a treatment (0 = null effect; check for alpha errors)
     #(note that these effect sizes are not really comparable in their magnitude; 
     # they are differently related to the regression that creates the data)
     # scale_batch_effect is useful to obtain a discrepancy in power between adjusted and unadjusted analysis
-    SD_residual = 2, # residual error SD,
-    prob_treatment = .5
+    SD_residual = 2, # residual error SD
+    prob_treatment = .5 # case / control has the same probability with prob_treatment = .5
   )
 )
 Sys.time() - start
 
-# replicate(1000, foo(N = 200, M = 5, P = 10, scale_batch_effect = 20, confound = FALSE))
-# -> finds significant, but marginal improvement of anticlustering
-
+# overall power per method:
 sort(rowMeans(results < .05)) |> round(2)
-# Uncontroled confounded analysis has very high "power". It also produces alpha errors because it confounds batch
-# effects (which are present) for treatment effects. This is very bad.
-
-# Even the controled analysis based on confounded assignment increases alpha error probability (set M and P on low )
 
 cat("For adjusted analysis: p value of anticlustering was lower (=better) in ", 
     mean(results["p_anticlust_control", ] < results["p_rnd_control", ]) * 100,
@@ -63,5 +57,3 @@ cat("For unadjusted analysis: p value of anticlustering was lower (=better) in "
     format_p(prop.test(sum(results["p_anticlust_no_control", ] < results["p_rnd_no_control", ]), ncol(results), p = .50)$p.value),
     "\n"
 )
-
-t.test(log(results["p_anticlust_control", ]), log(results["p_rnd_control", ]), paired = TRUE) # anticlust significantly improves inference over statistical control + random assignment
