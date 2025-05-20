@@ -13,40 +13,32 @@ simulate <- function(
   b2 <- treatment_effect #effect of treatment on outcome
   
   batches_rnd <- sample(rep_len(1:K, N))
-  treatment_rnd <- sample(0:1, size = N, replace = TRUE, prob = c(1-prob_treatment, prob_treatment))
-  treatment_confound <- scale(batches_rnd) + rnorm(N, sd = K/2) > 0 # higher batch number = higher probability of treatment
+  treatment <- sample(0:1, size = N, replace = TRUE, prob = c(1-prob_treatment, prob_treatment))
 
-  batches_anticlust <- fast_anticlustering(cbind(covariates_binary, treatment_rnd), K = K) # balance treatment + covariates
+  batches_anticlust <- fast_anticlustering(cbind(covariates_binary, treatment), K = K) # balance treatment + covariates
   b0 <- ((1:K) / K) * scale_batch_effect # higher batch number = stronger positive influence on outcome
   residual <- rnorm(N, sd = SD_residual)
   
   outcome_rnd <- get_batch_data(
     N, batches_rnd, 
-    treatment_rnd, 
+    treatment, 
     covariates_binary, 
     b0, b1, b2
   ) + residual
   outcome_anticlust <- get_batch_data(
     N, batches_anticlust, 
-    treatment_rnd, 
-    covariates_binary, 
-    b0, b1, b2
-  ) + residual
-  outcome_confound <- get_batch_data(
-    N, batches_rnd, 
-    treatment_confound, 
+    treatment, 
     covariates_binary, 
     b0, b1, b2
   ) + residual
 
+
   
   c(
-    p_rnd_no_control = get_p_value_treatment(N, outcome_rnd, treatment_rnd, batches_rnd, FALSE),
-    p_rnd_control = get_p_value_treatment(N, outcome_rnd, treatment_rnd, batches_rnd, TRUE),
-    p_confound_no_control = get_p_value_treatment(N, outcome_confound, treatment_confound, batches_rnd, FALSE),
-    p_confound_control = get_p_value_treatment(N, outcome_confound, treatment_confound, batches_rnd, TRUE),
-    p_anticlust_no_control = get_p_value_treatment(N, outcome_anticlust, treatment_rnd, batches_anticlust, FALSE),
-    p_anticlust_control = get_p_value_treatment(N, outcome_anticlust, treatment_rnd, batches_anticlust, TRUE)
+    p_rnd_no_control = get_p_value_treatment(N, outcome_rnd, treatment, batches_rnd, FALSE),
+    p_rnd_control = get_p_value_treatment(N, outcome_rnd, treatment, batches_rnd, TRUE),
+    p_anticlust_no_control = get_p_value_treatment(N, outcome_anticlust, treatment, batches_anticlust, FALSE),
+    p_anticlust_control = get_p_value_treatment(N, outcome_anticlust, treatment, batches_anticlust, TRUE)
   )
 }
 
