@@ -28,8 +28,8 @@ results <- replicate(
   simulate(
     N = 200,  # number of samples
     K = 20,   # number of batches. Seems that anticlustering improves inferences for smaller batches (i.e., more batches with constant N)
-    M = 4,    # number of covariates
-    P = 4,    # number of class per covariate
+    M = 1,    # number of covariates
+    P = 2,    # number of class per covariate
     scale_batch_effect = 10,  # relative effect of batches. Must be somewhat large (e.g., >= 10). 
     treatment_effect = 1,     # effect size of a treatment (0 = null effect; check for alpha errors)
     #(note that these effect sizes are not really comparable in their magnitude; 
@@ -41,8 +41,13 @@ results <- replicate(
 )
 Sys.time() - start
 
+pvalues <- results[grepl("p_", row.names(results)), ]
+cors <- results[grepl("cor_", row.names(results)), ]
+
 # overall power per method:
-sort(rowMeans(results < .05)) |> round(2)
+sort(rowMeans(pvalues < .05)) |> round(2)
+rowMeans(cors)
+apply(cors, 1, sd) # this one is more relevant!
 
 cat("For adjusted analysis: p value of anticlustering was lower (=better) in ", 
     mean(results["p_anticlust_control", ] < results["p_rnd_control", ]) * 100,
@@ -57,3 +62,21 @@ cat("For unadjusted analysis: p value of anticlustering was lower (=better) in "
     format_p(prop.test(sum(results["p_anticlust_no_control", ] < results["p_rnd_no_control", ]), ncol(results), p = .50)$p.value),
     "\n"
 )
+
+## regression to predict power (works better for fewer batches)
+
+## maybe do implement confounding condition
+
+xlim <- range(cors["cor_rnd", ])
+plot(cors["cor_rnd", ], pvalues["p_rnd_no_control", ], xlim = xlim, pch = 2, cex = .5, col = "#ABCDEF",
+     xlab = "correlation batch effect / treatment effect ", ylab = "p value")
+points(cors["cor_anticlust", ], pvalues["p_rnd_no_control", ], col = "#333333", cex = .6, pch = 4)
+legend("topright", legend = c("Random", "Anticlustering"), pch = c(2, 4), col = c("#ABCDEF", "#333333"), cex = .7)
+
+
+significant <- pvalues["p_rnd_no_control", ] < .05
+summary(glm(significant ~ cors["cor_rnd", ], family = binomial()))
+
+cor.test(pvalues["p_rnd_no_control", ], cors["cor_rnd", ])
+cor.test(cors["cor_anticlust", ], pvalues["p_rnd_no_control", ])
+

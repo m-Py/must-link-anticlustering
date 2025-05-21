@@ -1,4 +1,4 @@
-
+ 
 # N = 200; K = 2; M = 10; P = 5;
 # scale_batch_effect = 10; SD_residual = 2;
 # treatment_effect = 1.2; prob_treatment = .5
@@ -16,7 +16,7 @@ simulate <- function(
   treatment <- sample(0:1, size = N, replace = TRUE, prob = c(1-prob_treatment, prob_treatment))
 
   batches_anticlust <- fast_anticlustering(cbind(covariates_binary, treatment), K = K) # balance treatment + covariates
-  b0 <- ((1:K) / K) * scale_batch_effect # higher batch number = stronger positive influence on outcome
+  b0 <- sample(((1:K) / K) * scale_batch_effect)
   residual <- rnorm(N, sd = SD_residual)
   
   outcome_rnd <- get_batch_data(
@@ -32,13 +32,21 @@ simulate <- function(
     b0, b1, b2
   ) + residual
 
-
   c(
     p_rnd_no_control = get_p_value_treatment(N, outcome_rnd, treatment, batches_rnd, FALSE),
     p_rnd_control = get_p_value_treatment(N, outcome_rnd, treatment, batches_rnd, TRUE),
     p_anticlust_no_control = get_p_value_treatment(N, outcome_anticlust, treatment, batches_anticlust, FALSE),
-    p_anticlust_control = get_p_value_treatment(N, outcome_anticlust, treatment, batches_anticlust, TRUE)
+    p_anticlust_control = get_p_value_treatment(N, outcome_anticlust, treatment, batches_anticlust, TRUE),
+    cor_rnd = cor_batch_effect_treatment_effect(batches_rnd, treatment, b0, b2),
+    cor_anticlust = cor_batch_effect_treatment_effect(batches_anticlust, treatment, b0, b2)
   )
+}
+
+
+cor_batch_effect_treatment_effect <- function(batches, treatment, b0, b2) {
+  batch_effect <- c(categories_to_binary(batches) %*% b0)
+  treatment_effect <- treatment * b2
+  cor(batch_effect, treatment_effect)
 }
 
 get_p_value_treatment <- function(N, outcome, treatment, batches, statistical_adjustment)  {
