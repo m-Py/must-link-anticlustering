@@ -17,29 +17,31 @@ library(anticlust) # for anticlustering
 library(afex) # for 2-way ANOVA
 library(prmisc) # for formatting a p value. 
 library(here)
+library(parallel)
 
-source(here("comparison_stat_control", "helper_functions.R")) # functions that implement the data generating process + statistical control
-source(here("comparison_stat_control", "simulation_function.R"))
+source(here("comparison_stat_control", "simulation_function.R")) # functions that implement the data generating process + statistical control
+cl <- makeCluster(getOption("cl.cores", 2))
 
 # set.seed(123)
-nsim <- 1000
+nsim <- 100
 start <- Sys.time()
-results <- replicate(
-  nsim, 
-  simulate(
-    N = 200,  # number of samples
-    K = 20,   # number of batches. Seems that anticlustering improves inferences for smaller batches (i.e., more batches with constant N)
-    M = 1,    # number of covariates
-    P = 2,    # number of class per covariate
-    scale_batch_effect = 10,  # relative effect of batches. Must be somewhat large (e.g., >= 10). 
-    treatment_effect = 1,     # effect size of a treatment (0 = null effect; check for alpha errors)
-    #(note that these effect sizes are not really comparable in their magnitude; 
-    # they are differently related to the regression that creates the data)
-    # scale_batch_effect is useful to obtain a discrepancy in power between adjusted and unadjusted analysis
-    SD_residual = 2, # residual error SD
-    prob_treatment = .5, # case / control has the same probability with prob_treatment = .5
-    adjustment_method = "lm"
-  )
+results <- parLapply(
+  cl, 
+  1:nsim, 
+  simulate,
+  N = 200,  # number of samples
+  K = 10,   # number of batches. Seems that anticlustering improves inferences for smaller batches (i.e., more batches with constant N)
+  M = 1,    # number of covariates
+  P = 2,    # number of class per covariate
+  scale_batch_effect = 10,  # relative effect of batches. Must be somewhat large (e.g., >= 10). 
+  treatment_effect = 1,     # effect size of a treatment (0 = null effect; check for alpha errors)
+  #(note that these effect sizes are not really comparable in their magnitude; 
+  # they are differently related to the regression that creates the data)
+  # scale_batch_effect is useful to obtain a discrepancy in power between adjusted and unadjusted analysis
+  SD_residual = 2, # residual error SD
+  prob_treatment = .5, # case / control has the same probability with prob_treatment = .5
+  adjustment_method = "lm", # insert some test cases that illustrate equivalence lm / afex; lm much faster
+  path_functions = here("comparison_stat_control", "helper_functions.R")
 )
 Sys.time() - start
 
@@ -48,7 +50,8 @@ cors <- results[grepl("cor_", row.names(results)), ]
 
 # overall power per method:
 sort(rowMeans(pvalues < .05)) |> round(2)
-t(apply(cors, 1, range))
+t(apply(cors, 1, range)) # this one is more relevant!
+
 
 cat("For adjusted analysis: p value of anticlustering was lower (=better) in ", 
     mean(results["p_anticlust_control", ] < results["p_rnd_control", ]) * 100,
@@ -63,6 +66,9 @@ cat("For unadjusted analysis: p value of anticlustering was lower (=better) in "
     format_p(prop.test(sum(results["p_anticlust_no_control", ] < results["p_rnd_no_control", ]), ncol(results), p = .50)$p.value),
     "\n"
 )
+
+# if there is no batch effect, we have the same p values for anticlustering and random assignment
+# because the treatment variable is the same.
 
 ## regression to predict power (works better for fewer batches)
 

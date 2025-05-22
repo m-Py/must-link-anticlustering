@@ -1,7 +1,7 @@
- 
-N = 200; K = 2; M = 1; P = 2;
-scale_batch_effect = 10; SD_residual = 2;
-treatment_effect = 1; prob_treatment = .5; adjustment_method = "afex";
+
+# N = 200; K = 2; M = 1; P = 2;
+# scale_batch_effect = 10; SD_residual = 2;
+# treatment_effect = 1; prob_treatment = .5; adjustment_method = "lm";
 
 simulate <- function(X, 
     N = 200, K = 20, M = 10, P = 5, 
@@ -43,4 +43,11 @@ simulate <- function(X,
     cor_rnd = cor_batch_effect_treatment_effect(batches_rnd, treatment, b0, b2),
     cor_anticlust = cor_batch_effect_treatment_effect(batches_anticlust, treatment, b0, b2)
   )
+}
+
+
+cor_batch_effect_treatment_effect <- function(batches, treatment, b0, b2) {
+  batch_effect <- c(categories_to_binary(batches) %*% b0)
+  treatment_effect <- treatment * b2
+  cor(batch_effect, treatment_effect)
 }
