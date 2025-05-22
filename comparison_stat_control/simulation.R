@@ -71,7 +71,7 @@ xlim <- range(cors["cor_rnd", ])
 plot(cors["cor_rnd", ], pvalues["p_rnd_no_control", ], xlim = xlim, pch = 2, cex = .5, col = "#ABCDEF",
      xlab = "correlation batch effect / treatment effect ", ylab = "p value")
 points(cors["cor_anticlust", ], pvalues["p_rnd_no_control", ], col = "#333333", cex = .6, pch = 4)
-legend("topright", legend = c("Random", "Anticlustering"), pch = c(2, 4), col = c("#ABCDEF", "#333333"), cex = .7)
+legend("topright", legend = c("Random Assignment", "Anticlustering"), pch = c(2, 4), col = c("#ABCDEF", "#333333"), cex = .7)
 
 
 significant <- pvalues["p_rnd_no_control", ] < .05
