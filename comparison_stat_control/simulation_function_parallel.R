@@ -1,21 +1,21 @@
 
 # N = 200; K = 2; M = 1; P = 2;
 # scale_batch_effect = 10; SD_residual = 2;
+# scale_covariate_effect = 1
 # treatment_effect = 1; prob_treatment = .5; adjustment_method = "lm";
 
 simulate_parallel <- function(X, 
     N = 200, K = 20, M = 10, P = 5, 
-    scale_batch_effect = 10, SD_residual = 2, 
-    treatment_effect = 1.2, prob_treatment = .5, 
-    adjustment_method = c("lm", "afex")) {
+    scale_batch_effect = 10, 
+    scale_covariate_effect = 1,
+    SD_residual = 2, 
+    treatment_effect = 1.2, 
+    prob_treatment = .5) {
 
   
   # LOAD LIBRARIES AND FUNCTIONS
   library(anticlust)
-  if (adjustment_method == "afex") {
-    library(afex)
-  }
-  ## DEFINE HELPER FUNCTIONS HERE
+  ## DEFINE HELPER FUNCTIONS HERE BECAUSE OTHERWISE IN PARALLEL THE CORES DO NOT HAVE THEM
   
   cor_batch_effect_treatment_effect <- function(batches, treatment, b0, b2) {
     batch_effect <- c(categories_to_binary(batches) %*% b0)
@@ -23,7 +23,7 @@ simulate_parallel <- function(X,
     cor(batch_effect, treatment_effect)
   }
   
-  get_p_value_treatment <- function(N, outcome, treatment, batches, statistical_adjustment, adjustment_method)  {
+  get_p_value_treatment <- function(N, outcome, treatment, batches, statistical_adjustment)  {
     
     dat <- data.frame(
       id = 1:N, 
@@ -32,31 +32,13 @@ simulate_parallel <- function(X,
       batch = as.factor(batches)
     )
     
-    if (statistical_adjustment && adjustment_method == "afex") {
-      pvalue <- suppressMessages(aov_ez(
-        id = "id",
-        dv = "outcome", 
-        between = "treatment",
-        covariate = "batch",
-        data = dat
-      ))$anova_table["treatment", "Pr(>F)"] 
-    } else if (!statistical_adjustment && adjustment_method == "afex") {
-      pvalue <- suppressMessages(aov_ez(
-        id = "id",
-        dv = "outcome", 
-        between = "treatment",
-        data = dat
-      ))$anova_table["treatment", "Pr(>F)"] 
-    } else if (statistical_adjustment && adjustment_method == "lm") {
-      pvalue <- coef(summary(lm(outcome ~ treatment + batch, data = dat)))["treatment", "Pr(>|t|)"]
-    } else if (!statistical_adjustment && adjustment_method == "lm") {
-      pvalue <- coef(summary(lm(outcome ~ treatment, data = dat)))["treatment", "Pr(>|t|)"]
-    }
-    pvalue
+    model <- "outcome ~ treatment"
+    
+    if (statistical_adjustment) {
+      model <- paste(model, "+ batch")
+    } 
+    coef(summary(lm(as.formula(model), data = dat)))["treatment", "Pr(>|t|)"]
   }
-  
-  
-  
   
   # get outcome data depending on assignment scheme; without residual error though
   # (residual is added later on output of this function for different assignments,
@@ -81,10 +63,9 @@ simulate_parallel <- function(X,
   }
   
   
-  adjustment_method <- ifelse(length(adjustment_method) == 1, adjustment_method, adjustment_method[1])
   covariates <- generate_categorical_data(N, M, P = P)
   covariates_binary <- categories_to_binary(covariates)
-  b1 <- rnorm(ncol(covariates_binary)) # effect of covariate on outcome
+  b1 <- rnorm(ncol(covariates_binary)) * scale_covariate_effect # effect of covariate on outcome
   b2 <- treatment_effect #effect of treatment on outcome
   
   batches_rnd <- sample(rep_len(1:K, N))
@@ -108,10 +89,10 @@ simulate_parallel <- function(X,
   ) + residual
 
   c(
-    p_rnd_no_control = get_p_value_treatment(N, outcome_rnd, treatment, batches_rnd, FALSE, adjustment_method),
-    p_rnd_control = get_p_value_treatment(N, outcome_rnd, treatment, batches_rnd, TRUE, adjustment_method),
-    p_anticlust_no_control = get_p_value_treatment(N, outcome_anticlust, treatment, batches_anticlust, FALSE, adjustment_method),
-    p_anticlust_control = get_p_value_treatment(N, outcome_anticlust, treatment, batches_anticlust, TRUE, adjustment_method),
+    p_rnd_no_control = get_p_value_treatment(N, outcome_rnd, treatment, batches_rnd, FALSE),
+    p_rnd_control = get_p_value_treatment(N, outcome_rnd, treatment, batches_rnd, TRUE),
+    p_anticlust_no_control = get_p_value_treatment(N, outcome_anticlust, treatment, batches_anticlust, FALSE),
+    p_anticlust_control = get_p_value_treatment(N, outcome_anticlust, treatment, batches_anticlust, TRUE),
     cor_rnd = cor_batch_effect_treatment_effect(batches_rnd, treatment, b0, b2),
     cor_anticlust = cor_batch_effect_treatment_effect(batches_anticlust, treatment, b0, b2)
   )

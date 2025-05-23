@@ -14,13 +14,16 @@
 # as implemented in the afex package 
 
 library(anticlust) # for anticlustering
-library(afex) # for 2-way ANOVA
 library(prmisc) # for formatting a p value. 
 library(here)
 library(parallel)
 
 source(here("comparison_stat_control", "simulation_function_parallel.R")) # functions that implement the data generating process + statistical control
-cl <- makeCluster(getOption("cl.cores", 4))
+
+# only create cluster object once at the start to not confuse the computer
+if (!"cl" %in% ls()) {
+  cl <- makeCluster(getOption("cl.cores", min(4, detectCores() - 1))) # leave 2 cores alone
+}
 
 # set.seed(123)
 nsim <- 1000
@@ -30,17 +33,17 @@ results <- parSapply(
   1:nsim, 
   simulate_parallel,
   N = 200,  # number of samples
-  K = 10,   # number of batches. Seems that anticlustering improves inferences for smaller batches (i.e., more batches with constant N)
+  K = 20,   # number of batches. Seems that anticlustering improves inferences for smaller batches (i.e., more batches with constant N)
   M = 1,    # number of covariates
   P = 2,    # number of class per covariate
-  scale_batch_effect = 10,  # relative effect of batches. Must be somewhat large (e.g., >= 10). 
+  scale_covariate_effect = 1, # relative effect of covariate on outcome
+  scale_batch_effect = 10,  # relative effect of batches. Must be somewhat large to see effect of stat. control (e.g., >= 10). 
   treatment_effect = 1,     # effect size of a treatment (0 = null effect; check for alpha errors)
   #(note that these effect sizes are not really comparable in their magnitude; 
   # they are differently related to the regression that creates the data)
   # scale_batch_effect is useful to obtain a discrepancy in power between adjusted and unadjusted analysis
   SD_residual = 2, # residual error SD
-  prob_treatment = .5, # case / control has the same probability with prob_treatment = .5
-  adjustment_method = "lm" # insert some test cases that illustrate equivalence lm / afex; lm much faster
+  prob_treatment = .5 # case / control has the same probability with prob_treatment = .5
 )
 Sys.time() - start
 
