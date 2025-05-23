@@ -2,7 +2,7 @@
 # N = 200; K = 2; M = 1; P = 2;
 # scale_batch_effect = 10; SD_residual = 2;
 # scale_covariate_effect = 1
-# treatment_effect = 1; prob_treatment = .5; adjustment_method = "lm";
+# treatment_effect = 1; prob_treatment = .5
 
 simulate_parallel <- function(X, 
     N = 200, K = 20, M = 10, P = 5, 
@@ -10,7 +10,8 @@ simulate_parallel <- function(X,
     scale_covariate_effect = 1,
     SD_residual = 2, 
     treatment_effect = 1.2, 
-    prob_treatment = .5) {
+    prob_treatment = .5, 
+    adjust_for_covariate = FALSE) {
 
   
   # LOAD LIBRARIES AND FUNCTIONS
@@ -23,13 +24,16 @@ simulate_parallel <- function(X,
     cor(batch_effect, treatment_effect)
   }
   
-  get_p_value_treatment <- function(N, outcome, treatment, batches, statistical_adjustment)  {
+  get_p_value_treatment <- function(N, outcome, treatment, batches, covariates, statistical_adjustment, adjust_for_covariate)  {
+
+    stopifnot(class(covariates[, 1]) == "factor")
     
     dat <- data.frame(
       id = 1:N, 
       outcome = outcome,
       treatment = treatment,
-      batch = as.factor(batches)
+      batch = as.factor(batches),
+      covariates
     )
     
     model <- "outcome ~ treatment"
@@ -37,6 +41,10 @@ simulate_parallel <- function(X,
     if (statistical_adjustment) {
       model <- paste(model, "+ batch")
     } 
+    
+    if (adjust_for_covariate) {
+      model <- paste(model, "+", colnames(covariates))
+    }
     coef(summary(lm(as.formula(model), data = dat)))["treatment", "Pr(>|t|)"]
   }
   
@@ -89,10 +97,10 @@ simulate_parallel <- function(X,
   ) + residual
 
   c(
-    p_rnd_no_control = get_p_value_treatment(N, outcome_rnd, treatment, batches_rnd, FALSE),
-    p_rnd_control = get_p_value_treatment(N, outcome_rnd, treatment, batches_rnd, TRUE),
-    p_anticlust_no_control = get_p_value_treatment(N, outcome_anticlust, treatment, batches_anticlust, FALSE),
-    p_anticlust_control = get_p_value_treatment(N, outcome_anticlust, treatment, batches_anticlust, TRUE),
+    p_rnd_no_control = get_p_value_treatment(N, outcome_rnd, treatment, batches_rnd, covariates, FALSE, FALSE),
+    p_rnd_control = get_p_value_treatment(N, outcome_rnd, treatment, batches_rnd, covariates, TRUE, adjust_for_covariate),
+    p_anticlust_no_control = get_p_value_treatment(N, outcome_anticlust, treatment, batches_anticlust, covariates, FALSE, FALSE),
+    p_anticlust_control = get_p_value_treatment(N, outcome_anticlust, treatment, batches_anticlust, covariates, TRUE, adjust_for_covariate),
     cor_rnd = cor_batch_effect_treatment_effect(batches_rnd, treatment, b0, b2),
     cor_anticlust = cor_batch_effect_treatment_effect(batches_anticlust, treatment, b0, b2)
   )

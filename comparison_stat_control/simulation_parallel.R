@@ -11,14 +11,14 @@
 # For statistical control, we use 2-way ANOVA (see NYGAARD et al., 2016; 
 # "Methods that remove batch effects while retaining group differences 
 # may lead to exaggerated confidence in downstream analyses"),
-# as implemented in the afex package 
+# Here, it is equivalent to simply using lm() (because we only use additive effects).
 
 library(anticlust) # for anticlustering
 library(prmisc) # for formatting a p value. 
 library(here)
 library(parallel)
-
-source(here("comparison_stat_control", "simulation_function_parallel.R")) # functions that implement the data generating process + statistical control
+# functions that implement the data generating process + statistical control
+source(here("comparison_stat_control", "simulation_function_parallel.R")) 
 
 # only create cluster object once at the start to not confuse the computer
 if (!"cl" %in% ls()) {
@@ -43,7 +43,8 @@ results <- parSapply(
   # they are differently related to the regression that creates the data)
   # scale_batch_effect is useful to obtain a discrepancy in power between adjusted and unadjusted analysis
   SD_residual = 2, # residual error SD
-  prob_treatment = .5 # case / control has the same probability with prob_treatment = .5
+  prob_treatment = .5, # case / control has the same probability with prob_treatment = .5
+  adjust_for_covariate = TRUE
 )
 Sys.time() - start
 
@@ -54,6 +55,8 @@ cors <- results[grepl("cor_", row.names(results)), ]
 sort(rowMeans(pvalues < .05)) |> round(2)
 t(apply(cors, 1, range)) # this one is more relevant!
 
+## If we have a bunch of covariates that are not strongly related to the outcome, 
+# stat. control is not good (i.e., controlling for the covariates)
 
 cat("For adjusted analysis: p value of anticlustering was lower (=better) in ", 
     mean(results["p_anticlust_control", ] < results["p_rnd_control", ]) * 100,
