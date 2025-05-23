@@ -2,7 +2,8 @@
 # N = 200; K = 2; M = 1; P = 2;
 # scale_batch_effect = 10; SD_residual = 2;
 # scale_covariate_effect = 1
-# treatment_effect = 1; prob_treatment = .5
+# treatment_effect = 0; prob_treatment = .5
+# adjust_for_covariate = FALSE
 
 simulate_parallel <- function(X, 
     N = 200, K = 20, M = 10, P = 5, 
@@ -83,6 +84,8 @@ simulate_parallel <- function(X,
   b0 <- sample(((1:K) / K) * scale_batch_effect)
   residual <- rnorm(N, sd = SD_residual)
   
+  batches_confounded <- balanced_clustering(treatment, K = K)
+  
   outcome_rnd <- get_batch_data(
     N, batches_rnd, 
     treatment, 
@@ -95,20 +98,28 @@ simulate_parallel <- function(X,
     covariates_binary, 
     b0, b1, b2
   ) + residual
+  outcome_confound <- get_batch_data(
+    N, batches_confounded, 
+    treatment, 
+    covariates_binary, 
+    b0, b1, b2
+  ) + residual
 
   c(
     p_rnd_no_control = get_p_value_treatment(N, outcome_rnd, treatment, batches_rnd, covariates, FALSE, FALSE),
     p_rnd_control = get_p_value_treatment(N, outcome_rnd, treatment, batches_rnd, covariates, TRUE, adjust_for_covariate),
     p_anticlust_no_control = get_p_value_treatment(N, outcome_anticlust, treatment, batches_anticlust, covariates, FALSE, FALSE),
     p_anticlust_control = get_p_value_treatment(N, outcome_anticlust, treatment, batches_anticlust, covariates, TRUE, adjust_for_covariate),
+    p_confound_no_control = get_p_value_treatment(N, outcome_confound, treatment, batches_confounded, covariates, FALSE, FALSE),
+    p_confound_control = get_p_value_treatment(N, outcome_confound, treatment, batches_confounded, covariates, TRUE, adjust_for_covariate),
     cor_rnd = cor_batch_effect_treatment_effect(batches_rnd, treatment, b0, b2),
-    cor_anticlust = cor_batch_effect_treatment_effect(batches_anticlust, treatment, b0, b2)
+    cor_anticlust = cor_batch_effect_treatment_effect(batches_anticlust, treatment, b0, b2),
+    cor_confound = cor_batch_effect_treatment_effect(batches_confounded, treatment, b0, b2),
+    bias_rnd =  chisq.test(batches_rnd, treatment)$p.value,
+    bias_anticlust = chisq.test(batches_anticlust, treatment)$p.value,
+    bias_confound = chisq.test(batches_confounded, treatment)$p.value
   )
 }
 
 
-cor_batch_effect_treatment_effect <- function(batches, treatment, b0, b2) {
-  batch_effect <- c(categories_to_binary(batches) %*% b0)
-  treatment_effect <- treatment * b2
-  cor(batch_effect, treatment_effect)
-}
+

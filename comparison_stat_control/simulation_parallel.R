@@ -34,10 +34,10 @@ results <- parSapply(
   simulate_parallel,
   N = 200,  # number of samples
   K = 20,   # number of batches. Seems that anticlustering improves inferences for smaller batches (i.e., more batches with constant N)
-  M = 10,    # number of covariates
+  M = 1,    # number of covariates
   P = 2,    # number of class per covariate
-  scale_covariate_effect = 0, # relative effect of covariate on outcome
-  scale_batch_effect = 0,  # relative effect of batches. Must be somewhat large to see effect of stat. control (e.g., >= 10). 
+  scale_covariate_effect = 1, # relative effect of covariate on outcome
+  scale_batch_effect = 10,  # relative effect of batches. Must be somewhat large to see effect of stat. control (e.g., >= 10). 
   treatment_effect = 1,     # effect size of a treatment (0 = null effect; check for alpha errors)
   #(note that these effect sizes are not really comparable in their magnitude; 
   # they are differently related to the regression that creates the data)
@@ -50,10 +50,16 @@ Sys.time() - start
 
 pvalues <- results[grepl("p_", row.names(results)), ]
 cors <- results[grepl("cor_", row.names(results)), ]
+biases <- results[grepl("bias_", row.names(results)), ]
 
 # overall power per method:
 sort(rowMeans(pvalues < .05)) |> round(2)
 t(apply(cors, 1, range)) # this one is more relevant!
+
+# confound can also lower power if analysis controls for batch effects
+
+# (if treatment effect = 0) test if alpha error rate of controlled analysis is enhanced for confounded assignment
+prop.test(sum(pvalues["p_confound_control", ] < 0.05), ncol(results), p = .05) # alpha error level is enhanced!
 
 ## If we have a bunch of covariates that are not strongly related to the outcome, 
 # stat. control is not necessarily good (i.e., controlling for the covariates)
@@ -82,16 +88,42 @@ cat("For unadjusted analysis: p value of anticlustering was lower (=better) in "
 
 ## maybe do implement confounding condition
 
-xlim <- range(cors["cor_rnd", ])
-plot(cors["cor_rnd", ], pvalues["p_rnd_no_control", ], xlim = xlim, pch = 2, cex = .5, col = "#ABCDEF",
-     xlab = "correlation batch effect / treatment effect ", ylab = "p value")
-points(cors["cor_anticlust", ], pvalues["p_rnd_no_control", ], col = "#333333", cex = .6, pch = 4)
-legend("topright", legend = c("Random Assignment", "Anticlustering"), pch = c(2, 4), col = c("#ABCDEF", "#333333"), cex = .7)
+plot_stuff <- function(cor_rnd, cor_anticlust, cor_confound, p_rnd, p_anticlust, p_confounded,
+                       xlab = "correlation batch effect / treatment effect", ylab = "p value") {
+  xlim <- range(cor_confound, cor_anticlust, cor_confound)
+  plot(cor_rnd, p_rnd, xlim = xlim, pch = 2, cex = .5, col = "#ABCDEF",
+       xlab = xlab, ylab = ylab)
+  points(cor_anticlust, p_anticlust, col = "#333333", cex = .6, pch = 4)
+  points(cor_confound, p_confounded, col = "#f0f", cex = .6, pch = 4)
+  legend("topright", legend = c("Random Assignment", "Anticlustering", "Confounded Assignment"), 
+         pch = c(2, 4), col = c("#ABCDEF", "#333333", "#f0f"), cex = .7)
+}
 
+
+plot_stuff(
+  cors["cor_rnd", ], cors["cor_anticlust", ], cors["cor_confound", ],
+  pvalues["p_rnd_no_control", ], pvalues["p_anticlust_no_control", ], pvalues["p_confound_no_control", ]
+)
+
+plot_stuff(
+  cors["cor_rnd", ], cors["cor_anticlust", ], cors["cor_confound", ],
+  pvalues["p_rnd_control", ], pvalues["p_anticlust_control", ], pvalues["p_confound_control", ]
+)
+## using bias values
+plot_stuff(
+  biases["bias_rnd", ], biases["bias_anticlust", ], biases["bias_confound", ],
+  pvalues["p_rnd_no_control", ], pvalues["p_anticlust_no_control", ], pvalues["p_confound_no_control", ],
+  xlab = "Batch balance"
+)
+
+plot_stuff(
+  biases["bias_rnd", ], biases["bias_anticlust", ], biases["bias_confound", ],
+  pvalues["p_rnd_control", ], pvalues["p_anticlust_control", ], pvalues["p_confound_control", ],
+  xlab = "Batch balance"
+)
 
 significant <- pvalues["p_rnd_no_control", ] < .05
 summary(glm(significant ~ cors["cor_rnd", ], family = binomial()))
 
 cor.test(pvalues["p_rnd_no_control", ], cors["cor_rnd", ])
 cor.test(cors["cor_anticlust", ], pvalues["p_anticlust_no_control", ])
-
