@@ -19,16 +19,16 @@ library(prmisc) # for formatting a p value.
 library(here)
 library(parallel)
 
-source(here("comparison_stat_control", "simulation_function.R")) # functions that implement the data generating process + statistical control
-cl <- makeCluster(getOption("cl.cores", 2))
+source(here("comparison_stat_control", "simulation_function_parallel.R")) # functions that implement the data generating process + statistical control
+cl <- makeCluster(getOption("cl.cores", 4))
 
 # set.seed(123)
-nsim <- 100
+nsim <- 1000
 start <- Sys.time()
-results <- parLapply(
+results <- parSapply(
   cl, 
   1:nsim, 
-  simulate,
+  simulate_parallel,
   N = 200,  # number of samples
   K = 10,   # number of batches. Seems that anticlustering improves inferences for smaller batches (i.e., more batches with constant N)
   M = 1,    # number of covariates
@@ -40,8 +40,7 @@ results <- parLapply(
   # scale_batch_effect is useful to obtain a discrepancy in power between adjusted and unadjusted analysis
   SD_residual = 2, # residual error SD
   prob_treatment = .5, # case / control has the same probability with prob_treatment = .5
-  adjustment_method = "lm", # insert some test cases that illustrate equivalence lm / afex; lm much faster
-  path_functions = here("comparison_stat_control", "helper_functions.R")
+  adjustment_method = "lm" # insert some test cases that illustrate equivalence lm / afex; lm much faster
 )
 Sys.time() - start
 
