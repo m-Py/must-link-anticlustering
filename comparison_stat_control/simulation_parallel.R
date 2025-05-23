@@ -34,10 +34,10 @@ results <- parSapply(
   simulate_parallel,
   N = 200,  # number of samples
   K = 20,   # number of batches. Seems that anticlustering improves inferences for smaller batches (i.e., more batches with constant N)
-  M = 1,    # number of covariates
+  M = 10,    # number of covariates
   P = 2,    # number of class per covariate
-  scale_covariate_effect = 1, # relative effect of covariate on outcome
-  scale_batch_effect = 10,  # relative effect of batches. Must be somewhat large to see effect of stat. control (e.g., >= 10). 
+  scale_covariate_effect = 0, # relative effect of covariate on outcome
+  scale_batch_effect = 0,  # relative effect of batches. Must be somewhat large to see effect of stat. control (e.g., >= 10). 
   treatment_effect = 1,     # effect size of a treatment (0 = null effect; check for alpha errors)
   #(note that these effect sizes are not really comparable in their magnitude; 
   # they are differently related to the regression that creates the data)
@@ -56,7 +56,10 @@ sort(rowMeans(pvalues < .05)) |> round(2)
 t(apply(cors, 1, range)) # this one is more relevant!
 
 ## If we have a bunch of covariates that are not strongly related to the outcome, 
-# stat. control is not good (i.e., controlling for the covariates)
+# stat. control is not necessarily good (i.e., controlling for the covariates)
+## (e.g., in simulation set covariate effect = 0 and batch effect = 0; use 
+# several covariates of them). Then anticlustering is still useful to prevent
+# a reduction in power.
 
 cat("For adjusted analysis: p value of anticlustering was lower (=better) in ", 
     mean(results["p_anticlust_control", ] < results["p_rnd_control", ]) * 100,
