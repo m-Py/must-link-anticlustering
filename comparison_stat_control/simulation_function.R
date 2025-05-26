@@ -6,14 +6,18 @@
 # adjust_for_covariate = FALSE
 
 simulate_parallel <- function(X, 
-    N = 200, K = 20, M = 10, P = 5, 
-    scale_batch_effect = 10, 
+    K = 20, scale_batch_effect = 10, 
     scale_covariate_effect = 1,
     SD_residual = 2, 
     treatment_effect = 1.2, 
     prob_treatment = .5, 
     adjust_for_covariate = FALSE) {
 
+  # Set variables that randomly vary
+  sample_sizes <- 40:400
+  N <- sample(sample_sizes[sample_sizes %% K == 0], 1) 
+  M  <- sample(1:5, size = 1)
+  P <- sample(2:5, size = 1)
   
   # LOAD LIBRARIES AND FUNCTIONS
   library(anticlust)
@@ -124,9 +128,9 @@ simulate_parallel <- function(X,
     cor_rnd = ifelse(treatment_effect > 0, cor_batch_effect_treatment_effect(batches_rnd, treatment, b0, b2), NA),
     cor_anticlust = ifelse(treatment_effect > 0, cor_batch_effect_treatment_effect(batches_anticlust, treatment, b0, b2), NA),
     cor_confound = ifelse(treatment_effect > 0, cor_batch_effect_treatment_effect(batches_confounded, treatment, b0, b2), NA),
-    bias_rnd =  chisq.test(batches_rnd, treatment)$p.value,
-    bias_anticlust = chisq.test(batches_anticlust, treatment)$p.value,
-    bias_confound = chisq.test(batches_confounded, treatment)$p.value
+    balance_rnd =  chisq.test(batches_rnd, treatment)$p.value,
+    balance_anticlust = chisq.test(batches_anticlust, treatment)$p.value,
+    balance_confound = chisq.test(batches_confounded, treatment)$p.value
   )
 }
 
