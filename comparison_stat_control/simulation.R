@@ -40,16 +40,19 @@ source(here("comparison_stat_control", "simulation_function.R"))
 
 # only create cluster object once at the start to not confuse the computer
 if (!"cl" %in% ls()) {
-  cl <- makeCluster(getOption("cl.cores", min(12, detectCores() - 2))) # ue 8 if possible but always leave 2 cores alone;
+  cl <- makeCluster(getOption("cl.cores", min(12, detectCores() - 2))) # use 12 if possible but always leave 2 cores alone;
 }
 
 conditions <- expand.grid(
   scale_batch_effect = c(2, 10),
+  scale_covariate_effect = c(0, 1, 10),
+  M = c(1, 5),
   treatment_effect = c(0, 1, 1.5, 2),
   adjust_for_covariate =  TRUE,
   K = c(2, 5, 10, 20), 
   prob_treatment = c(.50)
 )
+nrow(conditions)
 
 nsim <- 5000 # number of repetitions per simulation conditions
 
@@ -60,7 +63,8 @@ for (i in 1:nrow(conditions)) {
     1:nsim, 
     simulate_parallel,
     K = conditions[i, "K"],   # number of batches.
-    scale_covariate_effect = 1, # relative effect of covariate on outcome
+    M = conditions[i, "M"],
+    scale_covariate_effect = conditions[i, "scale_covariate_effect"], # relative effect of covariate on outcome
     scale_batch_effect = conditions[i, "scale_batch_effect"], # relative effect of batches. Must be somewhat large to see effect of stat. control. 
     treatment_effect = conditions[i, "treatment_effect"],     # effect size of a treatment (0 = null effect; check for alpha errors)
     #(note that these effect sizes are not really comparable in their magnitude; 

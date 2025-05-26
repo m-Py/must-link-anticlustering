@@ -6,7 +6,7 @@
 # adjust_for_covariate = FALSE
 
 simulate_parallel <- function(X, 
-    K = 20, scale_batch_effect = 10, 
+    K = 20, M = 1, scale_batch_effect = 10, 
     scale_covariate_effect = 1,
     SD_residual = 2, 
     treatment_effect = 1.2, 
@@ -16,8 +16,7 @@ simulate_parallel <- function(X,
   # Set variables that randomly vary
   sample_sizes <- 40:400
   N <- sample(sample_sizes[sample_sizes %% K == 0], 1) 
-  M  <- 1
-  P <- 2
+  P <- 2 # number of classes per covariate
   
   # LOAD LIBRARIES AND FUNCTIONS
   library(anticlust)
