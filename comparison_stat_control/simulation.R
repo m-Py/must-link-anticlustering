@@ -8,6 +8,24 @@
 #  b2 = Effect of treatment, T = treatment (1 / 0)
 #  e = residual error
 
+# Simulation uses the following design: Some factors are crossed, other variables randomly vary
+
+# Factors: 
+# - Effect size treatment: 0, 0.5, 1, 1.5, 2
+# - "Effect size" (scaling factor) batches: "none" (0), "small" (2), "substantial" (10)
+# - Number of batches: 2, 5, 10, 20
+# - Adjust for covariates: "Yes" (analysis adjusts for other covariates) "No" (analysis does not adjust for other covariates)
+
+# Fixed: 
+# - Residual error SD = 2
+# - Covariate Effect (scaling factor) = 1
+# - Probability that treatment is received = 0.5
+
+# Randomly varies: 
+# - sample_sizes <- 50:500; N <- sample(sample_sizes[sample_sizes %% K == 0], 1) # sample size
+# - Number of additional covariates (M  <- sample(2:5, size = 1)) 
+# - Number of categories in covariates (P <- sample(2:5, size = 1))
+
 # For statistical control, we use 2-way ANOVA (see NYGAARD et al., 2016; 
 # "Methods that remove batch effects while retaining group differences 
 # may lead to exaggerated confidence in downstream analyses"),
@@ -48,18 +66,29 @@ results <- parSapply(
 )
 Sys.time() - start
 
-pvalues <- results[grepl("p_", row.names(results)), ]
-cors <- results[grepl("cor_", row.names(results)), ]
-biases <- results[grepl("bias_", row.names(results)), ]
+results <- as.data.frame(t(results))
+
+
+write.table(
+  results,
+  file = here("Simulation_2", "results_bils.csv"),
+  append = results_file_exists,
+  col.names = !results_file_exists,
+  row.names = FALSE,
+  quote = FALSE,
+  sep = ";"
+)
+
+pvalues <- results[, grepl("p_", colnames(results))]
+cors <- results[, grepl("cor_", colnames(results))]
+biases <- results[, grepl("bias_", colnames(results))]
 
 # overall power per method:
-sort(rowMeans(pvalues < .05)) |> round(2)
-t(apply(cors, 1, range)) # this one is more relevant!
+sort(colMeans(pvalues < .05)) |> round(2)
+t(apply(cors, 2, range)) # this one is more relevant!
 
 # confound can also lower power if analysis controls for batch effects
 
-# (if treatment effect = 0) test if alpha error rate of controlled analysis is enhanced for confounded assignment
-prop.test(sum(pvalues["p_confound_control", ] < 0.05), ncol(results), p = .05) # alpha error level is enhanced!
 
 ## If we have a bunch of covariates that are not strongly related to the outcome, 
 # stat. control is not necessarily good (i.e., controlling for the covariates)
@@ -68,16 +97,16 @@ prop.test(sum(pvalues["p_confound_control", ] < 0.05), ncol(results), p = .05) #
 # a reduction in power.
 
 cat("For adjusted analysis: p value of anticlustering was lower (=better) in ", 
-    mean(results["p_anticlust_control", ] < results["p_rnd_control", ]) * 100,
+    mean(results$p_anticlust_control < results$p_rnd_control) * 100,
     "% of all cases,", 
-    format_p(prop.test(sum(results["p_anticlust_control", ] < results["p_rnd_control", ]), ncol(results), p = .50)$p.value),
+    format_p(prop.test(sum(results$p_anticlust_control < results$p_rnd_control), nrow(results), p = .50)$p.value),
     "\n"
 )
 
 cat("For unadjusted analysis: p value of anticlustering was lower (=better) in ", 
-    mean(results["p_anticlust_no_control", ] < results["p_rnd_no_control", ]) * 100,
+    mean(results$p_anticlust_no_control < results$p_rnd_no_control) * 100,
     "% of all cases,", 
-    format_p(prop.test(sum(results["p_anticlust_no_control", ] < results["p_rnd_no_control", ]), ncol(results), p = .50)$p.value),
+    format_p(prop.test(sum(results$p_anticlust_no_control < results$p_rnd_no_control), nrow(results), p = .50)$p.value),
     "\n"
 )
 
@@ -101,8 +130,8 @@ plot_stuff <- function(cor_rnd, cor_anticlust, cor_confound, p_rnd, p_anticlust,
 
 
 plot_stuff(
-  cors["cor_rnd", ], cors["cor_anticlust", ], cors["cor_confound", ],
-  pvalues["p_rnd_no_control", ], pvalues["p_anticlust_no_control", ], pvalues["p_confound_no_control", ]
+  cors$cor_rnd, cors$cor_anticlust, cors$cor_confound,
+  pvalues$p_rnd_no_control, pvalues$p_anticlust_no_control, pvalues$p_confound_no_control
 )
 
 plot_stuff(
@@ -111,19 +140,19 @@ plot_stuff(
 )
 ## using bias values
 plot_stuff(
-  biases["bias_rnd", ], biases["bias_anticlust", ], biases["bias_confound", ],
-  pvalues["p_rnd_no_control", ], pvalues["p_anticlust_no_control", ], pvalues["p_confound_no_control", ],
+  biases$bias_rnd, biases$bias_anticlust, biases$bias_confound,
+  pvalues$p_rnd_no_control, pvalues$p_anticlust_no_control, pvalues$p_confound_no_control,
   xlab = "Batch balance"
 )
 
 plot_stuff(
-  biases["bias_rnd", ], biases["bias_anticlust", ], biases["bias_confound", ],
-  pvalues["p_rnd_control", ], pvalues["p_anticlust_control", ], pvalues["p_confound_control", ],
+  biases$bias_rnd, biases$bias_anticlust, biases$bias_confound,
+  pvalues$p_rnd_control, pvalues$p_anticlust_control, pvalues$p_confound_control,
   xlab = "Batch balance"
 )
 
-significant <- pvalues["p_rnd_no_control", ] < .05
-summary(glm(significant ~ cors["cor_rnd", ], family = binomial()))
+significant <- pvalues$p_rnd_no_control < .05
+summary(glm(significant ~ cors$cor_rnd, family = binomial()))
 
-cor.test(pvalues["p_rnd_no_control", ], cors["cor_rnd", ])
-cor.test(cors["cor_anticlust", ], pvalues["p_anticlust_no_control", ])
+cor.test(pvalues$p_rnd_no_control, cors$cor_rnd)
+cor.test(cors$cor_anticlust, pvalues$p_anticlust_no_control)
