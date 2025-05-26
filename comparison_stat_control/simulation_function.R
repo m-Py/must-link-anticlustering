@@ -16,8 +16,8 @@ simulate_parallel <- function(X,
   # Set variables that randomly vary
   sample_sizes <- 40:400
   N <- sample(sample_sizes[sample_sizes %% K == 0], 1) 
-  M  <- sample(1:5, size = 1)
-  P <- sample(2:5, size = 1)
+  M  <- 1
+  P <- 2
   
   # LOAD LIBRARIES AND FUNCTIONS
   library(anticlust)

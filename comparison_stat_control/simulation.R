@@ -11,15 +11,15 @@
 # Simulation uses the following design: Some factors are crossed, other variables randomly vary
 
 # Factors: 
-# - Effect size treatment: 0, 0.5, 1, 1.5, 2
-# - "Effect size" (scaling factor) batches: "none" (0), "small" (2), "substantial" (10)
+# - Effect size treatment: 0, 1, 1.5, 2 ("none", "small", "medium", "large")
+# - "Effect size" (scaling factor) batches: "small" (2), "substantial" (10)
 # - Number of batches: 2, 5, 10, 20
-# - Adjust for covariates: "Yes" (analysis adjusts for other covariates) "No" (analysis does not adjust for other covariates)
 
 # Fixed: 
 # - Residual error SD = 2
 # - Covariate Effect (scaling factor) = 1
 # - Probability that treatment is received = 0.5
+# - Adjust for covariates: "Yes"
 
 # Randomly varies: 
 # - sample_sizes <- 40:400; N <- sample(sample_sizes[sample_sizes %% K == 0], 1) # sample size
@@ -40,18 +40,18 @@ source(here("comparison_stat_control", "simulation_function.R"))
 
 # only create cluster object once at the start to not confuse the computer
 if (!"cl" %in% ls()) {
-  cl <- makeCluster(getOption("cl.cores", min(8, detectCores() - 2))) # ue 8 if possible but always leave 2 cores alone;
+  cl <- makeCluster(getOption("cl.cores", min(12, detectCores() - 2))) # ue 8 if possible but always leave 2 cores alone;
 }
 
 conditions <- expand.grid(
-  scale_batch_effect = c(0, 2, 10),
-  treatment_effect = seq(0, 2, .5), 
-  adjust_for_covariate = c(TRUE, FALSE),
+  scale_batch_effect = c(2, 10),
+  treatment_effect = c(0, 1, 1.5, 2),
+  adjust_for_covariate =  TRUE,
   K = c(2, 5, 10, 20), 
   prob_treatment = c(.50)
 )
 
-nsim <- 1000 # number of repetitions per simulation conditions
+nsim <- 5000 # number of repetitions per simulation conditions
 
 start <- Sys.time()
 for (i in 1:nrow(conditions)) {
