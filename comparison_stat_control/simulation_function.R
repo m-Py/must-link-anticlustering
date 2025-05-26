@@ -111,8 +111,7 @@ simulate_parallel <- function(X,
 
   c(
     ID = as.numeric(paste0(sample(0:9, size = 15, replace = TRUE), collapse = "")),
-    N = N, K = K, M = M, 
-    K = K, M = M, P = P, 
+    N = N, K = K, M = M, P = P, 
     scale_batch_effect = scale_batch_effect, 
     scale_covariate_effect = scale_covariate_effect,
     SD_residual = SD_residual, 
