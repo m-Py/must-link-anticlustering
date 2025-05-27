@@ -59,7 +59,7 @@ get.z.score <- function(ci) {
 }
 
 ldf <- df |>
-  select(ID, N, M, K, scale_batch_effect, treatment_effect, adjust_for_covariate, starts_with("p_")) |>
+  select(ID, N, K, scale_batch_effect, treatment_effect, starts_with("p_")) |>
   pivot_longer(
     cols = starts_with("p_"),
     names_prefix = "p_",
@@ -86,7 +86,6 @@ ldf$Assignment[grepl("anticlust_", ldf$Method)] <- "Anticlustering"
 ldf$Assignment[grepl("confound_", ldf$Method)] <- "Confounded"
 
 ldf$K <- factor(ldf$K)
-ldf$M <- factor(ldf$M)
 ldf$Batch_Effects <- "small batch effects"
 ldf$Batch_Effects[ldf$scale_batch_effect == 10] <- "large batch effects"
 

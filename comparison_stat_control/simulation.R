@@ -1,5 +1,5 @@
 # Small scale simulation that compares anticlustering-based assignment versus random assignment and 
-# confounded assignment. For each assignment technique, we use statistical control of batches. 
+# confounded assignment. For each assignment technique, we use statistical control of batches, or not.
 
 # Outcome (O) is modelled as:
 # O = b0*C + b1*X + b2*T + e 
@@ -12,12 +12,12 @@
 
 # Factors: 
 # - Effect size treatment: 0, 1, 1.5, 2 ("none", "small", "medium", "large")
-# - "Effect size" (scaling factor) batches: "small" (2), "substantial" (10)
+# - "Effect size" (scaling factor) batches: "small" (1), "substantial" (10)
 # - Number of batches: 2, 5, 10, 20
 
 # Fixed: 
 # - Residual error SD = 2
-# - Covariate Effect (scaling factor) = 1
+# - Covariate Effect = 1
 # - Probability that treatment is received = 0.5
 # - Adjust for covariates: "Yes"
 
@@ -44,9 +44,8 @@ if (!"cl" %in% ls()) {
 }
 
 conditions <- expand.grid(
-  scale_batch_effect = c(2, 10),
-  scale_covariate_effect = c(0, 1, 10),
-  M = c(1, 5),
+  scale_batch_effect = c(1, 10),
+  covariate_effect = c(1),
   treatment_effect = c(0, 1, 1.5, 2),
   adjust_for_covariate =  TRUE,
   K = c(2, 5, 10, 20), 
@@ -54,7 +53,7 @@ conditions <- expand.grid(
 )
 nrow(conditions)
 
-nsim <- 5000 # number of repetitions per simulation conditions
+nsim <- 4000 # number of repetitions per simulation conditions
 
 start <- Sys.time()
 for (i in 1:nrow(conditions)) {
@@ -63,8 +62,7 @@ for (i in 1:nrow(conditions)) {
     1:nsim, 
     simulate_parallel,
     K = conditions[i, "K"],   # number of batches.
-    M = conditions[i, "M"],
-    scale_covariate_effect = conditions[i, "scale_covariate_effect"], # relative effect of covariate on outcome
+    covariate_effect = conditions[i, "covariate_effect"], # relative effect of covariate on outcome
     scale_batch_effect = conditions[i, "scale_batch_effect"], # relative effect of batches. Must be somewhat large to see effect of stat. control. 
     treatment_effect = conditions[i, "treatment_effect"],     # effect size of a treatment (0 = null effect; check for alpha errors)
     #(note that these effect sizes are not really comparable in their magnitude; 
