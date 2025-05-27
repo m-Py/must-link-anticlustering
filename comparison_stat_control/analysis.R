@@ -68,8 +68,10 @@ ldf <- df |>
     values_to = "pvalue"
   )
 
+
+## Overall power across all conditions
 ldf |>
-  filter(treatment_effect > 0, treatment_effect < 1) |>
+  filter(treatment_effect > 0) |>
   group_by(Method) |>
   summarize(
     Power = mean(pvalue <= .05), 
@@ -77,6 +79,19 @@ ldf |>
   ) |>
   arrange(Power) |> 
   mutate(Power = prmisc::decimals_only(Power, 3))
+
+## Overall alpha error rate
+ldf |>
+  filter(treatment_effect == 0) |>
+  group_by(Method) |>
+  summarize(
+    `Alpha Error %` = mean(pvalue <= .05), 
+    `95% CI` = ci_one_prop(r = sum(pvalue <= .05), n = n()), n = papaja::printnum(n(), format = "d")
+  ) |>
+  arrange(`Alpha Error %`) |> 
+  mutate(`Alpha Error %` = prmisc::decimals_only(`Alpha Error %`, 3))
+
+## confounded assignment has increased alpha error rate, even if batches are controlled for
 
 ldf2 <- df |>
   select(ID, N, K, scale_batch_effect, interaction_effect, starts_with("p_")) |>
@@ -109,11 +124,11 @@ ldf$K <- factor(ldf$K)
 ldf$Batch_Effects <- "small batch effects"
 ldf$Batch_Effects[ldf$scale_batch_effect == 10] <- "large batch effects"
 
-# Power by batch effect and number of batches
+# Power by batch effect and number of batches, and treatment effect
 pd <- position_dodge(.05)
 ldf |>
   filter(treatment_effect > 0, !grepl("confound", Method)) |>
-  group_by(K, Method, Assignment, `Statistical Control`, Batch_Effects) |>
+  group_by(K, Method, Assignment, treatment_effect, `Statistical Control`, Batch_Effects) |>
   summarize(
     Power = mean(pvalue <= .05),
     lower = ci_one_prop(r = sum(pvalue <= .05), n = n(), return_string = FALSE)$l,
@@ -124,7 +139,7 @@ ldf |>
     aes(ymin = lower, ymax = upper, colour = Assignment, linetype = `Statistical Control`), 
     position = pd, width = .3
   ) +
-  facet_grid(cols = vars(Batch_Effects),scales = "free") +
+  facet_grid(cols = vars(Batch_Effects), rows = vars(treatment_effect), scales = "free") +
   xlab("Number of batches") +
   theme_bw(base_size = 16)+
   theme(legend.position = "top", legend.box = "vertical", legend.title = element_blank())

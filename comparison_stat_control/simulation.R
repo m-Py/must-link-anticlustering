@@ -12,7 +12,7 @@
 
 # Factors: 
 # - Effect size treatment: 0, 0.5, 1, 1.5, 2
-# - Effect size interaction covariate / treatment: 0, 1, 2 ("none", "small", "medium", "large")
+# - Effect size interaction covariate / treatment: 0, 2.5
 # - "Effect size" (scaling factor) batches: "small" (1), "substantial" (10)
 # - Number of batches: 2, 5, 10, 20
 
@@ -51,9 +51,11 @@ conditions <- expand.grid(
   K = c(2, 5, 10, 20), 
   prob_treatment = c(.50)
 )
+conditions <- conditions[!(conditions$treatment_effect == 0 & conditions$interaction_effect > 0), ]
+## do not include interaction if there is no main effect! (makes problems with analysis and is questionable assumption anyway, see publications by Rouder et al.)
 nrow(conditions)
 
-nsim <- 4000 # number of repetitions per simulation conditions
+nsim <- 5000 # number of repetitions per simulation conditions
 
 start <- Sys.time()
 for (i in 1:nrow(conditions)) {
