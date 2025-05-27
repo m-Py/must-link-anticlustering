@@ -11,11 +11,12 @@ files <- list.files(here("comparison_stat_control", "data"), full.names = TRUE)
 df <- do.call("rbind", lapply(files, read.csv, sep =";"))
 
 head(df)
+nrow(df)
 
 df1 <- df[df$treatment_effect > 0, ]
 df0 <- df[df$treatment_effect == 0, ]
 
-mean(df1$p_anticlust_control < df1$p_rnd_control)
+mean(df1$p_treatment_anticlust_control < df1$p_treatment_rnd_control)
 
 plot_stuff <- function(cor_rnd, p_rnd, cor_anticlust, p_anticlust, cor_confound=NULL, p_confounded=NULL,
                        xlab = "correlation batch effect / treatment effect", ylab = "p value") {
@@ -35,10 +36,10 @@ plot_stuff <- function(cor_rnd, p_rnd, cor_anticlust, p_anticlust, cor_confound=
 }
 
 
-# plot_stuff(
-#   df1$cor_rnd, df1$p_rnd_no_control, 
-#   df1$cor_anticlust, df1$p_anticlust_no_control
-# )
+plot_stuff(
+  df1$cor_rnd, df1$p_treatment_rnd_no_control,
+  df1$cor_anticlust, df1$p_treatment_anticlust_no_control
+)
 
 # We have a function that compute confidence interval for power. Use Method 3 from
 # Newcombe, R. G. (1998). Two‐sided confidence intervals for the single proportion:
@@ -59,16 +60,35 @@ get.z.score <- function(ci) {
 }
 
 ldf <- df |>
-  select(ID, N, K, scale_batch_effect, treatment_effect, starts_with("p_")) |>
+  select(ID, N, K, scale_batch_effect, treatment_effect, interaction_effect, starts_with("p_")) |>
   pivot_longer(
-    cols = starts_with("p_"),
-    names_prefix = "p_",
+    cols = starts_with("p_treatment_"),
+    names_prefix = "p_treatment_",
     names_to = "Method",
     values_to = "pvalue"
   )
 
 ldf |>
-  filter(treatment_effect > 0) |>
+  filter(treatment_effect > 0, treatment_effect < 1) |>
+  group_by(Method) |>
+  summarize(
+    Power = mean(pvalue <= .05), 
+    `95% CI` = ci_one_prop(r = sum(pvalue <= .05), n = n()), n = papaja::printnum(n(), format = "d")
+  ) |>
+  arrange(Power) |> 
+  mutate(Power = prmisc::decimals_only(Power, 3))
+
+ldf2 <- df |>
+  select(ID, N, K, scale_batch_effect, interaction_effect, starts_with("p_")) |>
+  pivot_longer(
+    cols = starts_with("p_interaction_"),
+    names_prefix = "p_interaction_",
+    names_to = "Method",
+    values_to = "pvalue"
+  )
+
+ldf2 |>
+  filter(interaction_effect > 0) |>
   group_by(Method) |>
   summarize(
     Power = mean(pvalue <= .05), 
@@ -113,29 +133,9 @@ ldf |>
 # Interesting: With considerable batch effects, anticlustering is even advantageous for unadjusted analysis
 
 
-# Power by N
-ldf$N_category <- santoku::chop(ldf$N, breaks = c(100, 300))
-ldf |>
-  filter(treatment_effect > 0, !grepl("confound", Method)) |>
-  group_by(N_category, Method, Assignment, `Statistical Control`, Batch_Effects) |>
-  summarize(
-    Power = mean(pvalue <= .05),
-    lower = ci_one_prop(r = sum(pvalue <= .05), n = n(), return_string = FALSE)$l,
-    upper = ci_one_prop(r = sum(pvalue <= .05), n = n(), return_string = FALSE)$u) |>
-  ggplot(aes(x = N_category, y = Power, colour = Method)) +
-  geom_point(aes(color = Assignment, shape = `Statistical Control`), position = pd, size = 2) +
-  geom_errorbar(
-    aes(ymin = lower, ymax = upper, colour = Assignment, linetype = `Statistical Control`), 
-    position = pd, width = .3
-  ) +
-  facet_grid(cols = vars(Batch_Effects), scales = "free") +
-  xlab("Number of samples (categorized)") +
-  theme_bw(base_size = 16)+
-  theme(legend.position = "top", legend.box = "vertical", legend.title = element_blank())
-# scale_color_manual(values = c(color_anticlust, color_minimization, color_rnd))
-
 
 # Power by N and K and batch effects
+ldf$N_category <- santoku::chop(ldf$N, breaks = c(100, 300))
 ldf$N_category <- ordered(ldf$N_category, levels = levels(ldf$N_category), labels = paste0("N = ", levels(ldf$N_category)))
 ldf |>
   filter(treatment_effect > 0, !grepl("confound", Method)) |>
@@ -157,4 +157,42 @@ ldf |>
 # scale_color_manual(values = c(color_anticlust, color_minimization, color_rnd))
 
 
+
+
+
+### interaction
+
+
+ldf2$`Statistical Control` <- "unadjusted analysis"
+ldf2$`Statistical Control`[!grepl("no_control", ldf2$Method)] <- "adjusted analysis"
+
+ldf2$Assignment <- "Random Assignment"
+ldf2$Assignment[grepl("anticlust_", ldf2$Method)] <- "Anticlustering"
+ldf2$Assignment[grepl("confound_", ldf2$Method)] <- "Confounded"
+
+ldf2$K <- factor(ldf2$K)
+ldf2$Batch_Effects <- "small batch effects"
+ldf2$Batch_Effects[ldf2$scale_batch_effect == 10] <- "large batch effects"
+
+ldf2$N_category <- santoku::chop(ldf$N, breaks = c(100, 300))
+
+
+ldf2 |>
+  filter(interaction_effect > 0, !grepl("confound", Method)) |>
+  group_by(K, Method, Assignment, `Statistical Control`, Batch_Effects) |>
+  summarize(
+    Power = mean(pvalue <= .05),
+    lower = ci_one_prop(r = sum(pvalue <= .05), n = n(), return_string = FALSE)$l,
+    upper = ci_one_prop(r = sum(pvalue <= .05), n = n(), return_string = FALSE)$u) |>
+  ggplot(aes(x = K, y = Power, colour = Method)) +
+  geom_point(aes(color = Assignment, shape = `Statistical Control`), position = pd, size = 2) +
+  geom_errorbar(
+    aes(ymin = lower, ymax = upper, colour = Assignment, linetype = `Statistical Control`), 
+    position = pd, width = .3
+  ) +
+  facet_grid(cols = vars(Batch_Effects), scales = "free") +
+  xlab("Number of batches") +
+  ylab("Power interaction effect") +
+  theme_bw(base_size = 16)+
+  theme(legend.position = "top", legend.box = "vertical", legend.title = element_blank())
 

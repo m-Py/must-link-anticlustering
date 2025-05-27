@@ -11,20 +11,20 @@
 # Simulation uses the following design: Some factors are crossed, other variables randomly vary
 
 # Factors: 
-# - Effect size treatment: 0, 1, 1.5, 2 ("none", "small", "medium", "large")
+# - Effect size treatment: 0, 0.5, 1, 1.5, 2
+# - Effect size interaction covariate / treatment: 0, 1, 2 ("none", "small", "medium", "large")
 # - "Effect size" (scaling factor) batches: "small" (1), "substantial" (10)
 # - Number of batches: 2, 5, 10, 20
 
 # Fixed: 
 # - Residual error SD = 2
 # - Covariate Effect = 1
+# - Number of covariates = 1
+# - Number of levels in covariate = 2
 # - Probability that treatment is received = 0.5
-# - Adjust for covariates: "Yes"
 
 # Randomly varies: 
 # - sample_sizes <- 40:400; N <- sample(sample_sizes[sample_sizes %% K == 0], 1) # sample size
-# - Number of additional covariates (M  <- sample(1:5, size = 1)) 
-# - Number of categories in covariates (P <- sample(2:5, size = 1))
 
 # For statistical control, we use 2-way ANOVA (see NYGAARD et al., 2016; 
 # "Methods that remove batch effects while retaining group differences 
@@ -46,8 +46,8 @@ if (!"cl" %in% ls()) {
 conditions <- expand.grid(
   scale_batch_effect = c(1, 10),
   covariate_effect = c(1),
-  treatment_effect = c(0, 1, 1.5, 2),
-  adjust_for_covariate =  TRUE,
+  treatment_effect = c(0, 0.5, 1, 1.5),
+  interaction_effect = c(0, 2.5),
   K = c(2, 5, 10, 20), 
   prob_treatment = c(.50)
 )
@@ -65,12 +65,12 @@ for (i in 1:nrow(conditions)) {
     covariate_effect = conditions[i, "covariate_effect"], # relative effect of covariate on outcome
     scale_batch_effect = conditions[i, "scale_batch_effect"], # relative effect of batches. Must be somewhat large to see effect of stat. control. 
     treatment_effect = conditions[i, "treatment_effect"],     # effect size of a treatment (0 = null effect; check for alpha errors)
+    interaction_effect = conditions[i, "interaction_effect"],
     #(note that these effect sizes are not really comparable in their magnitude; 
     # they are differently related to the regression that creates the data)
     # scale_batch_effect is useful to obtain a discrepancy in power between adjusted and unadjusted analysis
     SD_residual = 2, # residual error SD
-    prob_treatment = conditions[i, "prob_treatment"], # case / control has the same probability with prob_treatment = .5
-    adjust_for_covariate = conditions[i, "adjust_for_covariate"]
+    prob_treatment = conditions[i, "prob_treatment"] # case / control has the same probability with prob_treatment = .5
   )
   results <- as.data.frame(t(results))
   
