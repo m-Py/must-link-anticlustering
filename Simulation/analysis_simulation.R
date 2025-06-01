@@ -14,6 +14,11 @@ tt$ID <- 1:nrow(tt) # ID that identifies a single simulation run / data set in t
 nrow(tt)
 p_values <- tt[, grepl("p_", colnames(tt))]
 
+# p values affected by dropouts?
+colMeans(tt[paste0("p_anticlust", 1:5)], na.rm = TRUE) |> round(2)
+colMeans(tt[paste0("p_anticlust_dropout", 1:5)], na.rm = TRUE) |> round(2)
+colMeans(tt[paste0("p_osat", 1:5)], na.rm = TRUE) |> round(2)
+colMeans(tt[paste0("p_ps", 1:5)], na.rm = TRUE) |> round(2)
 
 # global results OSAT vs. anticlust. How often is p value of anticlust better (i.e. larger)?
 anticlust_better <- apply(p_values, 1, function(x) x[paste0("p_anticlust", 1:5)] > x[paste0("p_osat", 1:5)])

@@ -15,10 +15,9 @@ source(here("Simulation", "functions.R")) # functions used for the simulation
 
 sessionInfo()
 
-set.seed(100) # for reproducibility; "comment" for running different data sets
-# Use 10000 data sets for final simulation. If done in one setting, should run in about 
+# Use 10000 data sets for final simulation. If done in one setting, should run in about
 # 3 days on a personal computer (mostly because PSBA is really slow).
-nsim <- 10000
+nsim <- 4800
 
 # Unfortunately, the PS implementation needs a seed. It also sets seeds 
 # repeatedly, which can easily mess with the logic of the remaining 
@@ -38,8 +37,11 @@ for (i in 1:nsim) {
   
   data <- generate_categorical_data(N, M, P)
   
+  exclude <- sample(N, N * .20)
+  
   start <- Sys.time()
-  OSAT <- my_osat(
+ 
+     OSAT <- my_osat(
     data,
     K = K, 
     nSim = 5000
@@ -90,11 +92,22 @@ for (i in 1:nsim) {
   pvalues_anticlust <- rep(NA, 5)
   pvalues_anticlust2 <- rep(NA, 5)
   pvalues_ps <- rep(NA, 5)
+  pvalues_osat_dropout <- rep(NA, 5)
+  pvalues_anticlust_dropout <- rep(NA, 5)
+  pvalues_anticlust2_dropout <- rep(NA, 5)
+  pvalues_ps_dropout <- rep(NA, 5)
+  
   pvalues_osat[1:M] <- sapply(1:M, function(x) chisq.test(table(data[, x], OSAT))$p.value)
   pvalues_anticlust[1:M] <- sapply(1:M, function(x) chisq.test(table(data[, x], ANTICLUST))$p.value)
   pvalues_anticlust2[1:M] <- sapply(1:M, function(x) chisq.test(table(data[, x], ANTICLUST2))$p.value)
+  
+  pvalues_osat_dropout[1:M] <- sapply(1:M, function(x) chisq.test(table(data[-exclude, x], OSAT[-exclude]))$p.value)
+  pvalues_anticlust_dropout[1:M] <- sapply(1:M, function(x) chisq.test(table(data[-exclude, x], ANTICLUST[-exclude]))$p.value)
+  pvalues_anticlust2_dropout[1:M] <- sapply(1:M, function(x) chisq.test(table(data[-exclude, x], ANTICLUST2[-exclude]))$p.value)
+  
   if (USE_PS) {
     pvalues_ps[1:M] <- sapply(1:M, function(x) chisq.test(table(data[, x], PS))$p.value)
+    pvalues_ps_dropout[1:M] <- sapply(1:M, function(x) chisq.test(table(data[-exclude, x], PS[-exclude]))$p.value)
   }
   
   results_file <- here("Simulation", "results.csv")
@@ -109,6 +122,10 @@ for (i in 1:nsim) {
     named_1row_matrix(pvalues_anticlust, "p_anticlust"),
     named_1row_matrix(pvalues_anticlust2, "p_anticlust_c"),
     named_1row_matrix(pvalues_ps, "p_ps"),
+    named_1row_matrix(pvalues_osat_dropout, "p_osat_dropout"),
+    named_1row_matrix(pvalues_anticlust_dropout, "p_anticlust_dropout"),
+    named_1row_matrix(pvalues_anticlust2_dropout, "p_anticlust_c_dropout"),
+    named_1row_matrix(pvalues_ps_dropout, "p_ps_dropout"),
     OSAT_t = OSAT_t,
     ANTICLUST_t = ANTICLUST_t,
     ANTICLUST_t_c = ANTICLUST2_t,
