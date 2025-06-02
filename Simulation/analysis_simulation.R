@@ -67,8 +67,9 @@ runtimes <- colMeans(tt[, grepl("_t", colnames(tt))], na.rm = TRUE) |> round(2)
 ## Some more sophisticated analyes using grouping via dplyr:
 
 # Create long format data:
+
 dfl <- tt |> 
-  select(ID, N, M, K, P, starts_with("p")) |> 
+  select(ID, N, M, K, P, starts_with("p_")) |> 
   pivot_longer(
     cols = starts_with("p_")
   ) |> 
@@ -78,6 +79,9 @@ dfl$Method <- "Anticlustering"
 dfl$Method[grepl("osat", dfl$name)] <- "OSAT"
 dfl$Method[grepl("p_anticlust_c", dfl$name)] <- "Must-Link Anticlustering"
 dfl$Method[grepl("p_ps", dfl$name)] <- "Propensity Score Batch Effect"
+
+dfl$Dropout <- "no dropout"
+dfl$Dropout[grepl("dropout", dfl$name)] <- "dropout"
 
 ## Analyze data by variables
 
@@ -90,12 +94,12 @@ facets <- c(
 )
 
 dfl |> 
-  group_by(Method, M, K) |> 
+  group_by(Method, M, K, Dropout) |> 
   summarise(`p value` = mean(value)) |> 
   ggplot(aes(y = `p value`, x = M, color = Method)) +
   geom_point(aes(color = Method, shape = Method)) + 
   geom_line(aes(color = Method, linetype = Method)) +
-  facet_grid(cols = vars(`K`), labeller = as_labeller(facets))+
+  facet_grid(cols = vars(`K`), rows = vars(Dropout))+
   theme_bw(base_size = 14) +
   xlab("Number of variables") +
   ylab("Average p value")
