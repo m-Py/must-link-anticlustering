@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2024.3.25)  10 MAR 2025 11:51
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2024.3.25)  3 JUN 2025 10:49
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -279,6 +279,7 @@ Package graphics Info: Driver file: pdftex.def on input line 107.
 \Gin@req@height=\dimen176
 \Gin@req@width=\dimen177
 )
+\pandoc@box=\box61
 \cslhangindent=\skip62
 \csllabelwidth=\skip63
 (/usr/share/texlive/texmf-dist/tex/latex/multirow/multirow.sty
@@ -291,16 +292,16 @@ Package: multirow 2021/03/15 v2.8 Span multiple rows of a table
 \wrapoverhang=\dimen179
 \WF@size=\dimen180
 \c@WF@wrappedlines=\count290
-\WF@box=\box61
+\WF@box=\box62
 \WF@everypar=\toks29
 Package: wrapfig 2003/01/31  v 3.6
 ) (/usr/share/texlive/texmf-dist/tex/latex/float/float.sty
 Package: float 2001/11/08 v1.3d Float enhancements (AL)
 \c@float@type=\count291
 \float@exts=\toks30
-\float@box=\box62
+\float@box=\box63
 \@float@everytoks=\toks31
-\@floatcapt=\box63
+\@floatcapt=\box64
 ) (/usr/share/texlive/texmf-dist/tex/latex/colortbl/colortbl.sty
 Package: colortbl 2020/01/04 v1.0e Color table columns (DPC)
 \everycr=\toks32
@@ -316,7 +317,7 @@ Package: tabu 2019/01/11 v2.9 - flexible LaTeX tabulars (FC+tabu-fixed) + inter
 mediate FMi
 (/usr/share/texlive/texmf-dist/tex/latex/varwidth/varwidth.sty
 Package: varwidth 2009/03/30 ver 0.92;  Variable-width minipages
-\@vwid@box=\box64
+\@vwid@box=\box65
 \sift@deathcycles=\count292
 \@vwid@loff=\dimen181
 \@vwid@roff=\dimen182
@@ -338,14 +339,14 @@ Package: varwidth 2009/03/30 ver 0.92;  Variable-width minipages
 \tabustrutrule=\dimen191
 \tabu@thebody=\toks33
 \tabu@footnotes=\toks34
-\tabu@box=\box65
-\tabu@arstrutbox=\box66
-\tabu@hleads=\box67
-\tabu@vleads=\box68
+\tabu@box=\box66
+\tabu@arstrutbox=\box67
+\tabu@hleads=\box68
+\tabu@vleads=\box69
 \tabu@cellskip=\skip67
 ) (/usr/share/texlive/texmf-dist/tex/latex/threeparttable/threeparttable.sty
 Package: threeparttable 2003/06/13  v 3.0
-\@tempboxb=\box69
+\@tempboxb=\box70
 ) (/usr/share/texlive/texmf-dist/tex/latex/threeparttablex/threeparttablex.sty
 Package: threeparttablex 2013/07/23 v0.3 by daleif
 (/usr/share/texlive/texmf-dist/tex/latex/environ/environ.sty
@@ -355,14 +356,14 @@ Package: trimspaces 2009/09/17 v1.1 Trim spaces around a token list
 ))
 \TPTL@width=\skip68
 ) (/usr/share/texlive/texmf-dist/tex/generic/ulem/ulem.sty
-\UL@box=\box70
-\UL@hyphenbox=\box71
+\UL@box=\box71
+\UL@hyphenbox=\box72
 \UL@skip=\skip69
 \UL@hook=\toks35
 \UL@height=\dimen192
 \UL@pe=\count299
 \UL@pixel=\dimen193
-\ULC@box=\box72
+\ULC@box=\box73
 Package: ulem 2019/11/18
 \ULdepth=\dimen194
 ) (/usr/share/texlive/texmf-dist/tex/latex/makecell/makecell.sty
@@ -482,13 +483,13 @@ File: bkm-pdftex.def 2020-11-06 v1.29 bookmark driver for pdfTeX (HO)
 Package: xurl 2022/01/09 v 0.10 modify URL breaks
 )
 LaTeX Font Info:    Trying to load font information for T1+lmr on input line 13
-7.
+6.
 (/usr/share/texmf/tex/latex/lm/t1lmr.fd
 File: t1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 ) (/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2022-01-12 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count312
-\l__pdf_internal_box=\box73
+\l__pdf_internal_box=\box74
 ) (./supplementary_materials.aux
 
 LaTeX Warning: Label `tab:unnamed-chunk-4' multiply defined.
@@ -508,36 +509,36 @@ LaTeX Warning: Label `tab:unnamed-chunk-4' multiply defined.
 )
 \openout1 = `supplementary_materials.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 137.
-LaTeX Font Info:    ... okay on input line 137.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 137.
-LaTeX Font Info:    ... okay on input line 137.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 137.
-LaTeX Font Info:    ... okay on input line 137.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 137.
-LaTeX Font Info:    ... okay on input line 137.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 137.
-LaTeX Font Info:    ... okay on input line 137.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 137.
-LaTeX Font Info:    ... okay on input line 137.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 137.
-LaTeX Font Info:    ... okay on input line 137.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 137.
-LaTeX Font Info:    ... okay on input line 137.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 137.
-LaTeX Font Info:    ... okay on input line 137.
-LaTeX Info: Redefining \microtypecontext on input line 137.
-Package microtype Info: Applying patch `item' on input line 137.
-Package microtype Info: Applying patch `toc' on input line 137.
-Package microtype Info: Applying patch `eqnum' on input line 137.
-Package microtype Info: Applying patch `footnote' on input line 137.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 136.
+LaTeX Font Info:    ... okay on input line 136.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 136.
+LaTeX Font Info:    ... okay on input line 136.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 136.
+LaTeX Font Info:    ... okay on input line 136.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 136.
+LaTeX Font Info:    ... okay on input line 136.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 136.
+LaTeX Font Info:    ... okay on input line 136.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 136.
+LaTeX Font Info:    ... okay on input line 136.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 136.
+LaTeX Font Info:    ... okay on input line 136.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 136.
+LaTeX Font Info:    ... okay on input line 136.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 136.
+LaTeX Font Info:    ... okay on input line 136.
+LaTeX Info: Redefining \microtypecontext on input line 136.
+Package microtype Info: Applying patch `item' on input line 136.
+Package microtype Info: Applying patch `toc' on input line 136.
+Package microtype Info: Applying patch `eqnum' on input line 136.
+Package microtype Info: Applying patch `footnote' on input line 136.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using protrusion set `basicmath'.
 Package microtype Info: Automatic font expansion enabled (level 2),
 (microtype)             stretch: 20, shrink: 20, step: 1, non-selected.
 Package microtype Info: Using default expansion set `alltext-nott'.
-LaTeX Info: Redefining \showhyphens on input line 137.
+LaTeX Info: Redefining \showhyphens on input line 136.
 Package microtype Info: No adjustment of tracking.
 Package microtype Info: No adjustment of interword spacing.
 Package microtype Info: No adjustment of character kerning.
@@ -548,7 +549,7 @@ File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count313
 \scratchdimen=\dimen256
-\scratchbox=\box74
+\scratchbox=\box75
 \nofMPsegments=\count314
 \nofMParguments=\count315
 \everyMPshowfont=\toks37
@@ -599,7 +600,7 @@ e
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-Package hyperref Info: Link coloring OFF on input line 137.
+Package hyperref Info: Link coloring OFF on input line 136.
 (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2021-04-02 v2.47 Cross-referencing by name of section
 (/usr/share/texlive/texmf-dist/tex/latex/refcount/refcount.sty
@@ -609,43 +610,43 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
 \c@section@level=\count319
 )
-LaTeX Info: Redefining \ref on input line 137.
-LaTeX Info: Redefining \pageref on input line 137.
-LaTeX Info: Redefining \nameref on input line 137.
+LaTeX Info: Redefining \ref on input line 136.
+LaTeX Info: Redefining \pageref on input line 136.
+LaTeX Info: Redefining \nameref on input line 136.
 LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 1
-39.
+38.
 (/usr/share/texmf/tex/latex/lm/ot1lmr.fd
 File: ot1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OML+lmm on input line 1
-39.
+38.
 (/usr/share/texmf/tex/latex/lm/omllmm.fd
 File: omllmm.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 
-139.
+138.
 (/usr/share/texmf/tex/latex/lm/omslmsy.fd
 File: omslmsy.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 
-139.
+138.
 (/usr/share/texmf/tex/latex/lm/omxlmex.fd
 File: omxlmex.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <12> on input line 139.
+(Font)              <12> on input line 138.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 139.
+(Font)              <8> on input line 138.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 139.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 139
+(Font)              <6> on input line 138.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 138
 .
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 ) (/usr/share/texlive/texmf-dist/tex/latex/microtype/mt-msa.cfg
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 139
+LaTeX Font Info:    Trying to load font information for U+msb on input line 138
 .
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
@@ -653,11 +654,11 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 144.
+(Font)              <10> on input line 143.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 144.
+(Font)              <7> on input line 143.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 144.
+(Font)              <5> on input line 143.
 [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
@@ -667,78 +668,78 @@ File: supplementary_materials_files/figure-latex/Figure1-1.pdf Graphic file (ty
 pe pdf)
 <use supplementary_materials_files/figure-latex/Figure1-1.pdf>
 Package pdftex.def Info: supplementary_materials_files/figure-latex/Figure1-1.p
-df  used on input line 245.
-(pdftex.def)             Requested size: 433.63878pt x 433.63878pt.
+df  used on input line 244.
+(pdftex.def)             Requested size: 433.61894pt x 433.61894pt.
 [2] [3 <./supplementary_materials_files/figure-latex/Figure1-1.pdf>]
-Overfull \hbox (70.21754pt too wide) in paragraph at lines 316--347
+Overfull \hbox (70.21754pt too wide) in paragraph at lines 315--346
  [][] 
  []
 
 
-Overfull \hbox (70.21754pt too wide) in paragraph at lines 353--384
+Overfull \hbox (70.21754pt too wide) in paragraph at lines 352--383
  [][] 
  []
 
 [4]
-Overfull \hbox (70.21754pt too wide) in paragraph at lines 390--421
+Overfull \hbox (70.21754pt too wide) in paragraph at lines 389--420
  [][] 
  []
 
 [5]
-Overfull \hbox (70.21754pt too wide) in paragraph at lines 427--458
+Overfull \hbox (70.21754pt too wide) in paragraph at lines 426--457
  [][] 
  []
 
 [6]
-Overfull \hbox (65.77304pt too wide) in paragraph at lines 464--495
+Overfull \hbox (65.77304pt too wide) in paragraph at lines 463--494
  [][] 
  []
 
 [7]
-Overfull \hbox (70.21754pt too wide) in paragraph at lines 501--532
+Overfull \hbox (70.21754pt too wide) in paragraph at lines 500--531
  [][] 
  []
 
 [8]
 LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 5
-69.
+71.
 (/usr/share/texmf/tex/latex/lm/t1lmtt.fd
 File: t1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
 ) [9]
-<supplementary_materials_files/figure-latex/Figure2-1.pdf, id=73, 469.755pt x 3
-25.215pt>
+<supplementary_materials_files/figure-latex/Figure2-1.pdf, id=73, 469.755pt x 4
+33.62pt>
 File: supplementary_materials_files/figure-latex/Figure2-1.pdf Graphic file (ty
 pe pdf)
 <use supplementary_materials_files/figure-latex/Figure2-1.pdf>
 Package pdftex.def Info: supplementary_materials_files/figure-latex/Figure2-1.p
-df  used on input line 579.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<supplementary_materials_files/figure-latex/Figure3-1.pdf, id=74, 469.755pt x 3
+df  used on input line 581.
+(pdftex.def)             Requested size: 469.75386pt x 433.61894pt.
+[10 <./supplementary_materials_files/figure-latex/Figure2-1.pdf>]
+<supplementary_materials_files/figure-latex/Figure3-1.pdf, id=85, 469.755pt x 3
 25.215pt>
 File: supplementary_materials_files/figure-latex/Figure3-1.pdf Graphic file (ty
 pe pdf)
 <use supplementary_materials_files/figure-latex/Figure3-1.pdf>
 Package pdftex.def Info: supplementary_materials_files/figure-latex/Figure3-1.p
-df  used on input line 605.
+df  used on input line 612.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<supplementary_materials_files/figure-latex/Figure4-1.pdf, id=75, 469.755pt x 3
+<supplementary_materials_files/figure-latex/Figure4-1.pdf, id=86, 469.755pt x 3
 25.215pt>
 File: supplementary_materials_files/figure-latex/Figure4-1.pdf Graphic file (ty
 pe pdf)
 <use supplementary_materials_files/figure-latex/Figure4-1.pdf>
 Package pdftex.def Info: supplementary_materials_files/figure-latex/Figure4-1.p
-df  used on input line 614.
+df  used on input line 621.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[10 <./supplementary_materials_files/figure-latex/Figure2-1.pdf>] [11 <./supple
-mentary_materials_files/figure-latex/Figure3-1.pdf>] [12 <./supplementary_mater
-ials_files/figure-latex/Figure4-1.pdf>] [13]
+[11 <./supplementary_materials_files/figure-latex/Figure3-1.pdf>] [12 <./supple
+mentary_materials_files/figure-latex/Figure4-1.pdf>] [13]
 <supplementary_materials_files/figure-latex/Figure5-1.pdf, id=115, 469.755pt x 
 325.215pt>
 File: supplementary_materials_files/figure-latex/Figure5-1.pdf Graphic file (ty
 pe pdf)
 <use supplementary_materials_files/figure-latex/Figure5-1.pdf>
 Package pdftex.def Info: supplementary_materials_files/figure-latex/Figure5-1.p
-df  used on input line 761.
+df  used on input line 768.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 [14] [15 <./supplementary_materials_files/figure-latex/Figure5-1.pdf>] [16
 
@@ -748,11 +749,11 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 15371 strings out of 480194
- 245300 string characters out of 5893742
- 601008 words of memory out of 5000000
+ 15377 strings out of 480194
+ 245372 string characters out of 5893742
+ 601042 words of memory out of 5000000
  32827 multiletter control sequences out of 15000+600000
- 530257 words of font info for 152 fonts, out of 8000000 for 9000
+ 530553 words of font info for 155 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  74i,9n,77p,1141b,372s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/share/texmf/fonts/en
@@ -766,7 +767,7 @@ s/type1/public/lm/lmr10.pfb></usr/share/texmf/fonts/type1/public/lm/lmr12.pfb><
 public/lm/lmr7.pfb></usr/share/texmf/fonts/type1/public/lm/lmri10.pfb></usr/sha
 re/texmf/fonts/type1/public/lm/lmsy10.pfb></usr/share/texmf/fonts/type1/public/
 lm/lmsy7.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt10.pfb>
-Output written on supplementary_materials.pdf (16 pages, 275742 bytes).
+Output written on supplementary_materials.pdf (16 pages, 282153 bytes).
 PDF statistics:
  255 PDF objects out of 1000 (max. 8388607)
  200 compressed objects within 2 object streams
