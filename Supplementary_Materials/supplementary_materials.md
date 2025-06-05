@@ -6,7 +6,7 @@ output:
   pdf_document: 
     keep_md: true
 bibliography: lit.bib
-date: "Generated on 2025-06-03"
+date: "Generated on 2025-06-05"
 ---
 
 
@@ -309,7 +309,8 @@ Across the 10000 simulation runs, the average run time for the competing assignm
 \caption{Average \textit{p} values in dependence of the number of batches and the number of variables. Higher \textit{p} values indicate better balance. Anticlustering maintained a comparable level of balance in all conditions. OSAT's performance decreased with increasing number of variables most strongly.}\label{fig:Figure2}
 \end{figure}
 
-Figure 2 illustrates the average *p*-values in dependence of the number of variables ($M$) and the number of batches ($K$), when no dropouts occured or when 20% dropouts occured. Without dropouts, when increasing the number of variables from 2 to 5, the average *p*-value for OSAT declined from 0.99 to 0.71 whereas the average *p*-value for anticlustering remained greater than 0.99. PSBA also demonstrated a decrease in *p*-value when increasing the number of variables, but less so than OSAT (from 0.99 to 0.91). With 20% dropouts, the overall level of balance was decreased as compared to the condition where no dropouts occured, especially for K = 2 and K = 4. Still, anticlustering maintained the highest level of balance among the competing methods, with average *p*-values not dropping below 0.85. 
+Figure 2 illustrates the average *p*-values in dependence of the number of variables ($M$) and the number of batches ($K$), when no dropouts occured or when 20% dropouts occured. Without dropouts, when increasing the number of variables from 2 to 5, the average *p*-value for OSAT declined from 0.99 to 0.71 whereas the average *p*-value for anticlustering remained greater than 0.99. PSBA also demonstrated a decrease in *p*-value when increasing the number of variables, but less so than OSAT (from 0.99 to 0.91). With 20% dropouts, the overall level of balance was decreased as compared to the condition where no dropouts occured, especially for K = 2 and K = 4. Still, anticlustering maintained the highest level of balance among the competing methods, with average *p*-values not dropping below 0.85. The worst case *p*-value observed for anticlustering under dropout conditions was 0.1043242. The other methods were more strongly affected by data loss, as evident by much smaller worst-case *p*-values (\ensuremath{1.4454321\times 10^{-4}} for OSAT and 0.0033143 for PSBA).
+
 
 Figures 3 and 4 display the results of the simulation study aggregating via the size of the data set (*N*, categorized for the purpose of illustration) and the number of categories per variable *P*, respectively. Increasing the number of categories per variable aggravated finding balance for OSAT and PSBA, while again, anticlustering was mostly unaffected. Increasing the number of samples led to improved balance for the OSAT method, while it was generally outperformed by anticlustering as well as PSBA.
 

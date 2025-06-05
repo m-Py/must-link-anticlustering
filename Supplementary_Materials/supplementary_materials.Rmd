@@ -345,9 +345,17 @@ anticlust_greater_than_d <- 0.85
 # ensure that I do not falsely claim in text that all p values are greater than .99
 stopifnot(all(ps_by_m_d$`p value`[ps_by_m_d$Method == "Anticlustering"] > anticlust_greater_than_d))
 
+worst_case_balance <- dfl |> 
+  filter(Dropout == "20% dropout") |> 
+  group_by(Method) |> 
+  summarise(worst_case_pvalue = min(value))
+
+wcb <- worst_case_balance$worst_case_pvalue
+names(wcb) <- worst_case_balance$Method
 ```
 
-Figure 2 illustrates the average *p*-values in dependence of the number of variables ($M$) and the number of batches ($K$), when no dropouts occured or when 20% dropouts occured. Without dropouts, when increasing the number of variables from 2 to 5, the average *p*-value for OSAT declined from `r best_osat_p` to `r worst_osat_p` whereas the average *p*-value for anticlustering remained greater than `r anticlust_greater_than`. PSBA also demonstrated a decrease in *p*-value when increasing the number of variables, but less so than OSAT (from `r best_ps_p` to `r worst_ps_p`). With 20% dropouts, the overall level of balance was decreased as compared to the condition where no dropouts occured, especially for K = 2 and K = 4. Still, anticlustering maintained the highest level of balance among the competing methods, with average *p*-values not dropping below `r anticlust_greater_than_d`. 
+Figure 2 illustrates the average *p*-values in dependence of the number of variables ($M$) and the number of batches ($K$), when no dropouts occured or when 20% dropouts occured. Without dropouts, when increasing the number of variables from 2 to 5, the average *p*-value for OSAT declined from `r best_osat_p` to `r worst_osat_p` whereas the average *p*-value for anticlustering remained greater than `r anticlust_greater_than`. PSBA also demonstrated a decrease in *p*-value when increasing the number of variables, but less so than OSAT (from `r best_ps_p` to `r worst_ps_p`). With 20% dropouts, the overall level of balance was decreased as compared to the condition where no dropouts occured, especially for K = 2 and K = 4. Still, anticlustering maintained the highest level of balance among the competing methods, with average *p*-values not dropping below `r anticlust_greater_than_d`. The worst case *p*-value observed for anticlustering under dropout conditions was `r wcb["Anticlustering"]`. The other methods were more strongly affected by data loss, as evident by much smaller worst-case *p*-values (`r wcb["OSAT"]` for OSAT and `r wcb["PSBA"]` for PSBA).
+
 
 Figures 3 and 4 display the results of the simulation study aggregating via the size of the data set (*N*, categorized for the purpose of illustration) and the number of categories per variable *P*, respectively. Increasing the number of categories per variable aggravated finding balance for OSAT and PSBA, while again, anticlustering was mostly unaffected. Increasing the number of samples led to improved balance for the OSAT method, while it was generally outperformed by anticlustering as well as PSBA.
 
