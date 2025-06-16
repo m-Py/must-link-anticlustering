@@ -19,7 +19,7 @@ It also has the code for the [anticlust Shiny App](https://anticlust.org) that w
 
 ## Dependencies
 
-The analyses in the paper were generated using R version 4.4.2 on an Intel i7-10700 personal computer (4.800GHz x 8) with 16 GB RAM, running Ubuntu 20.04.6 LTS.
+The simulation was implemented using the R programming language (version 4.4.2) on an Intel i9-12900K computer (5.100GHz x 24) with 32 GB RAM, running Ubuntu 22.04.5 LTS.
 
 Additionally, the following R packages / scripts were used in the analyses:
 
