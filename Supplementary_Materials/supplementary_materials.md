@@ -6,7 +6,7 @@ output:
   pdf_document: 
     keep_md: true
 bibliography: lit.bib
-date: "Generated on 2025-06-05"
+date: "Generated on 2025-06-27"
 ---
 
 
@@ -333,6 +333,14 @@ Figures 3 and 4 display the results of the simulation study aggregating via the 
 \end{figure}
 
 The anticlustering assignment that was subjected to must-link constraints on average achieved 99.9% of the objective value of the unconstrained assignment. Hence, must-link constraints are not only desirable from a user's point of view, but they also do not decrease batch balance considerably; in 74% of all cases, balance was not at all reduced by the constraints. Remarkably, the constrained anticlustering assignment led to better balance than the OSAT and PSBA assignments that did not employ any constraints (see Figures 2-4).
+
+### Quantification and Statistical Analysis
+
+Our simulation study compared anticlustering, must-link constrained anticlustering, OSAT and PSBA regarding their ability to achieve balance between batches. All code to reproduce the simulation and its analysis are available from the accompanying Open Science Repository (https://doi.org/10.17605/OSF.IO/EU5GD). The simulation performed 10000 iterations. During each iteration, a synthetic data set was randomly generated that was processed by each each of the four methods, in two dropout conditions (no dropout vs. 20% dropout). We generated categorical variables having 2-5 levels. Each data set contained 2-5 of such categorical variables. The total sample size N (50-500), the number of variables (2-5), the number of categories per variable (2-5), and the number of batches (2, 4, 10) was randomly chosen from a uniform distribution for each iteration of the simulation.
+
+To quantify balance among batches, a standard a $\chi^2$ test was performed. The $\chi^2$ test computes the discrepancy between the observed distribution of a categorical variable across batches, versus an assumed uniform distribution of the variable. The associated *p*-value quantifies the "extremeness" of the observed distribution. That is, a small *p*-value is associated with a small probability that the observed distribution of the variable (or a more extreme distribution) would be generated under true uniform sampling; a high *p*-value indicates that even when sampling from a true uniform distribution, we would usually expect an observed distribution that deviates more strongly from a uniform distribution. *P*-values were obtained for each for each of the 2-5 variables in each data set, for each of the four methods and for each of the two dropout conditions. As a consequence, we computed at least 16 *p*-values and a maximum of 40 *p*-values for each iteration of the simulation. Thus, the effective *n* was not 10000, but depended on the number of variables that were generated per simulation run. As main comparison, we reported the relative proportion of variables where anticlustering outperformed the competing methods in the no dropout condition, was equal to them, or was inferior. The effective *n* for this comparison was 34880 vs. OSAT and  23258 vs. PSBA. The *n* is different for each set of comparisons because PSBA was not applied when 10 batches were assigned. In Figure 2 we depicted the average *p*-value by method, number of batches, number of variables, and dropout condition, while aggregating across the other variables and across all simulation runs. 
+
+We did not report indices of statistical significance pertaining to the comparison between methods. This was due to (a) the large sample size, rendering measures of significance largely meaningless, and the ease of reproducibility of the simulation. Similarly, we chose a fixed but large number of simulation iterations, instead of aiming for a specified level of statistical power. Instead, a large data basis was generated allowing for meaningful conclusions, which is common practice in simulation studies. The number of iterations we employed (10000) is a common choice in computational studies and was also practically feasible for our particular study: the entire simulation took a total time of about 3 days on a desktop computer. Note that for a revision of this article, we repeated the entire simulation (using a different random seed and adding the 20% dropout condition) and virtually obtained the same pattern of results. Our accompanying online repository contains the data set obtained for the initial dataset as well as the revised (and final) dataset, verifying the high level of reproducibility.
 
 ## Bin Packing to Initialize a Must-Link Assignment
 
