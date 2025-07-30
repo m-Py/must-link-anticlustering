@@ -1,23 +1,19 @@
 ---
-title: Anticlustering for Sample Allocation To Minimize Batch Effects
-subtitle: Supplementary Materials
+title: Reproducible Analysis of "Anticlustering for Sample Allocation To Minimize Batch Effects"
+subtitle: Online Supplementary Materials from the Open Science Framework
 author: "Martin Papenberg"
 output:
   pdf_document: 
     keep_md: true
 bibliography: lit.bib
-date: "Generated on 2025-06-27"
+date: "Generated on 2025-07-30"
 ---
 
 
 
 # Overview
 
-This document is found at the accompanying online repository for the manuscript "Anticlustering for Sample Allocation To Minimize Batch Effects". It can be retrieved from https://osf.io/eu5gd/. The repository also contains other information, data and files concerning the project. 
-
-This document is meant to (a) reproduce all analyses and Figures (in this case, this includes formulas) reported in the manuscript and (b) illustrate some additional analyses not included in the main text due to space constraints (in particular, Figures 3 and 4 and section "Optimal Anticlustering With the Must-Link Feature" contain results not reported in the paper).
-
-This document is fully reproducible via R and R Markdown.
+This document is found at the accompanying online repository for the manuscript "Anticlustering for Sample Allocation To Minimize Batch Effects". It can be retrieved from the Open Science Framework via https://doi.org/10.17605/OSF.IO/EU5GD. This document includes all analyses, Tables, Figures, and formulas reported in the manuscript, and is fully reproducible via R and R Markdown (.Rmd file available in the repository). It also reiterates some of the theoretical background of anticlustering presented in the paper. Note, however, that this document has not been part of the peer review process.
 
 ## Anticlustering algorithm
 
@@ -295,7 +291,7 @@ p value &  &  & 1.000 & 1.000 & 1.000 &  & 0.991 & \\
 
 
 
-For the simulation, we generated 10000 data sets. Data sets were processed via (a) OSAT, (b) PSBA, (c) unconstrained anticlustering and (d) anticlustering subject to must-link constraints. Because the OSAT method is only applicable to categorical variables, we used categorical variables in our simulation. For anticlustering and for PSBA, the categorical variables were binary coded before the methods were applied (see Table 2). For each data set, we randomly determined the number of categorical variables (2-5), the number of classes per variable (2-5; the distribution of classes was uniform), the total sample size $N$ (between 50 and 500) and the number of batches $K$ (2, 4, or 10 equal-sized batches). PSBA was only applied for $K = 2$ and $K = 4$ ($n = 6658$ data sets) because the authors' implementation only allows the assignment to a maximum of four batches. For each data set, we simulated the condition where dropout in samples due to technical failures occurs. To this end, 20% of samples were randomly discarded to test the methods' ability to preserve balance when samples cannot be used. Must-link constraints were generating a random integer between 1 and $N$ (with equal probability), and using the resulting numbers as must-link grouping variables. This rule resulted in a distribution of constraints that resembled our motivating application: 58% of all elements had no must-link partner; 29% had 1 must-link partner; 10% had 2 must-link partners, and 3% had 3 or more must-link partners.
+For the simulation, we generated 10000 data sets. Data sets were processed via (a) OSAT, (b) PSBA, (c) unconstrained anticlustering and (d) anticlustering subject to must-link constraints. Because the OSAT method is only applicable to categorical variables, we used categorical variables in our simulation. For anticlustering and for PSBA, the categorical variables were binary coded before the methods were applied (see Table 1). For each data set, we randomly determined the number of categorical variables (2-5), the number of classes per variable (2-5; the distribution of classes was uniform), the total sample size $N$ (between 50 and 500) and the number of batches $K$ (2, 4, or 10 equal-sized batches). PSBA was only applied for $K = 2$ and $K = 4$ ($n = 6658$ data sets) because the authors' implementation only allows the assignment to a maximum of four batches. For each data set, we simulated the condition where dropout in samples due to technical failures occurs. To this end, 20% of samples were randomly discarded to test the methods' ability to preserve balance when samples cannot be used. Must-link constraints were generating a random integer between 1 and $N$ (with equal probability), and using the resulting numbers as must-link grouping variables. This rule resulted in a distribution of constraints that resembled our motivating application: 58% of all elements had no must-link partner; 29% had 1 must-link partner; 10% had 2 must-link partners, and 3% had 3 or more must-link partners.
 
 Across the 10000 simulation runs, the average run time for the competing assignment methods was 0.09s for unconstrained anticlustering, 0.1s for anticlustering with the must-link feature, 2.68s for OSAT, and 27.22s for PSBA, making anticlustering about 30 and 302 times faster than OSAT and PSBA, respectively. For each simulation run, we computed $\chi^2$-tests to assess the imbalance among batches for each of the 2-5 variables, for each of the three competing methods. We stored the *p*-value associated with each test. A higher *p*-value indicates that there is less imbalance among batches, i.e., that the batches are more similar. The simulation revealed that in 84% of all variable comparisons, balance among batches was better when using anticlustering as compared to OSAT. Balance was equal in 15% of all comparisons, and only in 0.32% (= 110 of all 34880 pairwise comparisons) OSAT outperformed `anticlust`. In 78% of all variable comparisons, balance was better when using anticlustering as compared to PSBA. Balance was equal in 22% of all comparisons, and only in 0.15% (= 35 of all 23258 pairwise comparisons) PSBA outperformed anticlustering. There are fewer comparisons between anticlustering and PSBA than between anticlustering and OSAT because PSBA was not applied in the simulation runs where 10 batches were assigned. 
 
@@ -309,10 +305,9 @@ Across the 10000 simulation runs, the average run time for the competing assignm
 \caption{Average \textit{p} values in dependence of the number of batches and the number of variables. Higher \textit{p} values indicate better balance. Anticlustering maintained a comparable level of balance in all conditions. OSAT's performance decreased with increasing number of variables most strongly.}\label{fig:Figure2}
 \end{figure}
 
-Figure 2 illustrates the average *p*-values in dependence of the number of variables ($M$) and the number of batches ($K$), when no dropouts occured or when 20% dropouts occured. Without dropouts, when increasing the number of variables from 2 to 5, the average *p*-value for OSAT declined from 0.99 to 0.71 whereas the average *p*-value for anticlustering remained greater than 0.99. PSBA also demonstrated a decrease in *p*-value when increasing the number of variables, but less so than OSAT (from 0.99 to 0.91). With 20% dropouts, the overall level of balance was decreased as compared to the condition where no dropouts occured, especially for K = 2 and K = 4. Still, anticlustering maintained the highest level of balance among the competing methods, with average *p*-values not dropping below 0.85. The worst case *p*-value observed for anticlustering under dropout conditions was 0.1043242. The other methods were more strongly affected by data loss, as evident by much smaller worst-case *p*-values (\ensuremath{1.4454321\times 10^{-4}} for OSAT and 0.0033143 for PSBA).
+Figure 2 illustrates the average *p*-values in dependence of the number of variables ($M$) and the number of batches ($K$), when no dropouts occured or when 20% dropouts occured (This is also Figure 2 from the main paper). Without dropouts, when increasing the number of variables from 2 to 5, the average *p*-value for OSAT declined from 0.99 to 0.71 whereas the average *p*-value for anticlustering remained greater than 0.99. PSBA also demonstrated a decrease in *p*-value when increasing the number of variables, but less so than OSAT (from 0.99 to 0.91). With 20% dropouts, the overall level of balance was decreased as compared to the condition where no dropouts occured, especially for K = 2 and K = 4. Still, anticlustering maintained the highest level of balance among the competing methods, with average *p*-values not dropping below 0.85. The worst case *p*-value observed for anticlustering under dropout conditions was 0.1043242. The other methods were more strongly affected by data loss, as evident by much smaller worst-case *p*-values (\ensuremath{1.4454321\times 10^{-4}} for OSAT and 0.0033143 for PSBA).
 
-
-Figures 3 and 4 display the results of the simulation study aggregating via the size of the data set (*N*, categorized for the purpose of illustration) and the number of categories per variable *P*, respectively. Increasing the number of categories per variable aggravated finding balance for OSAT and PSBA, while again, anticlustering was mostly unaffected. Increasing the number of samples led to improved balance for the OSAT method, while it was generally outperformed by anticlustering as well as PSBA.
+Figure 3 displays the results of the simulation study aggregating via the size of the data set (*N*, categorized for the purpose of illustration) and the number of categories per variable *P*, respectively (this is Figure S1 from the online supplementary PDF from the main paper). Increasing the number of categories per variable aggravated finding balance for OSAT and PSBA, while again, anticlustering was mostly unaffected. Increasing the number of samples led to improved balance for the OSAT method, while it was generally outperformed by anticlustering as well as PSBA.
 
 \begin{figure}
 
@@ -320,27 +315,11 @@ Figures 3 and 4 display the results of the simulation study aggregating via the 
 
 }
 
-\caption{Average \textit{p} values in dependence of the number of batches and the number of simulated samples \textit{N} (categorized). Higher \textit{p} values indicate better balance. Anticlustering maintained a comparable level of balance in all conditions. OSAT's performance increased with an increasing number of samples, and was most affected when few samples were available.}\label{fig:Figure3}
+\caption{Average \textit{p} values in dependence of the number of batches, the number of samples \textit{N} (categorized), and the number of categories per variable. Higher \textit{p} values indicate better balance. Anticlustering maintained a comparable level of balance in all conditions. OSAT's performance decreased with increasing number of categories and increased with an increasing number of samples.}\label{fig:Figure3}
 \end{figure}
 
-\begin{figure}
-
-{\centering \includegraphics{supplementary_materials_files/figure-latex/Figure4-1} 
-
-}
-
-\caption{Average \textit{p} values in dependence of the number of batches and the number of categories per variable \textit{P}. Higher \textit{p} values indicate better balance. Anticlustering maintained a comparable level of balance in all conditions. OSAT's and PSBA's performance decreased with an increasing number of categories per variable.}\label{fig:Figure4}
-\end{figure}
 
 The anticlustering assignment that was subjected to must-link constraints on average achieved 99.9% of the objective value of the unconstrained assignment. Hence, must-link constraints are not only desirable from a user's point of view, but they also do not decrease batch balance considerably; in 74% of all cases, balance was not at all reduced by the constraints. Remarkably, the constrained anticlustering assignment led to better balance than the OSAT and PSBA assignments that did not employ any constraints (see Figures 2-4).
-
-### Quantification and Statistical Analysis
-
-Our simulation study compared anticlustering, must-link constrained anticlustering, OSAT and PSBA regarding their ability to achieve balance between batches. All code to reproduce the simulation and its analysis are available from the accompanying Open Science Repository (https://doi.org/10.17605/OSF.IO/EU5GD). The simulation performed 10000 iterations. During each iteration, a synthetic data set was randomly generated that was processed by each each of the four methods, in two dropout conditions (no dropout vs. 20% dropout). We generated categorical variables having 2-5 levels. Each data set contained 2-5 of such categorical variables. The total sample size N (50-500), the number of variables (2-5), the number of categories per variable (2-5), and the number of batches (2, 4, 10) was randomly chosen from a uniform distribution for each iteration of the simulation.
-
-To quantify balance among batches, a standard a $\chi^2$ test was performed. The $\chi^2$ test computes the discrepancy between the observed distribution of a categorical variable across batches, versus an assumed uniform distribution of the variable. The associated *p*-value quantifies the "extremeness" of the observed distribution. That is, a small *p*-value is associated with a small probability that the observed distribution of the variable (or a more extreme distribution) would be generated under true uniform sampling; a high *p*-value indicates that even when sampling from a true uniform distribution, we would usually expect an observed distribution that deviates more strongly from a uniform distribution. *P*-values were obtained for each for each of the 2-5 variables in each data set, for each of the four methods and for each of the two dropout conditions. As a consequence, we computed at least 16 *p*-values and a maximum of 40 *p*-values for each iteration of the simulation. Thus, the effective *n* was not 10000, but depended on the number of variables that were generated per simulation run. As main comparison, we reported the relative proportion of variables where anticlustering outperformed the competing methods in the no dropout condition, was equal to them, or was inferior. The effective *n* for this comparison was 34880 vs. OSAT and  23258 vs. PSBA. The *n* is different for each set of comparisons because PSBA was not applied when 10 batches were assigned. In Figure 2 we depicted the average *p*-value by method, number of batches, number of variables, and dropout condition, while aggregating across the other variables and across all simulation runs. 
-
-We did not report indices of statistical significance pertaining to the comparison between methods. This was due to (a) the large sample size, rendering measures of significance largely meaningless, and the ease of reproducibility of the simulation. Similarly, we chose a fixed but large number of simulation iterations, instead of aiming for a specified level of statistical power. Instead, a large data basis was generated allowing for meaningful conclusions, which is common practice in simulation studies. The number of iterations we employed (10000) is a common choice in computational studies and was also practically feasible for our particular study: the entire simulation took a total time of about 3 days on a desktop computer. Note that for a revision of this article, we repeated the entire simulation (using a different random seed and adding the 20% dropout condition) and virtually obtained the same pattern of results. Our accompanying online repository contains the data set obtained for the initial dataset as well as the revised (and final) dataset, verifying the high level of reproducibility.
 
 ## Bin Packing to Initialize a Must-Link Assignment
 
@@ -365,7 +344,7 @@ The extension of the original model towards including must-link constraints is a
 
 To evaluate the optimal approach, we generated synthetic data sets with categorical variables, using the same parameters as in the simulation in the paper: $M = 2-5$ variables; $P = 2-5$ categories per variable; the distance matrix was generated via first binary coding the variables and then computing the pairwise Euclidean distances. The number of groups $K$ was varied between 2, 3, 4, 5, and 10. Must-link constraints were generated using the same rule as for the simulation study and were used to adjust the distance matrix. 
 
-Starting with $N = 20$ (or $N = 21$ for $K = 3$) we generated five data sets for each $N$. We ensured that each data set was divisible by $K$ so equal-sized groups could be generated. Each combination of $K$ and $N$ was replicated 5 times to estimate the average run time. For each $K$, $N$ was sequentially increased by $K$ until the time limit of 1800s was exceeded in a run [@schulz2022]. We also applied 2PML with 1000 repetitions (500x Phase 1 + 500x Phase 2) to investigate if our heuristic tends to produce optimal results. 
+Starting with $N = 20$ (or $N = 21$ for $K = 3$) we generated five data sets for each $N$. We ensured that each data set was divisible by $K$ so equal-sized groups could be generated. Each combination of $K$ and $N$ was replicated 5 times to estimate the average run time. For each $K$, $N$ was sequentially increased by $K$ until the time limit of 1800s was exceeded in a run [@schulz2022]. Table 8 and Figure 4 illustrate the run time results (Figure 4 is Figure S2 from the online supplementary PDF from the main paper).
 
 \begin{table}
 
@@ -393,16 +372,12 @@ K & Algorithm & max\_mean\_runtime & N\_max\\
 
 \begin{figure}
 
-{\centering \includegraphics{supplementary_materials_files/figure-latex/Figure5-1} 
+{\centering \includegraphics{supplementary_materials_files/figure-latex/Figure4-1} 
 
 }
 
-\caption{Illustrates the increase of the run time of the optimal and heuristic algorithms with increasing N. Note that the y-axis on a log scale, so a linear increase in the plot implies exponential increase of running time.}\label{fig:Figure5}
+\caption{Illustrates the increase of the run time of the optimal algorithm with increasing N. Note that the y-axis on a log scale, so a linear increase in the plot implies exponential increase of running time.}\label{fig:Figure4}
 \end{figure}
-
-
-
-Table 8 illustrate the maximum N achieved for the optimal algorithm, as well as the average run time for the maximum N that was still processed. Figure 5 shows the run time increase by N for both the optimal algorithm and the heuristic. In 94.74% of all data sets, the 2PML algorithm identified the optimal solution. 
 
 \clearpage
 
