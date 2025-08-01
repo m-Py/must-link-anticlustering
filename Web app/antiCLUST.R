@@ -382,7 +382,7 @@ ui <- fluidPage(
   # --------------------------------------------------------------------------
   div(class = "top-section", 
       style = "text-align: center;", # centers the image
-      img(src = "anticlust logo.png", width = "1000", height = "500")
+      img(src = "anticlust logo.png", width = "982", height = "410") #was 1000 x 500
   ),
   
   # --------------------------------------------------------------------------
